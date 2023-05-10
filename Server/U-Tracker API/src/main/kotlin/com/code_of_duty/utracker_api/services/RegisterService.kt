@@ -22,7 +22,7 @@ class RegisterService (private val studentDao: StudentDao, private val passwordU
         }
 
         val hashPassword = passwordUtils.hashPassword(registerDto.password)
-        val newStudent = Student(code = registerDto.code, username = registerDto.username, hashPassword = hashPassword, image = "", cum = 0.0f, degree = null)
+        val newStudent = Student(code = registerDto.code, username = registerDto.username, hashPassword = hashPassword)
         return studentDao.save(newStudent)
     }
 }
