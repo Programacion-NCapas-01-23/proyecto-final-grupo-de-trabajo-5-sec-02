@@ -1,5 +1,6 @@
 package com.code_of_duty.utracker_api.data.models
 
+import jakarta.annotation.Nullable
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
