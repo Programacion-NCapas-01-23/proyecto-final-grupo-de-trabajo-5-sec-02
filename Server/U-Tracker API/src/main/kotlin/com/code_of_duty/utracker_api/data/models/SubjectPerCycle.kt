@@ -7,12 +7,14 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "cycle")
-data class Cycle(
+@Table(name = "subject_x_cycle")
+data class SubjectPerCycle(
     @Id
     val id : Int,
-    val cycleType : Int,
     @ManyToOne
-    @JoinColumn(name = "pensum_fk", referencedColumnName = "id")
-    val pensum: Pensum
+    @JoinColumn(name = "cycle_fk", referencedColumnName = "id")
+    val cycle: Cycle,
+    @ManyToOne
+    @JoinColumn(name = "subject_fk", referencedColumnName = "code")
+    val subject: Subject
 )
