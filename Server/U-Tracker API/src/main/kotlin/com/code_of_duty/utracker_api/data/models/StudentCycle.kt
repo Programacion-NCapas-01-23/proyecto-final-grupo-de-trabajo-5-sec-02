@@ -8,12 +8,13 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "cycle")
-data class Cycle(
+@Table(name = "student_cycle")
+data class StudentCycle(
     @Id
-    val id : Int,
-    val cycleType : CycleType,
+    val studentCycleId: Int,
+    val cycleType: CycleType,
+    val year: Int,
     @ManyToOne
-    @JoinColumn(name = "pensum_fk", referencedColumnName = "id")
-    val pensum: Pensum
+    @JoinColumn(name = "student_fk", referencedColumnName = "code")
+    val student: Student
 )

@@ -1,5 +1,6 @@
 package com.code_of_duty.utracker_api.data.models
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
@@ -13,9 +14,11 @@ data class Student(
     val code : String,
     val username : String,
     val hashPassword : String,
+    @Column(name = "image", nullable = true, columnDefinition = "varchar(255) default 'https://i.imgur.com/1qk9n3m.png'")
     val image : String,
-    val cum : Float,
+    @Column(name = "cum", nullable = false, columnDefinition = "float default 0.0")
+    val cum : Float = 0.0f,
     @OneToOne()
-    @JoinColumn(name = "degree_fk", referencedColumnName = "id")
-    val degree : Degree
+    @JoinColumn(name = "degree_fk", referencedColumnName = "id", nullable = true)
+    val degree : Degree?
 )
