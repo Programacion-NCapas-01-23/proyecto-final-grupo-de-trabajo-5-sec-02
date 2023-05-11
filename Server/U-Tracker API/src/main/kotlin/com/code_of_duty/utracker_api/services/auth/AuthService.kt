@@ -1,4 +1,4 @@
-package com.code_of_duty.utracker_api.services
+package com.code_of_duty.utracker_api.services.auth
 
 import com.code_of_duty.utracker_api.data.dao.StudentDao
 import com.code_of_duty.utracker_api.data.dtos.RegisterDto
@@ -7,7 +7,12 @@ import com.code_of_duty.utracker_api.utils.PasswordUtils
 import org.springframework.stereotype.Service
 
 @Service
-class RegisterService (private val studentDao: StudentDao, private val passwordUtils: PasswordUtils){
+class AuthService(private val studentDao: StudentDao, private val passwordUtils: PasswordUtils) {
+
+    fun getStudentByCode(code: String): Student? {
+        return studentDao.findByCode(code)
+    }
+
     fun isCodeTaken(code: String): Boolean {
         return studentDao.existsByCode(code)
     }
