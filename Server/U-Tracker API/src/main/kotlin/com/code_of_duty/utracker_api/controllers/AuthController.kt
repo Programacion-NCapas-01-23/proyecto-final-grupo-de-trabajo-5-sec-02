@@ -41,7 +41,7 @@ class AuthController (
     @PostMapping("/login")
     fun login(@RequestBody loginDto: LoginDto): ResponseEntity<String> {
         // Get the user with the provided code
-        val user = authService.getStudentByCode(loginDto.code)
+        val user = authService.authenticate(loginDto.code, loginDto.password)
 
         // Check if user exists
         if (user == null) {

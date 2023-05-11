@@ -5,10 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 
-@Repository
-interface StudentDao : JpaRepository<Student, Long> {
 
-    fun findByCode(code: String?): Student?
+interface StudentDao : JpaRepository<Student, Long> {
 
     fun existsByCode(code: String?): Boolean
 }
