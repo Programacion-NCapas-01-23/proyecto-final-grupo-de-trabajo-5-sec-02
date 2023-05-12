@@ -1,5 +1,6 @@
 package com.code_of_duty.utracker_api.utils
 
+import com.code_of_duty.utracker_api.data.dtos.MessageDto
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
 
     @ExceptionHandler(StudentNotFoundException::class)
-    fun handleStudentNotFoundException(ex: StudentNotFoundException): ResponseEntity<String> {
-        return ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
+    fun handleStudentNotFoundException(ex: StudentNotFoundException): ResponseEntity<MessageDto> {
+        return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.NOT_FOUND)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
@@ -25,7 +26,7 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException::class)
-    fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException): ResponseEntity<String> {
-        return ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
+    fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException): ResponseEntity<MessageDto> {
+        return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.BAD_REQUEST)
     }
 }
