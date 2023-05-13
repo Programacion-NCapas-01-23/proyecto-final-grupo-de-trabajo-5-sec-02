@@ -1,6 +1,5 @@
 package com.code_of_duty.utracker_api.services.auth
 
-import com.code_of_duty.utracker_api.data.dao.LoginDao
 import com.code_of_duty.utracker_api.data.dao.StudentDao
 import com.code_of_duty.utracker_api.data.dtos.RegisterDto
 import com.code_of_duty.utracker_api.data.models.Student
