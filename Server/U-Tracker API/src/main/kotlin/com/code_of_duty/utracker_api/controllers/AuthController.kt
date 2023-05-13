@@ -1,7 +1,8 @@
 package com.code_of_duty.utracker_api.controllers
 
+import com.code_of_duty.utracker_api.data.dtos.LoginDto
 import com.code_of_duty.utracker_api.data.dtos.RegisterDto
-import com.code_of_duty.utracker_api.services.RegisterService
+import com.code_of_duty.utracker_api.services.auth.AuthService
 import com.code_of_duty.utracker_api.utils.PasswordUtils
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -11,11 +12,14 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/auth")
-class AuthController (private val registerService: RegisterService, private val passwordUtils: PasswordUtils){
+class AuthController (
+                      private val passwordUtils: PasswordUtils,
+                      private val authService: AuthService
+){
 
     @PostMapping("/register")
     fun register(@RequestBody registerDto: RegisterDto) :ResponseEntity<String>{
-        if (registerService.isCodeTaken(registerDto.username)) {
+        if (authService.isCodeTaken(registerDto.username)) {
             return ResponseEntity.badRequest().body("Code already taken")
         }
 
@@ -28,9 +32,31 @@ class AuthController (private val registerService: RegisterService, private val 
         val hashedPassword = passwordUtils.hashPassword(registerDto.password)
 
         // Create a new user using UserService
-        val newUser = registerService.registerStudent(registerDto, hashedPassword)
+        val newUser = authService.registerStudent(registerDto, hashedPassword)
 
         // Return a success response with the new user's ID
         return ResponseEntity.ok("User successfully registered with ID ${newUser.code}")
+    }
+
+    @PostMapping("/login")
+    fun login(@RequestBody loginDto: LoginDto): ResponseEntity<String> {
+        // Get the user with the provided code
+        val user = authService.authenticate(loginDto.code, loginDto.password)
+
+        // Check if user exists
+        if (user == null) {
+            return ResponseEntity.badRequest().body("Invalid code or password")
+        }
+
+        // Verify the provided password matches the stored password hash
+        val isPasswordCorrect = passwordUtils.verifyPassword(loginDto.password, user.hashPassword)
+
+        // If password is incorrect, return an error response
+        if (!isPasswordCorrect) {
+            return ResponseEntity.badRequest().body("Invalid code or password")
+        }
+
+        // Return a success response with the user's ID
+        return ResponseEntity.ok("User successfully logged in with ID ${user.code}")
     }
 }
