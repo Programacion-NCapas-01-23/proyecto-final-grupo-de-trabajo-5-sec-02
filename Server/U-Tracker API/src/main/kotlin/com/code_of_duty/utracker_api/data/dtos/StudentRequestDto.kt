@@ -1,21 +1,21 @@
 package com.code_of_duty.utracker_api.data.dtos
 
-import jakarta.validation.constraints.Max
-import jakarta.validation.constraints.Min
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
-
+import jakarta.validation.constraints.Size
 
 data class StudentRequestDto(
-    @NotEmpty(message = "Code cannot be blank")
-    @Pattern(regexp = "\\S+", message = "Code cannot contain whitespace")
-    @Min(value = 8, message = "Code must be at least 8 characters long")
-    @Max(value = 8, message = "Code must be at most 8 characters long")
+
+    @field:NotEmpty(message = "Code cannot be blank")
+    @field:Pattern(regexp = "\\S+", message = "Code cannot contain whitespace")
+    @field:Size(min = 8, max = 8, message = "Code must be 8 characters long")
     val code : String,
-    @NotEmpty(message = "Username cannot be blank")
-    @Pattern(regexp = "\\S+", message = "Username cannot contain whitespace")
+
+    @field:NotEmpty(message = "Username cannot be blank")
     val username: String,
-    @Pattern(regexp = "\\S+", message = "Image cannot contain whitespace")
-    @Pattern(regexp = "^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|png)\$", message = "Image must be a valid URL")
+
+    @field:Pattern(regexp = "\\S+", message = "Image cannot contain whitespace")
+    @field:Pattern(regexp = "^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|png)\$", message = "Image must be a valid URL")
     val image: String?
 )

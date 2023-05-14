@@ -29,4 +29,14 @@ class GlobalExceptionHandler {
     fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException): ResponseEntity<MessageDto> {
         return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.BAD_REQUEST)
     }
+
+    @ExceptionHandler(StudentCodeNotMatchException::class)
+    fun handleStudentCodeNotMatchException(ex: StudentCodeNotMatchException): ResponseEntity<MessageDto> {
+        return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(UnauthorizedException::class)
+    fun handleUnauthorizedException(ex: UnauthorizedException): ResponseEntity<MessageDto> {
+        return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.UNAUTHORIZED)
+    }
 }
