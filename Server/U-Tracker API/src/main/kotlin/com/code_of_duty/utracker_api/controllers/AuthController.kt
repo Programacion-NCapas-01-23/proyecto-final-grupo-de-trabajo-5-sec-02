@@ -4,6 +4,7 @@ import com.code_of_duty.utracker_api.data.dtos.LoginDto
 import com.code_of_duty.utracker_api.data.dtos.RegisterDto
 import com.code_of_duty.utracker_api.services.auth.AuthService
 import com.code_of_duty.utracker_api.utils.PasswordUtils
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -12,11 +13,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/auth")
-class AuthController (
-                      private val passwordUtils: PasswordUtils,
-                      private val authService: AuthService
-){
+class AuthController (private val passwordUtils: PasswordUtils){
 
+    @Autowired
+    lateinit var authService: AuthService
     @PostMapping("/register")
     fun register(@RequestBody registerDto: RegisterDto) :ResponseEntity<String>{
         if (authService.isCodeTaken(registerDto.username)) {
@@ -42,11 +42,9 @@ class AuthController (
     fun login(@RequestBody loginDto: LoginDto): ResponseEntity<String> {
         // Get the user with the provided code
         val user = authService.authenticate(loginDto.code, loginDto.password)
+            ?: return ResponseEntity.badRequest().body("Invalid code or password")
 
         // Check if user exists
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Invalid code or password")
-        }
 
         // Verify the provided password matches the stored password hash
         val isPasswordCorrect = passwordUtils.verifyPassword(loginDto.password, user.hashPassword)
