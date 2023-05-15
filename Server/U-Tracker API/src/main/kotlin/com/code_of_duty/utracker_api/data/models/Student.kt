@@ -12,13 +12,13 @@ import jakarta.persistence.Table
 data class Student(
     @Id
     val code : String,
-    val username : String,
+    var username : String,
     val hashPassword : String,
     @Column(name = "image", nullable = true, columnDefinition = "varchar(255) default 'https://i.imgur.com/1qk9n3m.png'")
-    val image : String? = null,
+    var image : String? = null,
     @Column(name = "cum", nullable = false, columnDefinition = "float default 0.0")
-    val cum : Float = 0.0f,
+    var cum : Float = 0.0f,
     @OneToOne()
     @JoinColumn(name = "degree_fk", referencedColumnName = "id", nullable = true)
-    val degree : Degree? = null
+    var degree : Degree? = null
 )
