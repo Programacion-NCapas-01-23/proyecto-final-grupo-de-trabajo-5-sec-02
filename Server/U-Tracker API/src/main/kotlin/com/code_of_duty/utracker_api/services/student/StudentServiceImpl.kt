@@ -23,11 +23,12 @@ class StudentServiceImpl(private val studentDao: StudentDao): StudentService {
 
         if (currentStudent.code != student.code) throw StudentCodeNotMatchException("Student code does not match")
 
-        currentStudent.let {
-            it.username = student.username
-            it.image = student.image
-            studentDao.save(it)
-        }
+        val newStudent = currentStudent.copy(
+            username = student.username,
+            image = student.image
+        )
+
+        studentDao.save(newStudent)
     }
 
     override fun changePassword(code: String, changePasswordDto: ChangePasswordDto) {
@@ -47,4 +48,6 @@ class StudentServiceImpl(private val studentDao: StudentDao): StudentService {
 
         studentDao.save(student)
     }
+
+    override fun findByEmail(email: String) = studentDao.findByEmail(email)
 }
