@@ -39,4 +39,9 @@ class GlobalExceptionHandler {
     fun handleUnauthorizedException(ex: UnauthorizedException): ResponseEntity<MessageDto> {
         return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.UNAUTHORIZED)
     }
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<MessageDto> {
+        return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.BAD_REQUEST)
+    }
 }

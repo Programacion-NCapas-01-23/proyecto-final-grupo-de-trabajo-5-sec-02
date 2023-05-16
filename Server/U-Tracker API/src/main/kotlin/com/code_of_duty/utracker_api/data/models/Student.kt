@@ -13,6 +13,7 @@ data class Student(
     @Id
     val code : String,
     var username : String,
+    //TODO (): add email for password reset
     val hashPassword : String,
     @Column(name = "image", nullable = true, columnDefinition = "varchar(255) default 'https://i.imgur.com/1qk9n3m.png'")
     var image : String? = null,

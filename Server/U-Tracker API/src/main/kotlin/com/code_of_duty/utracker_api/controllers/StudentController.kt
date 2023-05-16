@@ -1,5 +1,6 @@
 package com.code_of_duty.utracker_api.controllers
 
+import com.code_of_duty.utracker_api.data.dtos.ChangePasswordDto
 import com.code_of_duty.utracker_api.data.dtos.MessageDto
 import com.code_of_duty.utracker_api.data.dtos.StudentRequestDto
 import com.code_of_duty.utracker_api.data.dtos.StudentResponseDto
@@ -27,6 +28,11 @@ class StudentController(private val studentService: StudentService) {
     @Autowired
     private lateinit var generalUtils: GeneralUtils
 
+    /**
+     * Get student information
+     * @param request HttpServletRequest
+     * @return StudentResponseDto
+     */
     @GetMapping("/getStudent")
     @Operation(summary = "Get student by code")
     @SecurityRequirement(name = "BearerAuth")
@@ -47,6 +53,12 @@ class StudentController(private val studentService: StudentService) {
         return ResponseEntity(response, HttpStatus.OK)
     }
 
+    /**
+     * Update student information
+     * @param request HttpServletRequest
+     * @param student StudentRequestDto
+     * @return MessageDto with success message
+     */
     @PatchMapping("/updateStudent")
     @Operation(summary = "Update student Information")
     @SecurityRequirement(name = "BearerAuth")
@@ -63,5 +75,23 @@ class StudentController(private val studentService: StudentService) {
         studentService.updateStudent(code, student)
 
         return ResponseEntity(MessageDto("Student updated successfully"), HttpStatus.OK)
+    }
+
+    @PatchMapping("/changePassword")
+    @Operation(summary = "Change student password")
+    @SecurityRequirement(name = "BearerAuth")
+    fun changePassword(
+        request: HttpServletRequest,
+        @Parameter(description = "Student information to update")
+        @Valid @RequestBody student: ChangePasswordDto
+    ): ResponseEntity<MessageDto> {
+
+        val token = generalUtils.extractJWT(request)
+        //TODO ( "Implement validation JWT")
+        val code = token
+
+        studentService.changePassword(code, student)
+
+        return ResponseEntity(MessageDto("Password changed successfully"), HttpStatus.OK)
     }
 }

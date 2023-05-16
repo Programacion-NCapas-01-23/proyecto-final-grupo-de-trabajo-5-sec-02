@@ -1,6 +1,5 @@
 package com.code_of_duty.utracker_api.data.dtos
 
-import io.swagger.v3.oas.annotations.media.ExampleObject
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
