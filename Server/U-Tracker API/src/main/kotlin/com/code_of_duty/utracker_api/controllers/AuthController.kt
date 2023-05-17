@@ -54,7 +54,8 @@ class AuthController (private val passwordUtils: PasswordUtils){
             return ResponseEntity.badRequest().body("Invalid code or password")
         }
 
+        val token = authService.generateToken(user)
         // Return a success response with the user's ID
-        return ResponseEntity.ok("User successfully logged in with ID ${user.code}")
+        return ResponseEntity.ok("User successfully logged in with ID ${user.code} with token: ${token}")
     }
 }

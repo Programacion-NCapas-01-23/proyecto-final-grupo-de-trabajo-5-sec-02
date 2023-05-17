@@ -9,4 +9,6 @@ interface AuthService {
     fun registerStudent(registerDto: RegisterDto, degree: String): Student
     fun authenticate(code: String, password: String): Student?
     fun isCodeTaken(code: String): Boolean
+    fun generateToken(student: Student): String
+    fun validateToken(authToken: String): Boolean
 }
