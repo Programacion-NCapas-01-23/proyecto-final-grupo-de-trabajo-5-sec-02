@@ -1,10 +1,14 @@
 package com.code_of_duty.utracker_api.services.auth
 
 import com.code_of_duty.utracker_api.data.dao.StudentDao
+import com.code_of_duty.utracker_api.data.dao.VerificationTokenDao
+import com.code_of_duty.utracker_api.data.dtos.ForgotPasswordDto
 import com.code_of_duty.utracker_api.data.dtos.RegisterDto
 import com.code_of_duty.utracker_api.data.models.Student
 import com.code_of_duty.utracker_api.utils.JwtUtils
+import com.code_of_duty.utracker_api.services.verificationToken.VerificationTokenService
 import com.code_of_duty.utracker_api.utils.PasswordUtils
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
@@ -31,7 +35,7 @@ class AuthServiceImp(private val studentDao: StudentDao,
         }
 
         val hashPassword = passwordUtils.hashPassword(registerDto.password)
-        val newStudent = Student(code = registerDto.code, username = registerDto.username, hashPassword = hashPassword)
+        val newStudent = Student(code = registerDto.code, username = registerDto.username, email = registerDto.email, hashPassword = hashPassword)
         return studentDao.save(newStudent)
     }
 
@@ -46,4 +50,31 @@ class AuthServiceImp(private val studentDao: StudentDao,
         return student
     }
 
+    override fun changePassword(forgotPasswordDto: ForgotPasswordDto) {
+        val student = studentDao.findByEmail(forgotPasswordDto.email)
+            ?: throw IllegalArgumentException("Email not found")
+
+        if (forgotPasswordDto.password != forgotPasswordDto.confirmPassword) {
+            throw IllegalArgumentException("Passwords do not match")
+        }
+
+        val token = verificationTokenService.findByToken(forgotPasswordDto.token)
+            ?: throw IllegalArgumentException("Invalid token")
+
+        if (token.student != student) {
+            throw IllegalArgumentException("Invalid token")
+        }
+
+        if (token.expiryDate.isBefore(java.time.LocalDateTime.now())) {
+            throw IllegalArgumentException("Token expired")
+        }
+
+        val hashPassword = passwordUtils.hashPassword(forgotPasswordDto.password)
+
+        val studentWithChangedPassword = student.copy(hashPassword = hashPassword)
+
+        studentDao.save(studentWithChangedPassword)
+
+        verificationTokenService.deleteVerificationToken(token.token)
+    }
 }
