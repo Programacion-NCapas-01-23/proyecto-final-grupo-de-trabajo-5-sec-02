@@ -12,4 +12,5 @@ interface StudentService {
     fun updateStudent(code: String, student: StudentRequestDto)
 
     fun changePassword(code: String, changePasswordDto: ChangePasswordDto)
+    fun findByEmail(email: String): Student?
 }
