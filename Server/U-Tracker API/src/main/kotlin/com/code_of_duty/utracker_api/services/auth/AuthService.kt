@@ -11,4 +11,6 @@ interface AuthService {
     fun authenticate(code: String, password: String): Student?
     fun isCodeTaken(code: String): Boolean
     fun changePassword(forgotPasswordDto: ForgotPasswordDto)
+    fun generateToken(student: Student): String
+    fun validateToken(authToken: String): Boolean
 }
