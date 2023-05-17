@@ -1,19 +1,17 @@
 package com.code_of_duty.utracker_api.services.auth
 
 import com.code_of_duty.utracker_api.data.dao.StudentDao
-import com.code_of_duty.utracker_api.data.dao.VerificationTokenDao
 import com.code_of_duty.utracker_api.data.dtos.ForgotPasswordDto
 import com.code_of_duty.utracker_api.data.dtos.RegisterDto
 import com.code_of_duty.utracker_api.data.models.Student
-import com.code_of_duty.utracker_api.utils.JwtUtils
 import com.code_of_duty.utracker_api.services.verificationToken.VerificationTokenService
+import com.code_of_duty.utracker_api.utils.JwtUtils
 import com.code_of_duty.utracker_api.utils.PasswordUtils
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class AuthServiceImp(private val studentDao: StudentDao,
-                     private val passwordUtils: PasswordUtils, private val jwtUtils: JwtUtils): AuthService{
+                     private val passwordUtils: PasswordUtils, private val jwtUtils: JwtUtils, private val verificationTokenService: VerificationTokenService): AuthService{
 
     override fun isCodeTaken(code: String) = studentDao.existsByCode(code)
     override fun generateToken(student: Student): String {
