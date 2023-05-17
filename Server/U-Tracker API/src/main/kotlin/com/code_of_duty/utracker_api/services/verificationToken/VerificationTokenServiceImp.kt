@@ -13,7 +13,8 @@ class VerificationTokenServiceImp(private val verificationTokenDao: Verification
     @Autowired
     lateinit var studentDao: StudentDao
     override fun createVerificationToken(studentCode: String): VerificationToken{
-        val character = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        val character = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
         lateinit var token: String
 
         do{
@@ -24,13 +25,20 @@ class VerificationTokenServiceImp(private val verificationTokenDao: Verification
 
         val user = studentDao.findById(studentCode).orElse(null)
 
-        val expDate = LocalDateTime.now().plusDays(1)
+        verificationTokenDao.findByStudent(user)?.let { verificationTokenDao.delete(it) }
+
+        val expDate = LocalDateTime.now().plusMinutes(15)
 
         val verificationToken = VerificationToken(token = token, student = user, expiryDate = expDate)
 
         return verificationTokenDao.save(verificationToken)
     }
     override fun deleteVerificationToken(token: String) {
-        TODO("Not yet implemented")
+        val verificationToken = verificationTokenDao.findByToken(token)
+            ?: throw IllegalArgumentException("Invalid token")
+
+        verificationTokenDao.delete(verificationToken)
     }
+
+    override fun findByToken(token: String) = verificationTokenDao.findByToken(token)
 }

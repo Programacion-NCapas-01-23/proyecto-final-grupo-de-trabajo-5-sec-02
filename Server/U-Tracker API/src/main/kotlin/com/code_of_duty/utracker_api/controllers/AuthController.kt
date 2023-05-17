@@ -1,5 +1,6 @@
 package com.code_of_duty.utracker_api.controllers
 
+import com.code_of_duty.utracker_api.data.dtos.ForgotPasswordDto
 import com.code_of_duty.utracker_api.data.dtos.LoginDto
 import com.code_of_duty.utracker_api.data.dtos.MessageDto
 import com.code_of_duty.utracker_api.data.dtos.RegisterDto
@@ -7,17 +8,14 @@ import com.code_of_duty.utracker_api.services.auth.AuthService
 import com.code_of_duty.utracker_api.services.student.StudentService
 import com.code_of_duty.utracker_api.services.verificationToken.VerificationTokenService
 import com.code_of_duty.utracker_api.utils.PasswordUtils
+import jakarta.validation.Valid
 import jakarta.validation.constraints.Email
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.mail.javamail.JavaMailSender
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/auth")
@@ -72,7 +70,7 @@ class AuthController (private val passwordUtils: PasswordUtils){
         return ResponseEntity.ok("User successfully logged in with ID ${user.code}")
     }
 
-    @GetMapping("/forgot-password")
+    @GetMapping("/getVerificationToken")
     fun forgotPassword(@Email email: String): ResponseEntity<MessageDto> {
         // Check if user exists
         val student = studentService.findByEmail(email)
@@ -101,5 +99,15 @@ class AuthController (private val passwordUtils: PasswordUtils){
         mailSender.send(message)
 
         return ResponseEntity(MessageDto("Password reset code sent to your email"), HttpStatus.OK)
+    }
+
+    @PatchMapping("/changePassword")
+    fun changePassword(
+        @RequestBody
+        @Valid
+        forgotPasswordDto: ForgotPasswordDto
+    ): ResponseEntity<MessageDto>{
+        authService.changePassword(forgotPasswordDto)
+        return ResponseEntity(MessageDto("Password changed successfully"), HttpStatus.OK)
     }
 }
