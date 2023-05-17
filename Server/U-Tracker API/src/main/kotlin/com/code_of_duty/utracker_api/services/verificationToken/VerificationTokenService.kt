@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service
 interface VerificationTokenService {
     fun createVerificationToken(studentCode: String): VerificationToken
     fun deleteVerificationToken(token: String)
-
+    fun findByToken(token: String): VerificationToken?
 }
