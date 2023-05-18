@@ -10,6 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.code_of_duty.u_tracker.ui.graphs.RootNavigationGraph
 import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,13 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             UTrackerTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                RootNavigationGraph(navController = rememberNavController());
             }
         }
     }
