@@ -36,6 +36,9 @@ dependencies {
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     //send email
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.thymeleaf:thymeleaf:3.1.1.RELEASE'
+    implementation 'org.thymeleaf:thymeleaf-spring5:3.1.1.RELEASE'
+    implementation 'org.thymeleaf:thymeleaf-spring5:3.1.1.RELEASE'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

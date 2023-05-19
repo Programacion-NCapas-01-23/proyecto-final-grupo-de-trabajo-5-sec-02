@@ -4,22 +4,25 @@ import com.code_of_duty.utracker_api.data.dao.StudentDao
 import com.code_of_duty.utracker_api.data.dao.VerificationTokenDao
 import com.code_of_duty.utracker_api.data.models.VerificationToken
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Component
-class VerificationTokenServiceImp(private val verificationTokenDao: VerificationTokenDao) : VerificationTokenService {
+class VerificationTokenServiceImp(
+    private val verificationTokenDao: VerificationTokenDao,
+    @Value("\${TokenGenerator.characters}") private val characters: String
+) : VerificationTokenService {
 
     @Autowired
     lateinit var studentDao: StudentDao
     override fun createVerificationToken(studentCode: String): VerificationToken{
-        val character = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-
         lateinit var token: String
-
+        //TODO () -> change to use UUID.fromString()
         do{
             token= (1..6)
-                .map { character.random() }
+                .map { characters.random() }
                 .joinToString("")
         }while(verificationTokenDao.existsByToken(token))
 
