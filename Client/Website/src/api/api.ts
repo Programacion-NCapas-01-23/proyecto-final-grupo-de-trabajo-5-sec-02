@@ -1,7 +1,8 @@
 import { NextApiResponse } from 'next';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import apiService from "@/api/appService";
 
-const api: AxiosInstance = axios.create({
+export const api: AxiosInstance = axios.create({
   baseURL: 'YOUR_API_BASE_URL', // Replace with your API base URL
 });
 
@@ -30,29 +31,6 @@ api.interceptors.response.use(
       return Promise.reject({ message: 'An error occurred. Please try again.' });
     }
 );
-
-// Helper functions for different HTTP methods
-export const apiService = {
-  get: <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
-    return api.get(url, config).then((response: AxiosResponse<T>) => response.data);
-  },
-
-  post: <T>(url: string, data: any, config?: AxiosRequestConfig): Promise<T> => {
-    return api.post(url, data, config).then((response: AxiosResponse<T>) => response.data);
-  },
-
-  put: <T>(url: string, data: any, config?: AxiosRequestConfig): Promise<T> => {
-    return api.put(url, data, config).then((response: AxiosResponse<T>) => response.data);
-  },
-
-  patch: <T>(url: string, data: any, config?: AxiosRequestConfig): Promise<T> => {
-    return api.patch(url, data, config).then((response: AxiosResponse<T>) => response.data);
-  },
-
-  delete: <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
-    return api.delete(url, config).then((response: AxiosResponse<T>) => response.data);
-  },
-};
 
 export interface ApiRequest {
   url: string;
