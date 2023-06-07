@@ -1,4 +1,4 @@
-package com.code_of_duty.utracker_api.controllers
+package com.code_of_duty.utracker_api.controllers.api
 
 import com.code_of_duty.utracker_api.data.dtos.ForgotPasswordDto
 import com.code_of_duty.utracker_api.data.dtos.LoginDto
@@ -8,6 +8,7 @@ import com.code_of_duty.utracker_api.services.auth.AuthService
 import com.code_of_duty.utracker_api.services.student.StudentService
 import com.code_of_duty.utracker_api.services.verificationToken.VerificationTokenService
 import com.code_of_duty.utracker_api.utils.PasswordUtils
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Email
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,6 +24,7 @@ import org.thymeleaf.context.Context
 
 @RestController
 @RequestMapping("\${api.base-path}/auth")
+@Tag(name = "API", description = "API operations")
 class AuthController (private val passwordUtils: PasswordUtils){
 
     @Autowired

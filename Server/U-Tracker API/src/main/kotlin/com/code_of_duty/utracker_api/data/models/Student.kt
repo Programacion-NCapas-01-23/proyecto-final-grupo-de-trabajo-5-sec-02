@@ -12,7 +12,9 @@ import jakarta.persistence.Table
 data class Student(
     @Id
     val code : String,
+    @Column(unique = true)
     val username : String,
+    @Column(unique = true)
     val email : String,
     val hashPassword : String,
     @Column(name = "image", nullable = true, columnDefinition = "varchar(255) default 'https://i.imgur.com/1qk9n3m.png'")

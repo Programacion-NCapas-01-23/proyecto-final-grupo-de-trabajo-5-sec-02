@@ -1,16 +1,14 @@
 package com.code_of_duty.utracker_api.data.models
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.util.UUID
 
 @Entity
 @Table(name = "admins")
 data class Admins(
     @Id
-    val id: UUID,
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: UUID = UUID.randomUUID(),
     @Column(unique = true)
     val username: String,
     @Column(unique = true)

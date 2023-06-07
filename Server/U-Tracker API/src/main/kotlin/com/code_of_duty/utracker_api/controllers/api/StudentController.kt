@@ -1,4 +1,4 @@
-package com.code_of_duty.utracker_api.controllers
+package com.code_of_duty.utracker_api.controllers.api
 
 import com.code_of_duty.utracker_api.data.dtos.ChangePasswordDto
 import com.code_of_duty.utracker_api.data.dtos.MessageDto
@@ -10,6 +10,7 @@ import com.code_of_duty.utracker_api.utils.StudentNotFoundException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,19 +24,15 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("\${api.base-path}/student")
+@Tag(name = "API", description = "API operations")
 class StudentController(private val studentService: StudentService) {
 
     @Autowired
     private lateinit var generalUtils: GeneralUtils
 
-    /**
-     * Get student information
-     * @param request HttpServletRequest
-     * @return StudentResponseDto
-     */
     @GetMapping("/getStudent")
     @Operation(summary = "Get student by code")
-    @SecurityRequirement(name = "BearerAuth")
+    @SecurityRequirement(name = "APIAuth")
     fun getStudent( request: HttpServletRequest ): ResponseEntity<StudentResponseDto> {
         val token = generalUtils.extractJWT(request)
         //TODO ( "Implement validation JWT")
@@ -61,7 +58,7 @@ class StudentController(private val studentService: StudentService) {
      */
     @PatchMapping("/updateStudent")
     @Operation(summary = "Update student Information")
-    @SecurityRequirement(name = "BearerAuth")
+    @SecurityRequirement(name = "APIAuth")
     fun updateStudent(
         request: HttpServletRequest,
         @Parameter(description = "Student information to update")
@@ -79,7 +76,7 @@ class StudentController(private val studentService: StudentService) {
 
     @PatchMapping("/changePassword")
     @Operation(summary = "Change student password")
-    @SecurityRequirement(name = "BearerAuth")
+    @SecurityRequirement(name = "APIAuth")
     fun changePassword(
         request: HttpServletRequest,
         @Parameter(description = "Student information to update")
