@@ -11,14 +11,18 @@ import com.code_of_duty.utracker_api.utils.PasswordUtils
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Email
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.ResourceLoader
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.*
+import org.thymeleaf.TemplateEngine
+import org.thymeleaf.context.Context
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("\${api.base-path}/auth")
 class AuthController (private val passwordUtils: PasswordUtils){
 
     @Autowired
@@ -29,6 +33,8 @@ class AuthController (private val passwordUtils: PasswordUtils){
     private lateinit var mailSender: JavaMailSender
     @Autowired
     lateinit var studentService: StudentService
+    @Autowired
+    private lateinit var templateEngine: TemplateEngine
     @PostMapping("/register")
     fun register(@RequestBody registerDto: RegisterDto) :ResponseEntity<String>{
         if (authService.isCodeTaken(registerDto.username)) {
@@ -80,23 +86,14 @@ class AuthController (private val passwordUtils: PasswordUtils){
         val verifyToken = verificationTokenService.createVerificationToken(student.code)
 
         // Send email with verification token
-
+        val context = Context()
+        context.setVariable("verifyToken", verifyToken)
+        val html = templateEngine.process("email_template", context)
         val message = mailSender.createMimeMessage()
         val helper = MimeMessageHelper(message, true, "utf-8")
         helper.setTo(student.email)
         helper.setSubject("Password Reset code")
-        message.setText("<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "    <title>Token de verificación</title>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "    <h1>Token de verificación</h1>\n" +
-                "    <p>¡Bienvenido al correo de recuperacion! A continuación, encontrarás tu token de verificación de 6 dígitos:</p>\n" +
-                "    <h2 style=\"background-color: #f5f5f5; padding: 10px; display: inline-block;\">${verifyToken.token}</h2>\n" +
-                "    <p>Utiliza este token para completar el proceso de verificación en nuestra plataforma.</p>\n" +
-                "</body>\n" +
-                "</html>\n", "utf-8", "html")
+        message.setText(html, "utf-8", "html")
         mailSender.send(message)
 
         return ResponseEntity(MessageDto("Password reset code sent to your email"), HttpStatus.OK)

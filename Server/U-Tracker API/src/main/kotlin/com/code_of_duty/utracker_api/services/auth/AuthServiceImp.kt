@@ -33,7 +33,12 @@ class AuthServiceImp(private val studentDao: StudentDao,
         }
 
         val hashPassword = passwordUtils.hashPassword(registerDto.password)
-        val newStudent = Student(code = registerDto.code, username = registerDto.username, email = registerDto.email, hashPassword = hashPassword)
+        val newStudent = Student(
+            code = registerDto.code,
+            username = registerDto.username,
+            email = registerDto.email,
+            hashPassword = hashPassword
+        )
         return studentDao.save(newStudent)
     }
 
