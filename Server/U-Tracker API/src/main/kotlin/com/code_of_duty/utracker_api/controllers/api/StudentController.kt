@@ -1,4 +1,4 @@
-package com.code_of_duty.utracker_api.controllers
+package com.code_of_duty.utracker_api.controllers.api
 
 import com.code_of_duty.utracker_api.data.dtos.ChangePasswordDto
 import com.code_of_duty.utracker_api.data.dtos.MessageDto
@@ -10,6 +10,7 @@ import com.code_of_duty.utracker_api.utils.StudentNotFoundException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,19 +24,15 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("\${api.base-path}/student")
+@Tag(name = "API")
 class StudentController(private val studentService: StudentService) {
 
     @Autowired
     private lateinit var generalUtils: GeneralUtils
 
-    /**
-     * Get student information
-     * @param request HttpServletRequest
-     * @return StudentResponseDto
-     */
     @GetMapping("/getStudent")
     @Operation(summary = "Get student by code")
-    @SecurityRequirement(name = "BearerAuth")
+    @SecurityRequirement(name = "APIAuth")
     fun getStudent( request: HttpServletRequest ): ResponseEntity<StudentResponseDto> {
         val token = generalUtils.extractJWT(request)
         //TODO ( "Implement validation JWT")
@@ -53,15 +50,9 @@ class StudentController(private val studentService: StudentService) {
         return ResponseEntity(response, HttpStatus.OK)
     }
 
-    /**
-     * Update student information
-     * @param request HttpServletRequest
-     * @param student StudentRequestDto
-     * @return MessageDto with success message
-     */
     @PatchMapping("/updateStudent")
     @Operation(summary = "Update student Information")
-    @SecurityRequirement(name = "BearerAuth")
+    @SecurityRequirement(name = "APIAuth")
     fun updateStudent(
         request: HttpServletRequest,
         @Parameter(description = "Student information to update")
@@ -79,7 +70,7 @@ class StudentController(private val studentService: StudentService) {
 
     @PatchMapping("/changePassword")
     @Operation(summary = "Change student password")
-    @SecurityRequirement(name = "BearerAuth")
+    @SecurityRequirement(name = "APIAuth")
     fun changePassword(
         request: HttpServletRequest,
         @Parameter(description = "Student information to update")
@@ -94,4 +85,26 @@ class StudentController(private val studentService: StudentService) {
 
         return ResponseEntity(MessageDto("Password changed successfully"), HttpStatus.OK)
     }
+
+    @PatchMapping("/changeImage")
+    @Operation(summary = "Change student image")
+    @SecurityRequirement(name = "APIAuth")
+    fun changeImage(
+        request: HttpServletRequest,
+        @Parameter(description = "Student image to update")
+        @Valid @RequestBody image: String
+    ): ResponseEntity<MessageDto> {
+        TODO()
+    }
+
+    @GetMapping("/cumCalculation")
+    @Operation(summary = "Calculate student cum")
+    @SecurityRequirement(name = "APIAuth")
+    fun cumCalculation(
+        request: HttpServletRequest
+    ): ResponseEntity<MessageDto> {
+        TODO()
+    }
+
+
 }
