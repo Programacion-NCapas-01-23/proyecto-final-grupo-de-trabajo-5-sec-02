@@ -57,6 +57,34 @@ class AdminAuthController(private val adminAuthService: AdminAuthService){
             token = token,
         ), HttpStatus.OK)
     }
+
+    @Operation(
+        summary = "Register",
+        description = "Register as an admin",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Register successful",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorsDto::class)
+                    )
+                ]
+            )
+        ]
+    )
     @PostMapping("/Register")
     fun register(@Valid @RequestBody adminRegisterDto: AdminRegisterDto) : ResponseEntity<MessageDto> {
         TODO("Implementar este método")

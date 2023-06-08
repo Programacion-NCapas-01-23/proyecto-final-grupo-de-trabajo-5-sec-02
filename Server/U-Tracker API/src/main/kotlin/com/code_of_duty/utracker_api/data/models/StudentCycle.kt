@@ -14,5 +14,13 @@ data class StudentCycle(
     val year: Int,
     @ManyToOne
     @JoinColumn(name = "student_fk", referencedColumnName = "code")
-    val student: Student
+    val student: Student,
+
+    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "subject_x_student_cycle",
+        joinColumns = [JoinColumn(name = "studentCycle_fk", referencedColumnName = "studentCycleId")],
+        inverseJoinColumns = [JoinColumn(name = "subject_fk", referencedColumnName = "code")]
+    )
+    val subjects: List<Subject>
 )

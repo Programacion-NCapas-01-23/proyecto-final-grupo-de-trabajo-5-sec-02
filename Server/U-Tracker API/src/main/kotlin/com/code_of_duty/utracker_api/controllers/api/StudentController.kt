@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("\${api.base-path}/student")
-@Tag(name = "API", description = "API operations")
+@Tag(name = "API")
 class StudentController(private val studentService: StudentService) {
 
     @Autowired
@@ -50,12 +50,6 @@ class StudentController(private val studentService: StudentService) {
         return ResponseEntity(response, HttpStatus.OK)
     }
 
-    /**
-     * Update student information
-     * @param request HttpServletRequest
-     * @param student StudentRequestDto
-     * @return MessageDto with success message
-     */
     @PatchMapping("/updateStudent")
     @Operation(summary = "Update student Information")
     @SecurityRequirement(name = "APIAuth")
@@ -91,4 +85,26 @@ class StudentController(private val studentService: StudentService) {
 
         return ResponseEntity(MessageDto("Password changed successfully"), HttpStatus.OK)
     }
+
+    @PatchMapping("/changeImage")
+    @Operation(summary = "Change student image")
+    @SecurityRequirement(name = "APIAuth")
+    fun changeImage(
+        request: HttpServletRequest,
+        @Parameter(description = "Student image to update")
+        @Valid @RequestBody image: String
+    ): ResponseEntity<MessageDto> {
+        TODO()
+    }
+
+    @GetMapping("/cumCalculation")
+    @Operation(summary = "Calculate student cum")
+    @SecurityRequirement(name = "APIAuth")
+    fun cumCalculation(
+        request: HttpServletRequest
+    ): ResponseEntity<MessageDto> {
+        TODO()
+    }
+
+
 }

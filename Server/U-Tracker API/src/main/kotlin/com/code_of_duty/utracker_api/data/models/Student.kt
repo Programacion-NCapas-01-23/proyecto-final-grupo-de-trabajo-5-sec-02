@@ -1,11 +1,7 @@
 package com.code_of_duty.utracker_api.data.models
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.OneToOne
-import jakarta.persistence.Table
+import com.fasterxml.jackson.annotation.JsonIgnore
+import jakarta.persistence.*
 
 @Entity
 @Table(name="student")
@@ -23,5 +19,9 @@ data class Student(
     var cum : Float = 0.0f,
     @OneToOne()
     @JoinColumn(name = "degree_fk", referencedColumnName = "id", nullable = true)
-    var degree : Degree? = null
+    var degree : Degree? = null,
+
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+    @JsonIgnore
+    val studentCycles : List<StudentCycle>? = null
 )
