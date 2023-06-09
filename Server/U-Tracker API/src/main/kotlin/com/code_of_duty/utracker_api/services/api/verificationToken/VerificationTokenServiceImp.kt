@@ -1,4 +1,4 @@
-package com.code_of_duty.utracker_api.services.verificationToken
+package com.code_of_duty.utracker_api.services.api.verificationToken
 
 import com.code_of_duty.utracker_api.data.dao.StudentDao
 import com.code_of_duty.utracker_api.data.dao.VerificationTokenDao
@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
-import java.util.UUID
 
 @Component
 class VerificationTokenServiceImp(

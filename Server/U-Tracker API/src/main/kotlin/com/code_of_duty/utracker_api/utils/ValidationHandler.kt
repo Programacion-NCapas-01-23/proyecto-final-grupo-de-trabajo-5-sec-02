@@ -42,6 +42,6 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<MessageDto> {
-        return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.BAD_REQUEST)
+        return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.CONFLICT)
     }
 }

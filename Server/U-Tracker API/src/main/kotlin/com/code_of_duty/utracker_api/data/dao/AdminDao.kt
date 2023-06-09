@@ -7,4 +7,5 @@ import java.util.*
 interface AdminDao: ListCrudRepository<Admins, UUID> {
     fun findByUsername(username: String): Admins?
     fun existsByUsername(username: String): Boolean
+    fun existsByEmail(email: String): Boolean
 }
