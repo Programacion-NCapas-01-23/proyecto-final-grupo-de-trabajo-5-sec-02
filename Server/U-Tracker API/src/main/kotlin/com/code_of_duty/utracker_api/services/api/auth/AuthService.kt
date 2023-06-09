@@ -1,4 +1,4 @@
-package com.code_of_duty.utracker_api.services.auth
+package com.code_of_duty.utracker_api.services.api.auth
 
 import com.code_of_duty.utracker_api.data.dtos.ForgotPasswordDto
 import com.code_of_duty.utracker_api.data.dtos.RegisterDto

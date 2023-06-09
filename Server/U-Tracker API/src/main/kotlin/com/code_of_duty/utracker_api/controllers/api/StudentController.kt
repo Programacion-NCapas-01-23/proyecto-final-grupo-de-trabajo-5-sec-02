@@ -4,11 +4,15 @@ import com.code_of_duty.utracker_api.data.dtos.ChangePasswordDto
 import com.code_of_duty.utracker_api.data.dtos.MessageDto
 import com.code_of_duty.utracker_api.data.dtos.StudentRequestDto
 import com.code_of_duty.utracker_api.data.dtos.StudentResponseDto
-import com.code_of_duty.utracker_api.services.student.StudentService
+import com.code_of_duty.utracker_api.services.api.student.StudentService
 import com.code_of_duty.utracker_api.utils.GeneralUtils
+import com.code_of_duty.utracker_api.utils.JwtUtils
 import com.code_of_duty.utracker_api.utils.StudentNotFoundException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
@@ -30,14 +34,48 @@ class StudentController(private val studentService: StudentService) {
     @Autowired
     private lateinit var generalUtils: GeneralUtils
 
+    @Operation(
+        summary = "Get student by code",
+        description = "Get student by code",
+        security = [SecurityRequirement(name = "APIAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Student found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = StudentResponseDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Student not found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            )
+        ]
+    )
     @GetMapping("/getStudent")
-    @Operation(summary = "Get student by code")
-    @SecurityRequirement(name = "APIAuth")
     fun getStudent( request: HttpServletRequest ): ResponseEntity<StudentResponseDto> {
-        val token = generalUtils.extractJWT(request)
-        //TODO ( "Implement validation JWT")
-        val code = token
-        val student = studentService.getStudent(code) ?: throw StudentNotFoundException("Student with code $code not found")
+        val code = generalUtils.extractJWT(request)
+
+        val student = studentService.getStudent(code) ?: throw StudentNotFoundException("Student not found")
 
         val response = StudentResponseDto(
             code = student.code,
@@ -50,22 +88,57 @@ class StudentController(private val studentService: StudentService) {
         return ResponseEntity(response, HttpStatus.OK)
     }
 
+    @Operation(
+        summary = "Update student Information",
+        description = "Update student Information",
+        security = [SecurityRequirement(name = "APIAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Student updated successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Student not found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            )
+        ]
+    )
     @PatchMapping("/updateStudent")
-    @Operation(summary = "Update student Information")
-    @SecurityRequirement(name = "APIAuth")
     fun updateStudent(
         request: HttpServletRequest,
         @Parameter(description = "Student information to update")
         @Valid @RequestBody student: StudentRequestDto
     ): ResponseEntity<MessageDto> {
-
-        val token = generalUtils.extractJWT(request)
-        //TODO ( "Implement validation JWT")
-        val code = token
+        val code = generalUtils.extractJWT(request)
 
         studentService.updateStudent(code, student)
 
-        return ResponseEntity(MessageDto("Student updated successfully"), HttpStatus.OK)
+        return ResponseEntity(
+            MessageDto("Student updated successfully"),
+            HttpStatus.OK
+        )
     }
 
     @PatchMapping("/changePassword")
@@ -77,13 +150,14 @@ class StudentController(private val studentService: StudentService) {
         @Valid @RequestBody student: ChangePasswordDto
     ): ResponseEntity<MessageDto> {
 
-        val token = generalUtils.extractJWT(request)
-        //TODO ( "Implement validation JWT")
-        val code = token
+        val code = generalUtils.extractJWT(request)
 
         studentService.changePassword(code, student)
 
-        return ResponseEntity(MessageDto("Password changed successfully"), HttpStatus.OK)
+        return ResponseEntity(
+            MessageDto("Password changed successfully"),
+            HttpStatus.OK
+        )
     }
 
     @PatchMapping("/changeImage")

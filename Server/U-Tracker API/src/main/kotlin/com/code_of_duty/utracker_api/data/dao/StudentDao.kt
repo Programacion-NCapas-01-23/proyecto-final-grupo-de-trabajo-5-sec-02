@@ -7,4 +7,5 @@ interface StudentDao : ListCrudRepository<Student, String> {
     fun existsByCode(code: String): Boolean
     fun save(student: Student): Student
     fun findByEmail(email: String): Student?
+    fun findByUsername(code: String): Student?
 }
