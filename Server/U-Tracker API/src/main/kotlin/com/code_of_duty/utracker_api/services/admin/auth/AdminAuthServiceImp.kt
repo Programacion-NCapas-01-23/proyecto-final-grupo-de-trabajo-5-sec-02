@@ -8,6 +8,7 @@ import com.code_of_duty.utracker_api.utils.JwtUtils
 import com.code_of_duty.utracker_api.utils.PasswordUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.util.UUID
 
 @Component
 class AdminAuthServiceImp: AdminAuthService {
@@ -47,4 +48,6 @@ class AdminAuthServiceImp: AdminAuthService {
     }
 
     override fun validateToken(authToken: String) = jwtUtil.validateToken(authToken)
+
+    override fun exists(id: UUID) = adminDao.existsById(id)
 }

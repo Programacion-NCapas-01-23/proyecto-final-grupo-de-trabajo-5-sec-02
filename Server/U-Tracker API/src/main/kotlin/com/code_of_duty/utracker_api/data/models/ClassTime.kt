@@ -10,7 +10,7 @@ import java.util.UUID
 data class ClassTime(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: UUID = UUID.randomUUID(),
+    val id: UUID? = UUID.randomUUID(),
     val day: Days,
     val startHour: LocalTime,
     val totalHours: Int,
