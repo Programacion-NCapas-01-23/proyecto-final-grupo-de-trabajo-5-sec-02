@@ -5,5 +5,6 @@ enum class Days {
     TUESDAY,
     WEDNESDAY,
     THURSDAY,
-    FRIDAY
+    FRIDAY,
+    SATURDAY
 }

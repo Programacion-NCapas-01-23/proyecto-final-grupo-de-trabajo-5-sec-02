@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("\${admin.base-path}/auth")
 @Tag(name = "Admin")
 class AdminAuthController(private val adminAuthService: AdminAuthService){
+    //region login_Doc
     @Operation(
         summary = "Login",
         description = "Login as an admin",
@@ -47,6 +48,7 @@ class AdminAuthController(private val adminAuthService: AdminAuthService){
             )
         ]
     )
+    //endregion
     @PostMapping("/login")
     fun login(@Valid @RequestBody adminLoginDto: AdminLoginDto) : ResponseEntity<LoginResDto> {
         val admin = adminAuthService.login(adminLoginDto)
@@ -58,6 +60,7 @@ class AdminAuthController(private val adminAuthService: AdminAuthService){
         ), HttpStatus.OK)
     }
 
+    //region register_Doc
     @Operation(
         summary = "Register",
         description = "Register as an admin",
@@ -85,6 +88,7 @@ class AdminAuthController(private val adminAuthService: AdminAuthService){
             )
         ]
     )
+    //endregion
     @PostMapping("/Register")
     fun register(@Valid @RequestBody adminRegisterDto: AdminRegisterDto) : ResponseEntity<MessageDto> {
         adminAuthService.register(adminRegisterDto)
