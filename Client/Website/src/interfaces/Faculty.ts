@@ -1,5 +1,8 @@
-export interface Faculty {
-    id: number;
+interface Faculty {
+    id?: string;
     name: string;
-    university: string;
+    description: string;
+    logo?: string;
 }
+
+export default Faculty;
