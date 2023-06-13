@@ -1,14 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {Faculty} from "@/interfaces/Faculty";
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import Faculty from "@/interfaces/Faculty";
+import InitialState from "@/interfaces/InitialState";
 
-interface FacultyState {
-    faculties: Faculty[];
-    loading: boolean;
-    error: string | null;
-}
-
-const initialState: FacultyState = {
-    faculties: [],
+const initialState: InitialState<Faculty> = {
+    data: [],
     loading: false,
     error: null,
 };
@@ -22,7 +17,7 @@ const facultySlice = createSlice({
             state.error = null;
         },
         fetchFacultiesSuccess(state, action: PayloadAction<Faculty[]>) {
-            state.faculties = action.payload;
+            state.data = action.payload;
             state.loading = false;
             state.error = null;
         },
@@ -35,7 +30,7 @@ const facultySlice = createSlice({
             state.error = null;
         },
         createFacultySuccess(state, action: PayloadAction<Faculty>) {
-            state.faculties.push(action.payload);
+            state.data.push(action.payload);
             state.loading = false;
             state.error = null;
         },
@@ -49,9 +44,9 @@ const facultySlice = createSlice({
         },
         updateFacultySuccess(state, action: PayloadAction<Faculty>) {
             const updatedFaculty = action.payload;
-            const index = state.faculties.findIndex((faculty) => faculty.id === updatedFaculty.id);
+            const index = state.data.findIndex((faculty) => faculty.id === updatedFaculty.id);
             if (index !== -1) {
-                state.faculties[index] = updatedFaculty;
+                state.data[index] = updatedFaculty;
             }
             state.loading = false;
             state.error = null;

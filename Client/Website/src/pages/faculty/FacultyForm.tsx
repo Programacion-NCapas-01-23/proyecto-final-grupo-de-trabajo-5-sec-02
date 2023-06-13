@@ -1,26 +1,25 @@
-import { useState } from 'react';
-// TODO Change import in order to use the hooks
-import { useDispatch } from 'react-redux';
+import React, {ChangeEvent, FormEvent, useState} from 'react';
+import { useAppDispatch } from '@/hooks/reduxHooks';
 import axios from 'axios';
 
 import { createFacultyStart } from '@/state/slices/facultySlice';
 
 const universities = ['University A', 'University B', 'University C']; // Replace with your actual list of universities
 
-const FacultyPage = () => {
-    const dispatch = useDispatch();
+const FacultyForm = () => {
+    const dispatch = useAppDispatch();
     const [facultyName, setFacultyName] = useState('');
     const [selectedUniversity, setSelectedUniversity] = useState('');
 
-    const handleFacultyNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFacultyNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFacultyName(e.target.value);
     };
 
-    const handleUniversityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleUniversityChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setSelectedUniversity(e.target.value);
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
             // Replace 'API_URL' with your actual API endpoint
@@ -37,7 +36,7 @@ const FacultyPage = () => {
     };
 
     return (
-        <div className="container mx-auto mt-10">
+        <div className="p-4 sm:ml-64">
             <h1 className="text-2xl font-bold mb-4">Create Faculty</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
@@ -83,4 +82,4 @@ const FacultyPage = () => {
     );
 };
 
-export default FacultyPage;
+export default FacultyForm;
