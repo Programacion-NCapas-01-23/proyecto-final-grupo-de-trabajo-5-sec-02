@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="9798a863-66e3-44af-96a9-7777663121da" name="Changes" comment="" />
+    <list default="true" id="9798a863-66e3-44af-96a9-7777663121da" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,7 +29,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "dev",
     "last_opened_file_path": "/home/axel/Documents/proyecto-final-grupo-de-trabajo-5-sec-02/Server/U-Tracker API",
     "vue.rearranger.settings.migration": "true"
   }
@@ -37,6 +43,7 @@
       <option name="presentableId" value="Default" />
       <updated>1683741392334</updated>
       <workItem from="1683741393598" duration="111000" />
+      <workItem from="1686613644835" duration="30000" />
     </task>
     <servers />
   </component>
