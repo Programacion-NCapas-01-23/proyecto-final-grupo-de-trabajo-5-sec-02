@@ -1,4 +1,5 @@
 import {Sidebar} from "@/components/Sidebar";
+import FacultyForm from "@/pages/faculty/FacultyForm";
 
 export default function Home() {
   return (
@@ -6,6 +7,7 @@ export default function Home() {
       className=""
     >
       <Sidebar />
+      <FacultyForm/>
     </main>
   )
 }
