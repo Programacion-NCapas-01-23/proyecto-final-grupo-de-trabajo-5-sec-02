@@ -1,5 +1,5 @@
 import {AxiosRequestConfig, AxiosResponse} from "axios/index";
-import {api} from "@/api/api";
+import {api} from "@/api/routes";
 
 // Helper functions for different HTTP methods
 const apiService = {
