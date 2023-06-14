@@ -1,4 +1,5 @@
 import '@/styles/globals.css'
+import '@/styles/FacultyForm.scss';
 import type { AppProps } from 'next/app'
 import store from '@/state/store'
 import { Provider } from 'react-redux'
