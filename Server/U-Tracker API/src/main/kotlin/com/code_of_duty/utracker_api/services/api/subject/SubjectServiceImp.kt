@@ -29,17 +29,18 @@ class SubjectServiceImp(
     }
 
     override fun setAssessment(uuid: UUID, assessmentDto: AssesmentDto): Subject {
-        val subject = subjectDao.findById(uuid)
-            .orElseThrow { EntityNotFoundException("Subject not found with id: $uuid") }
-        val assessment = Assessment(
-            name = assessmentDto.name,
-            percentage = assessmentDto.percentage,
-            date = assessmentDto.date,
-            grade = assessmentDto.grade,
-            subject = subject
-        )
-        assessmentDao.save(assessment)
-        return subject
+        TODO("Not yet implemented")
+//        val subject = subjectDao.findById(uuid)
+//            .orElseThrow { EntityNotFoundException("Subject not found with id: $uuid") }
+//        val assessment = Assessment(
+//            name = assessmentDto.name,
+//            percentage = assessmentDto.percentage,
+//            date = assessmentDto.date,
+//            grade = assessmentDto.grade,
+//            subject = subject
+//        )
+//        assessmentDao.save(assessment)
+//        return subject
     }
 
 

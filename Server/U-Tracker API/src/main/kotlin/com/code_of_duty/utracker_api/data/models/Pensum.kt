@@ -10,7 +10,7 @@ data class Pensum(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id : UUID = UUID.randomUUID(),
     val plan: String,
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "degree_fk", referencedColumnName = "id")
     val degree: Degree
 )
