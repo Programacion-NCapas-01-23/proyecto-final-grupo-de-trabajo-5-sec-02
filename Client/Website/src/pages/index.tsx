@@ -6,8 +6,6 @@ export default function Home() {
     <main
       className=""
     >
-      <Sidebar />
-      <FacultyForm/>
     </main>
   )
 }

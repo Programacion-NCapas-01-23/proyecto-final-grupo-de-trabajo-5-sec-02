@@ -1,4 +1,4 @@
-import axios, {AxiosInstance} from "axios/index";
+import axios, {AxiosInstance} from "axios";
 
 export const baseURL: string = 'http://localhost:8080';
 
