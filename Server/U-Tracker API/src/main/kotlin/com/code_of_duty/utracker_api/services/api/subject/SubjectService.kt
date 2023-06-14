@@ -17,5 +17,5 @@ interface SubjectService {
 
     fun setAssessment(uuid: UUID, assessmentDto: AssesmentDto): Subject
 
-    fun calculateEstimateGrades(code: String, assessment: List<Assessment>): Subject
+    //fun calculateEstimateGrades(code: String, assessment: List<Assessment>): Subject
 }

@@ -11,3 +11,6 @@ class StudentCodeNotMatchException(message: String?) : RuntimeException(message)
 
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 class UnauthorizedException(message: String?) : RuntimeException(message)
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+class ExceptionNotFound(message: String?) : RuntimeException(message)
