@@ -1,83 +1,82 @@
-import React, {ChangeEvent, FormEvent, useState} from 'react';
-import { useAppDispatch } from '@/hooks/reduxHooks';
-import axios from 'axios';
+import React from 'react';
+import {useAppDispatch} from '@/hooks/reduxHooks';
+import {createFacultyStart} from '@/state/slices/facultySlice';
+import Faculty from "@/interfaces/Faculty";
+import {createFaculty} from "@/state/thunks/facultyThunk";
+import {Button, Form, Input, Typography, Upload} from 'antd';
+import {PlusOutlined} from '@ant-design/icons';
 
-import { createFacultyStart } from '@/state/slices/facultySlice';
-
-const universities = ['University A', 'University B', 'University C']; // Replace with your actual list of universities
+const {TextArea} = Input;
+const {Title} = Typography;
+const normFile = (e: any) => {
+    if (Array.isArray(e)) {
+        return e;
+    }
+    return e?.fileList;
+};
 
 const FacultyForm = () => {
     const dispatch = useAppDispatch();
-    const [facultyName, setFacultyName] = useState('');
-    const [selectedUniversity, setSelectedUniversity] = useState('');
+    const [form] = Form.useForm();
 
-    const handleFacultyNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setFacultyName(e.target.value);
-    };
-
-    const handleUniversityChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        setSelectedUniversity(e.target.value);
-    };
-
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        try {
-            // Replace 'API_URL' with your actual API endpoint
-            const response = await axios.post('API_URL', {
-                facultyName,
-                university: selectedUniversity,
-            });
-            dispatch(createFacultyStart(response.data)); // Dispatch an action to save the faculty in Redux
-            // Redirect or show success message here
-        } catch (error) {
-            console.error('Error:', error);
-            // Handle error here (show error message, etc.)
-        }
+    const handleSubmit = async (values: Faculty) => {
+        const {name, description, logo} = values;
+        const newFaculty: Faculty = {
+            name,
+            description,
+            logo,
+        };
+        dispatch(createFacultyStart());
+        createFaculty(newFaculty)
     };
 
     return (
-        <div className="p-4 sm:ml-64">
-            <h1 className="text-2xl font-bold mb-4">Create Faculty</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label htmlFor="facultyName" className="block text-gray-700 font-bold mb-2">
-                        Faculty Name
-                    </label>
-                    <input
-                        type="text"
-                        id="facultyName"
-                        className="border rounded px-4 py-2 w-full"
-                        value={facultyName}
-                        onChange={handleFacultyNameChange}
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="university" className="block text-gray-700 font-bold mb-2">
-                        University
-                    </label>
-                    <select
-                        id="university"
-                        className="border rounded px-4 py-2 w-full"
-                        value={selectedUniversity}
-                        onChange={handleUniversityChange}
-                        required
-                    >
-                        <option value="">Select University</option>
-                        {universities.map((university) => (
-                            <option key={university} value={university}>
-                                {university}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <button
-                    type="submit"
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        <div className="">
+            <div className="form-container">
+                <Title>Crear Facultad</Title>
+                <Form
+                    name="newFaculty"
+                    form={form}
+                    labelCol={{span: 8}}
+                    wrapperCol={{span: 16}}
+                    style={{maxWidth: 600}}
+                    initialValues={{remember: true}}
+                    onFinish={handleSubmit}
+                    autoComplete="off"
                 >
-                    Save
-                </button>
-            </form>
+                    <Form.Item
+                        label="Nombre"
+                        name="name"
+                        rules={[{required: true, message: 'Ingresa el nombre de la facultad!'}]}
+                    >
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item
+                        label="Descripcion"
+                        name="description"
+                        rules={[{required: true, message: 'Ingresa la descripción de la facultad!'}]}
+                    >
+                        <TextArea rows={3}/>
+                    </Form.Item>
+                    <Form.Item label="Logo"
+                               name="logo"
+                               valuePropName="fileList"
+                               getValueFromEvent={(e) => normFile(e)}
+                    >
+                        <Upload action="/upload.do"
+                                listType="picture-card"
+                        >
+                            <div>
+                                <PlusOutlined/>
+                                <div style={{marginTop: 8}}>Upload</div>
+                            </div>
+                        </Upload>
+                    </Form.Item>
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
+                </Form>
+            </div>
         </div>
     );
 };

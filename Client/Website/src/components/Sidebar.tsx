@@ -5,61 +5,77 @@ import IconStudent from "@/assets/icons/IconStudent";
 import IconSchedule from "@/assets/icons/IconSchedule";
 import IconBxsBook from "@/assets/icons/IconBxsBook";
 import IconCircleUser from "@/assets/icons/IconCircleUser";
+import React, {ReactNode} from "react";
 
-export const Sidebar = () => {
+// TODO Refactor the Sidebar component to open/close it
+
+export const Sidebar = ({ children }: { children: ReactNode }) => {
     return(
         <>
             <Header/>
             <aside id="logo-sidebar"
-                   className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+                   className=""
                    aria-label="Sidebar">
-                <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-                    <ul className="space-y-2 font-medium">
+                <div className="">
+                    <h5 id="drawer-navigation-label"
+                        className="">Menu</h5>
+                    <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation"
+                            className="">
+                        <svg aria-hidden="true" className="" fill="currentColor" viewBox="0 0 20 20"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd"
+                                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                  clipRule="evenodd"></path>
+                        </svg>
+                        <span className="">Close menu</span>
+                    </button>
+                    <ul className="">
                         <li>
                             <a href="#"
-                               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <IconDashboard className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                               className="">
+                                <IconDashboard className="" />
                                 <span className="ml-3">Dashboard</span>
                             </a>
                         </li>
                         <li>
                             <a href="#"
-                               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <IconSchool className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                                <span className="flex-1 ml-3 whitespace-nowrap">Facultades</span>
+                               className="">
+                                <IconSchool className="" />
+                                <span className="">Facultades</span>
                             </a>
                         </li>
                         <li>
                             <a href="#"
-                               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <IconStudent className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                                <span className="flex-1 ml-3 whitespace-nowrap">Carreras y Pemsun</span>
+                               className="">
+                                <IconStudent className="" />
+                                <span className="">Carreras y Pemsun</span>
                             </a>
                         </li>
                         <li>
                             <a href="#"
-                               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <IconSchedule className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                                <span className="flex-1 ml-3 whitespace-nowrap">Horarios</span>
+                               className="">
+                                <IconSchedule className="" />
+                                <span className="">Horarios</span>
                             </a>
                         </li>
                         <li>
                             <a href="#"
-                               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <IconBxsBook className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                                <span className="flex-1 ml-3 whitespace-nowrap">Materias</span>
+                               className="">
+                                <IconBxsBook className="" />
+                                <span className="">Materias</span>
                             </a>
                         </li>
                         <li>
                             <a href="#"
-                               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <IconCircleUser className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                                <span className="flex-1 ml-3 whitespace-nowrap">Mi Perfil</span>
+                               className="">
+                                <IconCircleUser className="" />
+                                <span className="">Mi Perfil</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </aside>
+            {children}
         </>
     )
 }

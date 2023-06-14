@@ -1,5 +1,5 @@
 import {useAppDispatch} from "@/hooks/reduxHooks";
-import {FormEvent, useEffect} from "react";
+import {FormEvent} from "react";
 import Career from "@/interfaces/Career";
 import Faculty from "@/interfaces/Faculty";
 import {createCareerStart} from "@/state/slices/careerSlice";
@@ -13,7 +13,7 @@ const CareerForm = (): JSX.Element => {
         description: '',
     }
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>)=> {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const newCareer: Career = {
             name: '',
@@ -24,12 +24,14 @@ const CareerForm = (): JSX.Element => {
     };
 
     return (
-        <>
-            <h1>Crear Carrera</h1>
-            <form onSubmit={handleSubmit}>
+        <div>
+            <div className="">
+                <h1>Crear Carrera</h1>
+                <form onSubmit={handleSubmit}>
 
-            </form>
-        </>
+                </form>
+            </div>
+        </div>
     )
 }
 
