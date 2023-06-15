@@ -9,6 +9,8 @@ data class SubjectPerCycle(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id : UUID = UUID.randomUUID(),
+    @Column(unique = true)
+    val correlative : Int,
     @ManyToOne
     @JoinColumn(name = "cycle_fk", referencedColumnName = "id")
     val cycle: Cycle,

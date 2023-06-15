@@ -59,7 +59,7 @@ class AuthServiceImp(
         val token = verificationTokenService.findByToken(forgotPasswordDto.token)
             ?: throw IllegalArgumentException("Invalid token")
 
-        if (token.student != student) {
+        if (token.student.email != student.email) {
             throw IllegalArgumentException("Invalid token")
         }
 

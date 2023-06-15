@@ -19,7 +19,7 @@ class ClassTimeServiceImpl : ClassTimeService{
     lateinit var generalUtils: GeneralUtils
     override fun addClassTime(classesTimes: List<ClassTimeDTO>) {
         classesTimes.forEach {
-            val day = generalUtils.getDay(it.day, classesTimes.indexOf(it))
+            val day = Days.fromInt(it.day)
             val time = LocalTime.parse(it.start)
 
             if(classTimeDao.existsByDayAndStartHourAndTotalHours(day, time, it.end))
@@ -37,7 +37,7 @@ class ClassTimeServiceImpl : ClassTimeService{
     override fun deleteClassTime(classesTimes: List<UUID>) = classTimeDao.deleteByIdIn(classesTimes)
 
     override fun updateClassTime(classTime: ClassTimeUpdateDto){
-        val day = generalUtils.getDay(classTime.day)
+        val day = Days.fromInt(classTime.day)
 
         val time = LocalTime.parse(classTime.startHour)
 
