@@ -3,12 +3,12 @@ import { Typography } from 'antd';
 
 const { Title } = Typography;
 
-const Faculties = (): JSX.Element => {
+const Page = (): JSX.Element => {
     return(
         <>
-            <Title>Facultades</Title>
+            <Title>Carreras</Title>
         </>
     )
 };
 
-export default Faculties;
+export default Page;
