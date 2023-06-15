@@ -7,18 +7,18 @@ import IconCircleUser from "@/assets/icons/IconCircleUser";
 import React, {ReactNode, useState} from "react";
 import { Layout, Menu, Button, theme, Typography } from 'antd';
 import IconGraduationCap from "@/assets/icons/IconGraduationCap";
+import { useRouter } from 'next/navigation'
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
-
-
-// TODO Refactor the Sidebar component to open/close it
 
 export const Sidebar = ({ children }: { children: ReactNode }) => {
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+
+    const router = useRouter();
 
     return(
         <>
@@ -46,16 +46,19 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
                                 key: '1',
                                 icon: <IconDashboard />,
                                 label: 'Dashboard',
+                                onClick: () => router.push('/'),
                             },
                             {
                                 key: '2',
                                 icon: <IconSchool />,
                                 label: 'Facultades',
+                                onClick: () => router.push('/faculties'),
                                 children: [
                                     {
                                         key: '8',
                                         icon: <IconSchool />,
-                                        label: 'Losing control'
+                                        label: 'Losing control',
+                                        onClick: () => router.push('/'),
                                     }
                                 ]
                             },
@@ -63,26 +66,31 @@ export const Sidebar = ({ children }: { children: ReactNode }) => {
                                 key: '3',
                                 icon: <IconStudent />,
                                 label: 'Carreras',
+                                onClick: () => router.push('/careers'),
                             },
                             {
                                 key: '4',
                                 icon: <IconGraduationCap />,
                                 label: 'Pensum',
+                                onClick: () => router.push('/pensums'),
                             },
                             {
                                 key: '5',
                                 icon: <IconBxsBook />,
                                 label: 'Materias',
+                                onClick: () => router.push('/subjects'),
                             },
                             {
                                 key: '6',
                                 icon: <IconSchedule />,
                                 label: 'Horarios',
+                                onClick: () => router.push('/schedules'),
                             },
                             {
                                 key: '7',
                                 icon: <IconCircleUser />,
                                 label: 'Mi Perfil',
+                                onClick: () => router.push('/'),
                             },
                         ]}
                     />
