@@ -1,4 +1,4 @@
-package com.code_of_duty.utracker_api.services.student
+package com.code_of_duty.utracker_api.services.api.student
 
 import com.code_of_duty.utracker_api.data.dao.StudentDao
 import com.code_of_duty.utracker_api.data.dtos.ChangePasswordDto

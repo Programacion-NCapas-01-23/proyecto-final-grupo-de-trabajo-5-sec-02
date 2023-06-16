@@ -13,11 +13,11 @@ class JwtUtils(
     @Value("\${jwt.expiration}") private val expirationTime: Long
 ) {
 
-    fun generateToken(username: String): String {
+    fun generateToken(code: String): String {
         val now = Date()
         val expiryDate = Date(now.time + expirationTime)
         return Jwts.builder()
-            .setSubject(username)
+            .setSubject(code)
             .setIssuedAt(now)
             .setExpiration(expiryDate)
             .signWith(HS256, jwtSecret)
@@ -32,5 +32,9 @@ class JwtUtils(
             println("Invalid JWT token: ${e.message}")
         }
         return false
+    }
+
+    fun getIdFromToken(token: String): String {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).body.subject
     }
 }

@@ -1,25 +1,27 @@
-package com.code_of_duty.utracker_api.services.verificationToken
+package com.code_of_duty.utracker_api.services.api.verificationToken
 
 import com.code_of_duty.utracker_api.data.dao.StudentDao
 import com.code_of_duty.utracker_api.data.dao.VerificationTokenDao
 import com.code_of_duty.utracker_api.data.models.VerificationToken
+import com.code_of_duty.utracker_api.utils.ExceptionNotFound
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
 @Component
-class VerificationTokenServiceImp(private val verificationTokenDao: VerificationTokenDao) : VerificationTokenService {
+class VerificationTokenServiceImp(
+    private val verificationTokenDao: VerificationTokenDao,
+    @Value("\${TokenGenerator.characters}") private val characters: String
+) : VerificationTokenService {
 
     @Autowired
     lateinit var studentDao: StudentDao
     override fun createVerificationToken(studentCode: String): VerificationToken{
-        val character = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-
         lateinit var token: String
-
         do{
             token= (1..6)
-                .map { character.random() }
+                .map { characters.random() }
                 .joinToString("")
         }while(verificationTokenDao.existsByToken(token))
 
@@ -34,11 +36,14 @@ class VerificationTokenServiceImp(private val verificationTokenDao: Verification
         return verificationTokenDao.save(verificationToken)
     }
     override fun deleteVerificationToken(token: String) {
-        val verificationToken = verificationTokenDao.findByToken(token)
-            ?: throw IllegalArgumentException("Invalid token")
+        val verificationToken = verificationTokenDao.findById(token).orElseThrow {
+            ExceptionNotFound("invalid token")
+        }
 
         verificationTokenDao.delete(verificationToken)
     }
 
-    override fun findByToken(token: String) = verificationTokenDao.findByToken(token)
+    override fun findByToken(token: String) = verificationTokenDao.findById(token).orElseThrow {
+        ExceptionNotFound("invalid token")
+    }
 }

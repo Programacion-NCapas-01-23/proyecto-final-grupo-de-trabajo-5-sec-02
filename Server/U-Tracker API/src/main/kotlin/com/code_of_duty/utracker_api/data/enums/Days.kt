@@ -5,5 +5,10 @@ enum class Days {
     TUESDAY,
     WEDNESDAY,
     THURSDAY,
-    FRIDAY
+    FRIDAY,
+    SATURDAY;
+
+    companion object {
+        fun fromInt(type: Int) = values().first { it.ordinal == type }
+    }
 }

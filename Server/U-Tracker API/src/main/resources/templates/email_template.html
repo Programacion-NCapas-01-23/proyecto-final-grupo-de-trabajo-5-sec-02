@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Token de verificación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .token {
+            background-color: #f5f5f5;
+            padding: 10px;
+            display: inline-block;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function copyToken() {
+            var tokenElement = document.getElementById("token");
+            var range = document.createRange();
+            range.selectNode(tokenElement);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();
+            alert("¡Token copiado!");
+        }
+    </script>
+</head>
+<body>
+<h1>Token de verificación</h1>
+<p>¡Bienvenido al correo de recuperación! A continuación, encontrarás tu token de verificación de 6 dígitos:</p>
+<h2 id="token" class="token" onclick="copyToken()">[[${verifyToken.token}]]</h2>
+<p>Utiliza este token para completar el proceso de verificación en nuestra plataforma.</p>
+</body>
+</html>
