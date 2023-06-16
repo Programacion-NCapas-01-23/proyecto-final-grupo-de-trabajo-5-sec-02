@@ -6,8 +6,8 @@ import org.springframework.data.repository.ListCrudRepository
 
 
 
-interface SubjectDao : ListCrudRepository<Subject, UUID> {
+interface SubjectDao : ListCrudRepository<Subject, String> {
     fun findByCode(code: String): List<Subject>
     fun findByName(name: String): Subject?
-    fun findByStudentId(studentId: String): List<Subject>
+
 }
