@@ -1,4 +1,4 @@
-import {Button, Card, Image} from 'antd';
+import {Card, Image} from 'antd';
 import React, {MouseEventHandler} from "react";
 import Link from 'next/link';
 
@@ -10,35 +10,35 @@ const cards = [
         title: "Facultades",
         description: "This is the description",
         source: "https://mundocampusvirtual.com/wp-content/uploads/2022/09/4886002039_8c186c8b17_b-scaled.jpg",
-        href: '/faculties/',
+        href: '/faculties',
     },
     {
         key: "2",
         title: "Carreras",
         description: "This is the description",
         source: "https://mundocampusvirtual.com/wp-content/uploads/2022/09/4886002039_8c186c8b17_b-scaled.jpg",
-        href: '/careers/',
+        href: '/careers',
     },
     {
         key: "3",
         title: "Pensum",
         description: "This is the description",
         source: "https://mundocampusvirtual.com/wp-content/uploads/2022/09/4886002039_8c186c8b17_b-scaled.jpg",
-        href: '/pensums/',
+        href: '/pensums',
     },
     {
         key: "4",
         title: "Materias",
         description: "This is the description",
         source: "https://mundocampusvirtual.com/wp-content/uploads/2022/09/4886002039_8c186c8b17_b-scaled.jpg",
-        href: '/subjects/',
+        href: '/subjects',
     },
     {
         key: "5",
         title: "Horarios",
         description: "This is the description",
         source: "https://mundocampusvirtual.com/wp-content/uploads/2022/09/4886002039_8c186c8b17_b-scaled.jpg",
-        href: '/schedules/',
+        href: '/schedules',
     },
 ]
 
