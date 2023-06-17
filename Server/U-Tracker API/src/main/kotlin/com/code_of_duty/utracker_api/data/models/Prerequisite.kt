@@ -14,7 +14,7 @@ data class PrerequisiteID(
     val subjectCode : Subject,
     @ManyToOne
     @JoinColumn(name = "prerequisite_fk", referencedColumnName = "correlative")
-    val prerequisiteCode : Subject
+    val prerequisiteCode : SubjectPerCycle
 )
 
 @Entity

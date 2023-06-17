@@ -10,7 +10,10 @@ import org.hibernate.validator.constraints.UUID
 import org.springframework.stereotype.Component
 
 @Component
-class SubjectServiceImp(private val subjectDao: SubjectDao, private val assessmentDao: AssesmentDao) : SubjectService {
+class SubjectServiceImp(
+    private val subjectDao: SubjectDao,
+    private val assessmentDao: AssesmentDao
+) : SubjectService {
 
     override fun getAllSubjects(code: String): List<Subject> {
         return subjectDao.findByCode(code)
@@ -26,17 +29,18 @@ class SubjectServiceImp(private val subjectDao: SubjectDao, private val assessme
     }
 
     override fun setAssessment(uuid: UUID, assessmentDto: AssesmentDto): Subject {
-        val subject = subjectDao.findById(uuid)
-            .orElseThrow { EntityNotFoundException("Subject not found with id: $uuid") }
-        val assessment = Assessment(
-            name = assessmentDto.name,
-            percentage = assessmentDto.percentage,
-            date = assessmentDto.date,
-            grade = assessmentDto.grade,
-            subject = subject
-        )
-        assessmentDao.save(assessment)
-        return subject
+        TODO("Not yet implemented")
+//        val subject = subjectDao.findById(uuid)
+//            .orElseThrow { EntityNotFoundException("Subject not found with id: $uuid") }
+//        val assessment = Assessment(
+//            name = assessmentDto.name,
+//            percentage = assessmentDto.percentage,
+//            date = assessmentDto.date,
+//            grade = assessmentDto.grade,
+//            subject = subject
+//        )
+//        assessmentDao.save(assessment)
+//        return subject
     }
 
 

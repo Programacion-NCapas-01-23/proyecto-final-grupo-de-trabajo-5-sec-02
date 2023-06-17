@@ -11,6 +11,7 @@ data class Cycle(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id : UUID = UUID.randomUUID(),
     val cycleType : CycleType,
+    val name: String,
     @ManyToOne
     @JoinColumn(name = "pensum_fk", referencedColumnName = "id")
     val pensum: Pensum

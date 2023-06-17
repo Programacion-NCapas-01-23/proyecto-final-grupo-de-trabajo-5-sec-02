@@ -3,6 +3,7 @@ package com.code_of_duty.utracker_api.services.api.verificationToken
 import com.code_of_duty.utracker_api.data.dao.StudentDao
 import com.code_of_duty.utracker_api.data.dao.VerificationTokenDao
 import com.code_of_duty.utracker_api.data.models.VerificationToken
+import com.code_of_duty.utracker_api.utils.ExceptionNotFound
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -18,7 +19,6 @@ class VerificationTokenServiceImp(
     lateinit var studentDao: StudentDao
     override fun createVerificationToken(studentCode: String): VerificationToken{
         lateinit var token: String
-        //TODO () -> change to use UUID.fromString()
         do{
             token= (1..6)
                 .map { characters.random() }
@@ -36,11 +36,14 @@ class VerificationTokenServiceImp(
         return verificationTokenDao.save(verificationToken)
     }
     override fun deleteVerificationToken(token: String) {
-        val verificationToken = verificationTokenDao.findByToken(token)
-            ?: throw IllegalArgumentException("Invalid token")
+        val verificationToken = verificationTokenDao.findById(token).orElseThrow {
+            ExceptionNotFound("invalid token")
+        }
 
         verificationTokenDao.delete(verificationToken)
     }
 
-    override fun findByToken(token: String) = verificationTokenDao.findByToken(token)
+    override fun findByToken(token: String) = verificationTokenDao.findById(token).orElseThrow {
+        ExceptionNotFound("invalid token")
+    }
 }
