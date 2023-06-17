@@ -21,7 +21,8 @@ class SubjectServiceImp(private val subjectDao: SubjectDao, private val assessme
     }
 
     override fun getSubjectsByStudent(studentId: String): List<Subject> {
-        return subjectDao.findByStudentId(studentId)
+        //return subjectDao.findByStudentId(studentId)
+        return emptyList()
     }
 
     override fun setAssessment(uuid: UUID, assessmentDto: AssesmentDto): Subject {
@@ -39,7 +40,7 @@ class SubjectServiceImp(private val subjectDao: SubjectDao, private val assessme
     }
 
 
-    override fun calculateEstimateGrades(code: String, assessments: List<Assessment>): Subject {
+    override fun calculateEstimateGrades(code: String, assessments: List<Assessment>): List<Double> {
         val subject = subjectDao.findByCode(code)
 
         var total = 0.0
@@ -68,18 +69,22 @@ class SubjectServiceImp(private val subjectDao: SubjectDao, private val assessme
         val passingGrade = 6.0
         val remainingGrade = passingGrade - estimateGrade
 
-        if (remainingGrade <= 0) {
-            // If the remaining grade is zero or negative, mark the subject as passed
-            subject[0].passed = true
-        } else if (totalAssessments > 0) {
+        val gradeNeededPerAssessment = mutableListOf<Double>()
+
+        if (remainingGrade > 0) {
             // Calculate the grade needed in the remaining assessments
-            val gradeNeeded = remainingGrade * totalAssessments - total
-            subject[0].remainingGrade = gradeNeeded / totalAssessments
+            val remainingAssessments = assessments.filter { it.grade == null }
+            val totalAssessments = remainingAssessments.size
+
+            if (totalAssessments > 0) {
+                val gradeNeeded = remainingGrade * totalAssessments
+                val remainingGradeNeeded = gradeNeeded / totalAssessments
+
+                for (i in 1..totalAssessments) {
+                    gradeNeededPerAssessment.add(remainingGradeNeeded)
+                }
+            }
         }
-
-        return subject[0]
+        return gradeNeededPerAssessment
     }
-
-
-
 }
