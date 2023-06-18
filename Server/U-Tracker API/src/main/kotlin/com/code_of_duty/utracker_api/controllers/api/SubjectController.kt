@@ -1,9 +1,12 @@
 package com.code_of_duty.utracker_api.controllers.api
 
+import com.code_of_duty.utracker_api.data.dtos.SubjectDto
+import com.code_of_duty.utracker_api.services.api.subject.SubjectService
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -11,8 +14,26 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("\${api.base-path}/subject")
 @Tag(name = "API")
 class SubjectController {
-    @GetMapping("/getSubject")
-    fun getSubject(@RequestParam(required = false) name: String): ResponseEntity<Any> {
+
+    @Autowired
+    lateinit var subjectService: SubjectService
+
+    @GetMapping("/getAllSubjects")
+    fun getAllSubjects(
+        @RequestParam(name = "nameFilter", required = false) nameFilter: String?,
+        @RequestParam(name = "sortBy", required = false) sortBy: String?,
+        @RequestParam(name = "degreeFilter", required = false) degreeFilter: String?,
+        @RequestParam(name = "pensumFilter", required = false) pensumFilter: String?,
+        @RequestParam(name = "facultyFilter", required = false) facultyFilter: String?
+    ): List<SubjectDto> {
+        return subjectService.getAllSubjects(nameFilter, sortBy, degreeFilter, pensumFilter, facultyFilter)
+    }
+
+
+
+    @GetMapping("/getSubjectByName")
+    @SecurityRequirement(name = "ApiAuth")
+    fun getSubjectByName(): ResponseEntity<Any> {
         TODO()
     }
 
