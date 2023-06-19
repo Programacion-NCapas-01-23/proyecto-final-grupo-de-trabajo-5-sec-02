@@ -4,5 +4,6 @@ services:
     build:
         commands:
             - ./gradlew clean build
-        start-command: java -jar build/libs/U-Tracker_API-0.0.1-SNAPSHOT-plain.jar
+        start-command: java -jar build/libs/U-tracker_API.jar
     port: 8080
+    
