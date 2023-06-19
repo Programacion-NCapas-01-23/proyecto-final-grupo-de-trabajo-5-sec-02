@@ -88,7 +88,7 @@ class AdminCycleController(
     @Operation(
         summary = "Delete cycles",
         description = "Delete a list of cycles",
-        security = [SecurityRequirement(name = "adminAuth")],
+        security = [SecurityRequirement(name = "AdminAuth")],
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -146,7 +146,7 @@ class AdminCycleController(
     @Operation(
         summary = "Update a cycle",
         description = "Update a cycle",
-        security = [SecurityRequirement(name = "adminAuth")],
+        security = [SecurityRequirement(name = "AdminAuth")],
         responses = [
             ApiResponse(
                 responseCode = "200",
