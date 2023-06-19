@@ -29,14 +29,6 @@ class SubjectController {
         return subjectService.getAllSubjects(nameFilter, sortBy, degreeFilter, pensumFilter, facultyFilter)
     }
 
-
-
-    @GetMapping("/getSubjectByName")
-    @SecurityRequirement(name = "ApiAuth")
-    fun getSubjectByName(): ResponseEntity<Any> {
-        TODO()
-    }
-
     @GetMapping("/getSubjectsByStudent")
     @SecurityRequirement(name = "ApiAuth")
     fun getSubjectByStudent(): ResponseEntity<Any> {

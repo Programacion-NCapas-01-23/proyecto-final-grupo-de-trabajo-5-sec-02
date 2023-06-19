@@ -15,8 +15,8 @@ import jakarta.validation.constraints.Email
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.web.bind.annotation.*
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.context.Context
@@ -34,6 +34,7 @@ class AuthController (private val passwordUtils: PasswordUtils){
     private lateinit var mailSender: JavaMailSender
     @Autowired
     lateinit var studentService: StudentService
+
     @Autowired
     private lateinit var templateEngine: TemplateEngine
 
@@ -64,20 +65,16 @@ class AuthController (private val passwordUtils: PasswordUtils){
         ]
     )
     @PostMapping("/register")
-    fun register(@RequestBody registerDto: RegisterDto) :ResponseEntity<Any>{
-        if (authService.isCodeTaken(registerDto.username)) {
-            return ResponseEntity(MessageDto("Username already taken"), HttpStatus.BAD_REQUEST)
+    fun register(@RequestBody registerDto: RegisterDto): ResponseEntity<Any> {
+        if (authService.isCodeTaken(registerDto.code)) {
+            return ResponseEntity(MessageDto("Code already taken"), HttpStatus.BAD_REQUEST)
         }
 
-        // Hash the password using PasswordUtils
-        val hashedPassword = passwordUtils.hashPassword(registerDto.password)
+        val newUser = authService.registerStudent(registerDto)
 
-        // Create a new user using UserService
-        val newUser = authService.registerStudent(registerDto, hashedPassword)
-
-        // Return a success response with the new user's ID
         return ResponseEntity(MessageDto("User successfully registered with ID ${newUser.code}"), HttpStatus.OK)
     }
+
 
     @Operation(
         summary = "Login",

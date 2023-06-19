@@ -38,7 +38,7 @@ class SubjectServiceImp(
                 subject.subjectPerCycles.all { subjectPerCycle ->
                     val degreeMatches = degreeFilter == null || subjectPerCycle.cycle.pensum.degree.name.equals(degreeFilter, ignoreCase = true)
                     val pensumMatches = pensumFilter == null || subjectPerCycle.cycle.pensum.plan.equals(pensumFilter, ignoreCase = true)
-                    val facultyMatches = facultyFilter == null || subjectPerCycle.cycle.pensum.degree.faculty.name.equals(facultyFilter, ignoreCase = true)
+                    val facultyMatches = facultyFilter == null || subjectPerCycle.cycle.pensum.degree.faculty?.name.equals(facultyFilter, ignoreCase = true)
                     degreeMatches && pensumMatches && facultyMatches
                 }
             }
