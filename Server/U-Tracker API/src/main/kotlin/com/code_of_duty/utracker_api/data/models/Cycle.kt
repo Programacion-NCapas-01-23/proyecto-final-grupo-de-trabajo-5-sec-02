@@ -14,5 +14,13 @@ data class Cycle(
     val name: String,
     @ManyToOne
     @JoinColumn(name = "pensum_fk", referencedColumnName = "id")
-    val pensum: Pensum
+    val pensum: Pensum,
+
+    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "cycle_x_subject",
+        joinColumns = [JoinColumn(name = "cycle_fk", referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "subject_fk", referencedColumnName = "code")]
+    )
+    val subjects: List<Subject> = emptyList()
 )

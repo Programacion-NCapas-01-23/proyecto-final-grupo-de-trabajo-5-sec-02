@@ -44,15 +44,6 @@ class SubjectServiceImp(
             }
         }
 
-          //TODO("Can be implemented later")
-//        if (sortBy != null) {
-//            when (sortBy.lowercase(Locale.getDefault())) {
-//                "faculty" -> subjects = subjects.sortedBy { it.subjectPerCycles.firstOrNull()?.cycle?.pensum?.degree?.faculty?.name }
-//                "degree" -> subjects = subjects.sortedBy { it.subjectPerCycles.firstOrNull()?.cycle?.pensum?.degree?.name }
-//                "pensum" -> subjects = subjects.sortedBy { it.subjectPerCycles.firstOrNull()?.cycle?.pensum?.plan }
-//            }
-//        }
-
         return subjects.map { subject ->
             val cycleRelation = subject.subjectPerCycles.map { subjectPerCycle ->
                 val cycle = cycleDao.findById(subjectPerCycle.cycle.id)
@@ -79,16 +70,6 @@ class SubjectServiceImp(
             )
         }
     }
-
-
-
-
-
-
-
-//    override fun getSubjectsByStudent(studentId: String): List<Subject> {
-//        return subjectDao.findByStudentId(studentId)
-//    }
 
     override fun setAssessment(uuid: UUID, assessmentDto: AssesmentDto): Subject {
         TODO("Not yet implemented")

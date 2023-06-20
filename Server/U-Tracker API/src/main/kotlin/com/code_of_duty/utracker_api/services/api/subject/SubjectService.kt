@@ -12,8 +12,6 @@ interface SubjectService {
 
     fun getAllSubjects(nameFilter: String?, sortBy: String?, degreeFilter: String?, pensumFilter: String?, facultyFilter: String?): List<SubjectDto>
 
-    //fun getSubjectsByStudent(studentId: String): List<Subject>
-
     fun setAssessment(uuid: UUID, assessmentDto: AssesmentDto): Subject
 
     fun calculateEstimateGrades(code: String, assessment: List<Assessment>): List<Double>
