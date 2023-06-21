@@ -6,6 +6,8 @@ import java.util.*
 
 interface DegreeDao : JpaRepository<Degree, UUID> {
 
-    fun findByCode(code: UUID): Degree?
+    fun findByName(name: String): Degree?
+
+    fun existsByName(name: String): Boolean
 
 }

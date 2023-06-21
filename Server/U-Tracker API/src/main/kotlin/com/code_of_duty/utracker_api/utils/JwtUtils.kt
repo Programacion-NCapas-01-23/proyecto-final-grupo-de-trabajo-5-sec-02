@@ -37,4 +37,8 @@ class JwtUtils(
     fun getIdFromToken(token: String): String {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).body.subject
     }
+
+    fun getUserDegreeFromToken(token: String): String {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).body["degree"] as String
+    }
 }

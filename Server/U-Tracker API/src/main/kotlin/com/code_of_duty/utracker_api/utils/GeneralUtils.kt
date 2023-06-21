@@ -1,10 +1,9 @@
 package com.code_of_duty.utracker_api.utils
 
-import com.code_of_duty.utracker_api.data.enums.CycleType
-import com.code_of_duty.utracker_api.data.enums.Days
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class GeneralUtils {
@@ -14,8 +13,19 @@ class GeneralUtils {
         val token = request.getHeader("Authorization")?.removePrefix("Bearer ")
             ?: throw UnauthorizedException("Authorization token not provided")
 
-        !jwtUtils.validateToken(token) && throw UnauthorizedException("Invalid token")
+        if (!jwtUtils.validateToken(token)) {
+            throw UnauthorizedException("Invalid token")
+        }
 
         return jwtUtils.getIdFromToken(token)
+    }
+
+    fun extractUserDegreeFromToken(request: HttpServletRequest): UUID {
+        val token = request.getHeader("Authorization")?.removePrefix("Bearer ")
+            ?: throw UnauthorizedException("Authorization token not provided")
+
+        !jwtUtils.validateToken(token) && throw UnauthorizedException("Invalid token")
+
+        return UUID.fromString(jwtUtils.getUserDegreeFromToken(token))
     }
 }
