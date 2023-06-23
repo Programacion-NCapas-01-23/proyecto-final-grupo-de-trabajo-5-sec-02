@@ -26,8 +26,8 @@ const FacultyForm = () => {
             description,
             logo,
         };
-        dispatch(createFacultyStart());
-        createFaculty(newFaculty)
+        console.log(newFaculty);
+        dispatch(createFaculty(newFaculty));
     };
 
     return (
