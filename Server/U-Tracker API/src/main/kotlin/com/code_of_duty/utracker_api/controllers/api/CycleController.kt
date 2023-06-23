@@ -5,14 +5,14 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.UUID
+import java.util.*
 
 @RestController
 @RequestMapping("\${api.base-path}/cycle")
 @Tag(name = "API")
 class CycleController {
     @GetMapping("/")
-    fun getCycle(@RequestParam(required = false) id: UUID ): ResponseEntity<Any> {
+    fun getAllCycles(@RequestParam(required = false) id: UUID ): ResponseEntity<Any> {
         TODO()
     }
 

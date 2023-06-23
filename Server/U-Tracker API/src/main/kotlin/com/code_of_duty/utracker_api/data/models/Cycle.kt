@@ -2,7 +2,7 @@ package com.code_of_duty.utracker_api.data.models
 
 import com.code_of_duty.utracker_api.data.enums.CycleType
 import jakarta.persistence.*
-import java.util.UUID
+import java.util.*
 
 @Entity
 @Table(name = "cycle")
@@ -15,7 +15,8 @@ data class Cycle(
     @ManyToOne
     @JoinColumn(name = "pensum_fk", referencedColumnName = "id")
     val pensum: Pensum,
-
+    @ManyToMany(mappedBy = "degrees")
+    val degrees: List<Degree> = emptyList(),
     @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinTable(
         name = "cycle_x_subject",

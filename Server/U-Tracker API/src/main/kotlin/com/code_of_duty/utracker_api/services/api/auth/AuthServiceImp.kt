@@ -22,7 +22,11 @@ class AuthServiceImp(
 ): AuthService{
 
     override fun isCodeTaken(code: String) = studentDao.existsByCode(code)
-    override fun generateToken(student: Student) = jwtUtils.generateToken(student.code)
+    override fun generateToken(student: Student): String {
+        val role = "student"
+        return jwtUtils.generateToken(student.code, role)
+    }
+
 
     override fun validateToken(authToken: String) = jwtUtils.validateToken(authToken)
 
