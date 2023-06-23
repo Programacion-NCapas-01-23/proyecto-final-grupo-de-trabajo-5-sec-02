@@ -1,5 +1,7 @@
 package com.code_of_duty.u_tracker.ui.components.ui
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,10 +26,17 @@ fun FormsCard(
     title: String,
     subtitle: String? = null,
     editFields: List<@Composable () -> Unit>,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
-        onClick = onClick,
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null,
+                onClick = onClick
+            ),
         colors = cardColors(
             containerColor = MaterialTheme3.colorScheme.onSurfaceVariant
         ),
