@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "http://localhost:8080/api/"
+    private const val BASE_URL = "http://192.168.1.2:8080/api/"
 
     @Provides
     @Singleton
@@ -33,4 +33,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesMoshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
+    @Provides
+    @Singleton
+    fun providesOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
 }

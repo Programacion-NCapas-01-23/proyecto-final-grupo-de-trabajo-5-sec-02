@@ -1,9 +1,9 @@
-package com.code_of_duty.u_tracker.data.models
+package com.code_of_duty.u_tracker.data.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "user_token")
+@Entity
 data class UserToken(
     @PrimaryKey
     val token: String
