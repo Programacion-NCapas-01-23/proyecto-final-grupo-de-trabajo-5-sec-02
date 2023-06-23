@@ -6,6 +6,6 @@ import java.util.*
 
 @Service
 interface DegreeService {
-
+    fun getAllCycles(userDegree: UUID): Optional<Degree>
     fun findById(id: UUID): Degree?
 }

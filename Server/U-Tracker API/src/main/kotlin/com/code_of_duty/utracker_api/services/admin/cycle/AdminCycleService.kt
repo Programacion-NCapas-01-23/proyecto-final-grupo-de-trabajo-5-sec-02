@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 interface AdminCycleService {
+
     fun addAllCycles(cycles: List<CycleDto>)
     fun deleteAllCycles(cycles: List<String>)
     fun updateCycle(cycle: CycleDto)

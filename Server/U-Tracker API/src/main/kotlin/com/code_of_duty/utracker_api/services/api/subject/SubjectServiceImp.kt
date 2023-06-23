@@ -36,9 +36,9 @@ class SubjectServiceImp(
         if (degreeFilter != null || pensumFilter != null || facultyFilter != null) {
             subjects = subjects.filter { subject ->
                 subject.subjectPerCycles.all { subjectPerCycle ->
-                    val degreeMatches = degreeFilter == null || subjectPerCycle.cycle.pensum.degree.name.equals(degreeFilter, ignoreCase = true)
-                    val pensumMatches = pensumFilter == null || subjectPerCycle.cycle.pensum.plan.equals(pensumFilter, ignoreCase = true)
-                    val facultyMatches = facultyFilter == null || subjectPerCycle.cycle.pensum.degree.faculty?.name.equals(facultyFilter, ignoreCase = true)
+                    val degreeMatches = degreeFilter == null || subjectPerCycle.cycle.pensum?.degree?.name.equals(degreeFilter, ignoreCase = true)
+                    val pensumMatches = pensumFilter == null || subjectPerCycle.cycle.pensum?.plan.equals(pensumFilter, ignoreCase = true)
+                    val facultyMatches = facultyFilter == null || subjectPerCycle.cycle.pensum?.degree?.faculty?.name.equals(facultyFilter, ignoreCase = true)
                     degreeMatches && pensumMatches && facultyMatches
                 }
             }
@@ -56,7 +56,7 @@ class SubjectServiceImp(
                         id = cycle.id.toString(),
                         type = cycle.cycleType.ordinal,
                         name = cycle.name,
-                        pensumId = cycle.pensum.id.toString()
+                        pensumId = cycle.pensum?.id.toString()
                     )
                 )
             }

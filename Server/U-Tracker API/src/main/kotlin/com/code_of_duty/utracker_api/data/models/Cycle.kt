@@ -15,8 +15,6 @@ data class Cycle(
     @ManyToOne
     @JoinColumn(name = "pensum_fk", referencedColumnName = "id")
     val pensum: Pensum,
-    @ManyToMany(mappedBy = "degrees")
-    val degrees: List<Degree> = emptyList(),
     @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinTable(
         name = "cycle_x_subject",

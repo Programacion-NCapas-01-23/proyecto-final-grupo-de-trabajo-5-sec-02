@@ -3,34 +3,29 @@ package com.code_of_duty.utracker_api.services.api.cycle
 import com.code_of_duty.utracker_api.data.dao.CycleDao
 import com.code_of_duty.utracker_api.data.dao.DegreeDao
 import com.code_of_duty.utracker_api.data.dao.PensumDao
+import com.code_of_duty.utracker_api.data.dao.StudentDao
+import com.code_of_duty.utracker_api.data.dtos.CycleDto
 import com.code_of_duty.utracker_api.data.dtos.StudentCycleDto
 import com.code_of_duty.utracker_api.data.models.Cycle
+import com.code_of_duty.utracker_api.data.models.Pensum
 import com.code_of_duty.utracker_api.utils.ExceptionNotFound
+import com.code_of_duty.utracker_api.utils.JwtUtils
 import com.google.ortools.sat.CpModel
 import com.google.ortools.sat.CpSolver
 import com.google.ortools.sat.CpSolverStatus
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class CycleServiceImp(private val cycleDao: CycleDao, private val pensumDao: PensumDao, private val degreeDao: DegreeDao) : CycleService {
-    override fun getAllCycles(userDegree: UUID): List<Cycle> {
-        // Retrieve the pensum based on the user's degree
-        val degree = degreeDao.findById(userDegree).orElseThrow { ExceptionNotFound("Degree not found for code: $userDegree") }
-
-        val pensum = pensumDao.findByPlanAndDegree("default", degree)
-            ?: throw ExceptionNotFound("Pensum not found for degree: $userDegree")
-
-        // Retrieve cycles based on the pensum
-        val cycles = pensum.cycles
-
-        // Map the cycles to DTOs
-
-        return cycles!!
+class CycleServiceImp(
+    private val cycleDao: CycleDao,
+    private val studentDao: StudentDao,
+    private val jwtUtils: JwtUtils,
+) : CycleService {
+    override fun getAllCycles(studentCode: String): List<CycleDto> {
+        TODO()
     }
-
-
-
     override fun createStudentCycle(studentUUID: UUID, userCycleId: String, subjects: List<UUID>): StudentCycleDto {
         // Create a solver.
         val solver = CpSolver()

@@ -14,6 +14,9 @@ class AdminCycleServiceImpl(
     private val cycleDao: CycleDao,
     private val pensumDao: PensumDao,
 ) : AdminCycleService {
+    override fun getAllCycles(): List<Cycle> {
+        return cycleDao.findAll()
+    }
     override fun addAllCycles(cycles: List<CycleDto>) {
         cycles.forEach {
             val pensum =  pensumDao.findById(UUID.fromString(it.pensumId)).orElse(null)
@@ -25,8 +28,7 @@ class AdminCycleServiceImpl(
                         Cycle(
                             cycleType = cycleType,
                             pensum = pensum,
-                            name = it.name,
-                            subjects = emptyList()
+                            name = it.name
                         )
                     )
                 }
@@ -54,8 +56,7 @@ class AdminCycleServiceImpl(
                 id = cycleToUpdate.id,
                 cycleType = CycleType.fromInt(cycle.type),
                 pensum = pensum,
-                name = cycle.name,
-                subjects = emptyList()
+                name = cycle.name
             )
             cycleDao.save(newCycle)
         } else {
@@ -63,7 +64,4 @@ class AdminCycleServiceImpl(
         }
     }
 
-    override fun getAllCycles(): List<Cycle> {
-        return cycleDao.findAll()
-    }
 }
