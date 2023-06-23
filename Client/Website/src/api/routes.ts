@@ -26,7 +26,7 @@ export const routes = {
         delete: `${baseURL}/cycles/delete`,
         update: `${baseURL}/cycles/update`,
     },
-    degrees: {
+    career: {
         add: `${baseURL}/degrees/add`,
         delete: `${baseURL}/degrees/delete`,
         update: `${baseURL}/degrees/update`,
@@ -41,7 +41,7 @@ export const routes = {
         delete: `${baseURL}/pensum/delete`,
         update: `${baseURL}/pensum/update`,
     },
-    schedules: {
+    schedule: {
         add: `${baseURL}/schedules/add`,
         delete: `${baseURL}/schedules/delete`,
         deleteAll: `${baseURL}/schedules/delete/all`,
