@@ -6,4 +6,6 @@ interface Career {
     faculty: Faculty;
 }
 
+export type CareerPreview = { facultyId: string } & Omit<Career, "faculty">;
+
 export default Career;

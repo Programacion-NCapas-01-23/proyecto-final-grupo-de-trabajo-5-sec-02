@@ -7,4 +7,6 @@ interface Cycle {
     pensum: Pensum,
 }
 
+export type CyclePreview = {pensumId: string} & Omit<Cycle, "pensum">;
+
 export default Cycle;
