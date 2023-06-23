@@ -31,9 +31,7 @@ export const createFaculty = (faculty: Faculty): AppThunk => {
     return async (dispatch: ThunkDispatch<RootState, null, Action<string>>) => {
         try {
             dispatch(createFacultyStart());
-            console.log(faculty)
             const createdFaculty = await apiService.post<Faculty>(routes.faculties.add, [faculty]);
-            console.log(createdFaculty)
             dispatch(createFacultySuccess(createdFaculty));
         } catch (error) {
             dispatch(createFacultyFailure(error.message));
