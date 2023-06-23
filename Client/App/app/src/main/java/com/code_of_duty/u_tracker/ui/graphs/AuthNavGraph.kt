@@ -5,10 +5,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.code_of_duty.u_tracker.ui.models.NavItems
 import com.code_of_duty.u_tracker.ui.screens.login.LoginContent
 import com.code_of_duty.u_tracker.ui.screens.ScreenContent
 
-fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.authNavGraph(navController: NavController) {
     navigation(
         route = Graph.AUTHENTICATION,
         startDestination = AuthScreen.Login.route
@@ -16,8 +17,11 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         composable(route = AuthScreen.Login.route) {
             LoginContent(
                 onClick = {
-                    navController.popBackStack()
-                    navController.navigate(Graph.HOME)
+                    navController.navigate(Graph.HOME){
+                        popUpTo(Graph.AUTHENTICATION){
+                            inclusive = true
+                        }
+                    }
                 },
                 onSignUpClick = {
                     navController.navigate(AuthScreen.SignUp.route)

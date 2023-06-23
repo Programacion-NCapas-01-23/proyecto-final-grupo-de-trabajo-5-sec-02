@@ -1,52 +1,52 @@
 package com.code_of_duty.u_tracker.ui.graphs
 
-import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 
-import com.code_of_duty.u_tracker.ui.models.BottomNavItems
+import com.code_of_duty.u_tracker.ui.models.NavItems
 import com.code_of_duty.u_tracker.ui.screens.ScreenContent
-import com.code_of_duty.u_tracker.ui.screens.assesment.AssesmentScreen
 import com.code_of_duty.u_tracker.ui.screens.cum.CUMScreen
 import com.code_of_duty.u_tracker.ui.screens.pensum.PensumScreen
 import com.code_of_duty.u_tracker.ui.screens.schedule.ScheduleScreen
 import com.code_of_duty.u_tracker.ui.screens.term.TermScreen
+import com.code_of_duty.u_tracker.ui.screens.profile.ProfileScreen
 
-@Composable
-fun HomeBottomNavGraph(navController: NavHostController) {
-    NavHost(
-        navController = navController,
+fun NavGraphBuilder.homeNavGraph(navController: NavController) {
+    navigation(
         route = Graph.HOME,
-        startDestination = BottomNavItems.Term.route
+        startDestination = NavItems.Term.route
     ) {
-        composable(route = BottomNavItems.Schedule.route){
+        composable(route = NavItems.Schedule.route){
             ScheduleScreen()
         }
-        composable(route = BottomNavItems.Assesment.route){
+        composable(route = NavItems.Assesment.route){
             ScreenContent(
-                name = BottomNavItems.Assesment.route,
+                name = NavItems.Assesment.route,
                 onClick = {
                     navController.navigate(Graph.DETAILS)
                 }
             )
         }
-        composable(route = BottomNavItems.CUM.route){
+        composable(route = NavItems.CUM.route){
             CUMScreen()
         }
-        composable(route = BottomNavItems.Term.route){
+        composable(route = NavItems.Term.route){
             TermScreen()
         }
-        composable(route = BottomNavItems.Pensum.route){
+        composable(route = NavItems.Pensum.route){
             PensumScreen()
+        }
+        composable(route = NavItems.Profile.route){
+            ProfileScreen()
         }
         detailsNavGraph(navController = navController)
     }
 }
 
-fun NavGraphBuilder.detailsNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.detailsNavGraph(navController: NavController) {
     navigation(
         route = Graph.DETAILS,
         startDestination = DetailsScreen.Information.route
