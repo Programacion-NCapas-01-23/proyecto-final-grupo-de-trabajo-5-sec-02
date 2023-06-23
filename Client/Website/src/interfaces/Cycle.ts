@@ -1,6 +1,6 @@
-import Pensum from "@/interfaces/Pensum";
+import {Pensum} from "@/interfaces/Pensum";
 
-interface Cycle {
+export interface Cycle {
     id?: string,
     cycleType: number,
     name: string,
@@ -8,5 +8,3 @@ interface Cycle {
 }
 
 export type CyclePreview = {pensumId: string} & Omit<Cycle, "pensum">;
-
-export default Cycle;
