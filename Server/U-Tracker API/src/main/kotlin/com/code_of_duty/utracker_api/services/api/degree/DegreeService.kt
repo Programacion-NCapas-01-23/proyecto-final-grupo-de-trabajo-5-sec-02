@@ -7,5 +7,5 @@ import java.util.*
 @Service
 interface DegreeService {
 
-    fun getDegreebyId(id: UUID): Degree?
+    fun findById(id: UUID): Degree?
 }

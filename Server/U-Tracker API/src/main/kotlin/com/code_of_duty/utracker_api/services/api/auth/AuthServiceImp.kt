@@ -36,7 +36,7 @@ class AuthServiceImp(
         }
 
         val hashPassword = passwordUtils.hashPassword(registerDto.password)
-        val degree = degreeService.getDegreebyId(
+        val degree = degreeService.findById(
             UUID.fromString(registerDto.degreeId)
             ?: throw ExceptionNotFound("Degree not found"))
 

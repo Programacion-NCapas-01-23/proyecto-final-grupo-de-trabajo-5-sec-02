@@ -6,5 +6,5 @@ import java.util.*
 
 @Component
 class DegreeServiceImp (private val degreeDao: DegreeDao) : DegreeService {
-    override fun getDegreebyId(id: UUID) = degreeDao.findById(id).orElse(null)
+    override fun findById(id: UUID) = degreeDao.findById(id).orElse(null)
 }

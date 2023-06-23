@@ -25,7 +25,8 @@ class AdminCycleServiceImpl(
                         Cycle(
                             cycleType = cycleType,
                             pensum = pensum,
-                            name = it.name
+                            name = it.name,
+                            subjects = emptyList()
                         )
                     )
                 }
@@ -53,11 +54,16 @@ class AdminCycleServiceImpl(
                 id = cycleToUpdate.id,
                 cycleType = CycleType.fromInt(cycle.type),
                 pensum = pensum,
-                name = cycle.name
+                name = cycle.name,
+                subjects = emptyList()
             )
             cycleDao.save(newCycle)
         } else {
             throw ExceptionNotFound("Cycle not found")
         }
+    }
+
+    override fun getAllCycles(): List<Cycle> {
+        return cycleDao.findAll()
     }
 }
