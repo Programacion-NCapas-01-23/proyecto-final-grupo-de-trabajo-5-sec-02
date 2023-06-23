@@ -43,11 +43,5 @@ sealed class NavItems (
         route = "profile",
         icon = R.drawable.account_circle
     )
-
-    object Logout: NavItems(
-        name = "Logout",
-        route = "logout",
-        icon = 1
-    )
 }
 

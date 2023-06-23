@@ -19,14 +19,7 @@ import com.code_of_duty.u_tracker.ui.graphs.RootNavigationGraph
 
 @Composable
 fun MainScreen (navController: NavHostController = rememberNavController()) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { TopAppBar(navController = navController, scrollBehavior = scrollBehavior)},
-        bottomBar = { BottomBar(navController = navController) }
-    ) {
-        RootNavigationGraph(navController = navController)
-    }
+
 }
 
 @Preview

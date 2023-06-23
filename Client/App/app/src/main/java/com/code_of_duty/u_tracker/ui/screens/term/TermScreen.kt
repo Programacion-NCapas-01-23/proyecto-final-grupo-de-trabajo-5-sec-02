@@ -11,21 +11,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 
 @Composable
 fun TermScreen () {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Green),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "TERM",
-            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
-        )
+    UTrackerTheme() {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.primary),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "TERM",
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.code_of_duty.u_tracker.ui.graphs
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -13,7 +14,7 @@ import com.code_of_duty.u_tracker.ui.screens.schedule.ScheduleScreen
 import com.code_of_duty.u_tracker.ui.screens.term.TermScreen
 import com.code_of_duty.u_tracker.ui.screens.profile.ProfileScreen
 
-fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.homeNavGraph(navController: NavController) {
     navigation(
         route = Graph.HOME,
         startDestination = NavItems.Term.route
@@ -41,15 +42,11 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
         composable(route = NavItems.Profile.route){
             ProfileScreen()
         }
-        composable(route = NavItems.Logout.route) {
-            navController.clearBackStack(Graph.AUTHENTICATION)
-            navController.navigate(Graph.AUTHENTICATION)
-        }
         detailsNavGraph(navController = navController)
     }
 }
 
-fun NavGraphBuilder.detailsNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.detailsNavGraph(navController: NavController) {
     navigation(
         route = Graph.DETAILS,
         startDestination = DetailsScreen.Information.route

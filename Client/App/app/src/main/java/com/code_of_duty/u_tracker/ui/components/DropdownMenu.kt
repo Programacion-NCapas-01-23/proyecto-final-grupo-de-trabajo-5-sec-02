@@ -33,7 +33,11 @@ fun DropDownMenu(expanded: Boolean, onDismiss: ()-> Unit,navController: NavContr
         }
         DropdownMenuItem(onClick = {
             onDismiss()
-            navController.navigate(NavItems.Logout.route)
+            navController.navigate(route = Graph.AUTHENTICATION){
+                popUpTo(route = Graph.ROOT){
+                    inclusive = true
+                }
+            }
         }) {
             androidx.compose.material.Icon(painter = painterResource(id = R.drawable.logout), contentDescription = "Log Out" )
             Spacer(modifier = Modifier.width(10.dp))

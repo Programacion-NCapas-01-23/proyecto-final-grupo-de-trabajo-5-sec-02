@@ -36,30 +36,39 @@ import com.code_of_duty.u_tracker.R
 import com.code_of_duty.u_tracker.ui.graphs.Graph
 import com.code_of_duty.u_tracker.ui.models.NavItems
 import com.code_of_duty.u_tracker.ui.theme.Typography
+import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar(navController: NavController, scrollBehavior: TopAppBarScrollBehavior) {
+fun TopAppBar(navController: NavController, scrollBehavior: TopAppBarScrollBehavior, destination: String?) {
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
     val title = getTitleFromRoute(currentDestination?.route)
+
     var showMenu by remember {
         mutableStateOf(false)
     }
-    CenterAlignedTopAppBar(
-        title = { Text(text = title,) },
-        navigationIcon = {
-            if(isInHomeNavGraph(currentDestination)){
-                IconButton(onClick = { showMenu = !showMenu }) {
-                    Icon(Icons.Filled.Menu, contentDescription = "Menu")
-                }
-              DropDownMenu(showMenu, {showMenu = false},navController = navController)
 
-            } else IconButton(onClick = { navController.popBackStack() }){Icon(Icons.Filled.ArrowBack, contentDescription = "Back")}
-        },
-        actions = {
-            var checked by remember { mutableStateOf(false) }
+    UTrackerTheme() {
+        CenterAlignedTopAppBar(
+            title = { Text(text = title,) },
+            navigationIcon = {
+                if (isInHomeNavGraph(currentDestination)) {
+                    IconButton(onClick = { showMenu = !showMenu }) {
+                        Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                    }
+                    DropDownMenu(showMenu, { showMenu = false }, navController = navController)
+
+                } else IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        Icons.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            },
+            actions = {
+                var checked by remember { mutableStateOf(false) }
 //            IconToggleButton(checked = checked, onCheckedChange = { checked = it }) {
 //                if (checked) {
 //                    Icon(
@@ -73,23 +82,24 @@ fun TopAppBar(navController: NavController, scrollBehavior: TopAppBarScrollBehav
 //                    )
 //                }
 //            }
-            IconButton(onClick = {
-                navController.navigate(NavItems.Profile.route){
-                popUpTo(navController.graph.findStartDestination().id)
-                launchSingleTop = true
+                IconButton(onClick = {
+                    navController.navigate(NavItems.Profile.route) {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }
+                }) {
+                    Icon(
+                        painter = painterResource(id = NavItems.Profile.icon),
+                        contentDescription = "User Profile"
+                    )
                 }
-            }) {
-                Icon(
-                    painter = painterResource(id = NavItems.Profile.icon),
-                    contentDescription = "User Profile"
-                )
-            }
-        },
+            },
 //        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
 //            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
 //        ),
-        scrollBehavior = scrollBehavior
-    )
+            scrollBehavior = scrollBehavior
+        )
+    }
 }
 
 private fun getTitleFromRoute(route: String?): String {
@@ -115,7 +125,6 @@ private fun isInHomeNavGraph(destination: NavDestination?): Boolean {
         NavItems.CUM,
         NavItems.Schedule,
         NavItems.Profile
-
     )
 
     return destination?.hierarchy?.any { screen ->
