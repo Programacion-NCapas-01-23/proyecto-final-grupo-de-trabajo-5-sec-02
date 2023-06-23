@@ -20,66 +20,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.code_of_duty.u_tracker.ui.components.BottomBar
 import com.code_of_duty.u_tracker.ui.components.TopAppBar
 
-//@Composable
-//fun RootNavigationGraph(navController: NavHostController) {
-//    NavHost(
-//        navController = navController,
-//        route = Graph.ROOT,
-//        startDestination = Graph.AUTHENTICATION
-//    ) {
-//        authNavGraph(navController = navController) // Llama al authNavGraph
-//        composable(route = Graph.HOME) {
-//            MainScreen()
-//        }
-//    }
-//}
-
-
-//@Composable
-//fun RootNavigatonGraph(navController: NavHostController) {
-//    Scaffold(
-//        topBar = {
-//            val actualDestination = navController.currentBackStackEntryAsState().value?.destination?.route.toString()
-//
-//            val currentBackStackEntry = navController.currentBackStackEntry
-//            val currentGraph = currentBackStackEntry?.destination?.parent?.route.toString()
-//
-//            when(currentGraph) {
-//                Graph.AUTHENTICATION -> {}
-//                Graph.HOME -> { TopBar(navController = navController) }
-//                else -> { TopBarSecondary(title = actualDestination) }
-//            }
-//        },
-//        bottomBar = { BottomBar(navController = navController) }
-//    ) { innerPadding ->
-//        Column(
-//            modifier = Modifier
-//                .background(MaterialTheme.colorScheme.secondary)
-//                .padding(innerPadding)
-//                .fillMaxSize(),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            NavHost(
-//                navController = navController,
-//                route = Graph.ROOT,
-//                startDestination = Graph.AUTHENTICATION
-//            ) {
-//                //Navegacion Autenticacion
-//                authNavGraph(navController = navController)
-//
-//                //Navegacion pantallas principales
-//                homeNavGraph(navController = navController)
-//
-//                //Navegacion pantallas others
-//                othersNavGraph(navController = navController)
-//            }
-//        }
-//    }
-//}
-
-@ExperimentalMaterialApi
-@ExperimentalMaterial3Api
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RootNavigationGraph(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -91,7 +33,7 @@ fun RootNavigationGraph(navController: NavHostController) {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            if (currentGraph == Graph.AUTHENTICATION) {
+            if (actualDestination == AuthScreen.Login.route || actualDestination == AuthScreen.SignUp.route) {
 
             } else {
                 TopAppBar(navController = navController, scrollBehavior = scrollBehavior, destination = actualDestination)
@@ -109,7 +51,7 @@ fun RootNavigationGraph(navController: NavHostController) {
             NavHost(
                 navController = navController,
                 route = Graph.ROOT,
-                startDestination = Graph.AUTHENTICATION
+                startDestination =  Graph.AUTHENTICATION
             ) {
                 //Navegacion Autenticacion
                 authNavGraph(navController = navController)

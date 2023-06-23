@@ -68,7 +68,7 @@ fun TopAppBar(navController: NavController, scrollBehavior: TopAppBarScrollBehav
                 }
             },
             actions = {
-                var checked by remember { mutableStateOf(false) }
+                //var checked by remember { mutableStateOf(false) }
 //            IconToggleButton(checked = checked, onCheckedChange = { checked = it }) {
 //                if (checked) {
 //                    Icon(
@@ -82,16 +82,18 @@ fun TopAppBar(navController: NavController, scrollBehavior: TopAppBarScrollBehav
 //                    )
 //                }
 //            }
-                IconButton(onClick = {
-                    navController.navigate(NavItems.Profile.route) {
-                        popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
+                if(isInHomeNavGraph(currentDestination)) {
+                    IconButton(onClick = {
+                        navController.navigate(NavItems.Profile.route) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    }) {
+                        Icon(
+                            painter = painterResource(id = NavItems.Profile.icon),
+                            contentDescription = "User Profile"
+                        )
                     }
-                }) {
-                    Icon(
-                        painter = painterResource(id = NavItems.Profile.icon),
-                        contentDescription = "User Profile"
-                    )
                 }
             },
 //        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
