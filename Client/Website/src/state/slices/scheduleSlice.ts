@@ -1,27 +1,27 @@
 import InitialState from "@/interfaces/InitialState";
-import Pensum from "@/interfaces/Pensum";
+import Schedule from "@/interfaces/Schedule";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-const initialState: InitialState<Pensum> = {
+const initialState: InitialState<Schedule> = {
     data: [],
     loading: false,
     error: null,
 }
 
-const pensumSlice = createSlice({
-    name: 'pensum',
+const scheduleSlice = createSlice({
+    name: 'schedule',
     initialState,
     reducers: {
-        createPensumStart(state) {
+        createScheduleStart(state) {
             state.loading = true;
             state.error = null;
         },
-        createPensumSuccess(state, action: PayloadAction<Pensum>) {
+        createScheduleSuccess(state, action: PayloadAction<Schedule>) {
             state.data.push(action.payload);
             state.loading = false;
             state.error = null;
         },
-        createPensumFailure(state, action: PayloadAction<string>) {
+        createScheduleFailure(state, action: PayloadAction<string>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -29,9 +29,9 @@ const pensumSlice = createSlice({
 });
 
 export const {
-    createPensumStart,
-    createPensumSuccess,
-    createPensumFailure,
-} = pensumSlice.actions;
+    createScheduleStart,
+    createScheduleSuccess,
+    createScheduleFailure,
+} = scheduleSlice.actions;
 
-export default pensumSlice.reducer;
+export default scheduleSlice.reducer;

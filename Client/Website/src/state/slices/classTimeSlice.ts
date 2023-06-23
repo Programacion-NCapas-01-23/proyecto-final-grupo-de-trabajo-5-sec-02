@@ -1,27 +1,27 @@
 import InitialState from "@/interfaces/InitialState";
-import Pensum from "@/interfaces/Pensum";
+import ClassTime from "@/interfaces/ClassTime";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-const initialState: InitialState<Pensum> = {
+const initialState: InitialState<ClassTime> = {
     data: [],
     loading: false,
     error: null,
 }
 
-const pensumSlice = createSlice({
-    name: 'pensum',
+const classTimeSlice = createSlice({
+    name: 'classTime',
     initialState,
     reducers: {
-        createPensumStart(state) {
+        createClassTimeStart(state) {
             state.loading = true;
             state.error = null;
         },
-        createPensumSuccess(state, action: PayloadAction<Pensum>) {
+        createClassTimeSuccess(state, action: PayloadAction<ClassTime>) {
             state.data.push(action.payload);
             state.loading = false;
             state.error = null;
         },
-        createPensumFailure(state, action: PayloadAction<string>) {
+        createClassTimeFailure(state, action: PayloadAction<string>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -29,9 +29,9 @@ const pensumSlice = createSlice({
 });
 
 export const {
-    createPensumStart,
-    createPensumSuccess,
-    createPensumFailure,
-} = pensumSlice.actions;
+    createClassTimeStart,
+    createClassTimeSuccess,
+    createClassTimeFailure,
+} = classTimeSlice.actions;
 
-export default pensumSlice.reducer;
+export default classTimeSlice.reducer;
