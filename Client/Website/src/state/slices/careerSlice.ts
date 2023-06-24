@@ -1,5 +1,5 @@
 import InitialState from "@/interfaces/InitialState";
-import Career from "@/interfaces/Career";
+import {Career} from "@/interfaces/Career";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: InitialState<Career> = {

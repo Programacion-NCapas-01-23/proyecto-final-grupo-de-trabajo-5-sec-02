@@ -1,5 +1,5 @@
 import InitialState from "@/interfaces/InitialState";
-import Subject from "@/interfaces/Subject";
+import {Subject} from "@/interfaces/Subject";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: InitialState<Subject> = {

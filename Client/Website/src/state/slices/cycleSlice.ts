@@ -1,5 +1,5 @@
 import InitialState from "@/interfaces/InitialState";
-import Cycle from "@/interfaces/Cycle";
+import {Cycle} from "@/interfaces/Cycle";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: InitialState<Cycle> = {

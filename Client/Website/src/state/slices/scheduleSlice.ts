@@ -1,5 +1,5 @@
 import InitialState from "@/interfaces/InitialState";
-import Schedule from "@/interfaces/Schedule";
+import {Schedule} from "@/interfaces/Schedule";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: InitialState<Schedule> = {

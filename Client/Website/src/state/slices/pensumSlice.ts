@@ -1,5 +1,5 @@
 import InitialState from "@/interfaces/InitialState";
-import Pensum from "@/interfaces/Pensum";
+import {Pensum} from "@/interfaces/Pensum";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: InitialState<Pensum> = {
