@@ -1,7 +1,7 @@
 import axios, {AxiosInstance} from "axios";
 
 export const baseURL: string = 'http://localhost:8080/admin';
-const token: string = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0NDQ0NTQ0OS1hYzA3LTQ5ZjItYTAwOC1jNTVjMGQ1ZmJlNmIiLCJpYXQiOjE2ODc0Nzk5MzgsImV4cCI6MTY4NzU0NDczOH0.kxvZl6NuxIUcUoFJR1f4BxpuTZ1VxU4RO9oWBjEzgUc';
+const token: string = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0NDQ0NTQ0OS1hYzA3LTQ5ZjItYTAwOC1jNTVjMGQ1ZmJlNmIiLCJpYXQiOjE2ODc1NjkxNjIsImV4cCI6MTY4NzYzMzk2Mn0.QbDWy6hdKHs4wpw0iZofEkzbssCW8VrieuRsKpWebn0';
 
 export const api: AxiosInstance = axios.create({
     baseURL,
