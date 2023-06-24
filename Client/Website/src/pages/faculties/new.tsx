@@ -1,6 +1,5 @@
 import React from 'react';
 import {useAppDispatch} from '@/hooks/reduxHooks';
-import {createFacultyStart} from '@/state/slices/facultySlice';
 import Faculty from "@/interfaces/Faculty";
 import {createFaculty} from "@/state/thunks/facultyThunk";
 import {Button, Form, Input, Typography, Upload} from 'antd';
@@ -26,7 +25,6 @@ const FacultyForm = () => {
             description,
             logo,
         };
-        console.log(newFaculty);
         dispatch(createFaculty(newFaculty));
     };
 
