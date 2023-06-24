@@ -1,7 +1,7 @@
 interface ClassTime {
     id?: string,
     days: number,
-    startHour: Date,
+    startHour: string,
     totalHours: number,
 }
 

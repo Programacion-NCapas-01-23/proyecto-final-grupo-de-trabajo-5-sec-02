@@ -1,16 +1,15 @@
 import ClassTime from "@/interfaces/ClassTime";
-import {AppThunk, RootState} from "@/state/store";
-import {Action, ThunkDispatch} from "@reduxjs/toolkit";
+import {AppDispatch, AppThunk} from "@/state/store";
 import {createClassTimeFailure, createClassTimeStart, createClassTimeSuccess} from "@/state/slices/classTimeSlice";
 import apiService from "@/api/appService";
 import {routes} from "@/api/routes";
 
 export const createClassTime = (classTime: ClassTime): AppThunk => {
-    return async (dispatch: ThunkDispatch<RootState, null, Action<string>>) => {
+    return async (dispatch: AppDispatch) => {
         try {
             dispatch(createClassTimeStart());
-            const classTimes = await apiService.post<ClassTime>(routes.classTime.add, [classTime]);
-            dispatch(createClassTimeSuccess(classTimes));
+            const createdClassTime = await apiService.post<ClassTime>(routes.faculties.add, [classTime]);
+            dispatch(createClassTimeSuccess(createdClassTime));
         } catch (error) {
             dispatch(createClassTimeFailure(error.message));
         }
