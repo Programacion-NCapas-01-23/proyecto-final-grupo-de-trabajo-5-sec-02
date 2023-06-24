@@ -15,9 +15,9 @@ data class Cycle(
     @ManyToOne
     @JoinColumn(name = "pensum_fk", referencedColumnName = "id")
     val pensum: Pensum,
-    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JoinTable(
-        name = "cycle_x_subject",
+        name = "subject_x_cycle",
         joinColumns = [JoinColumn(name = "cycle_fk", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "subject_fk", referencedColumnName = "code")]
     )

@@ -2,6 +2,7 @@ package com.code_of_duty.utracker_api.controllers.api
 
 import com.code_of_duty.utracker_api.data.dtos.SubjectDto
 import com.code_of_duty.utracker_api.services.api.subject.SubjectService
+import com.code_of_duty.utracker_api.utils.GeneralUtils
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
@@ -17,6 +18,8 @@ class SubjectController {
 
     @Autowired
     lateinit var subjectService: SubjectService
+    @Autowired
+    lateinit var generalUtils: GeneralUtils
 
     @GetMapping("/getAllSubjects")
     fun getAllSubjects(
@@ -27,6 +30,15 @@ class SubjectController {
         @RequestParam(name = "facultyFilter", required = false) facultyFilter: String?
     ): List<SubjectDto> {
         return subjectService.getAllSubjects(nameFilter, sortBy, degreeFilter, pensumFilter, facultyFilter)
+    }
+
+    @PutMapping("/completion")
+    fun updateSubjectCompletion(
+        @RequestParam subjectId: String,
+        @RequestParam passed: Boolean,
+        request: HttpServletRequest
+    ): ResponseEntity<Any> {
+        TODO()
     }
 
     @GetMapping("/getSubjectsByStudent")

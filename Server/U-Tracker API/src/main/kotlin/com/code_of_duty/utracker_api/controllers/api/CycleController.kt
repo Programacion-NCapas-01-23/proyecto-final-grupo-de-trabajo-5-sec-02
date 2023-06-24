@@ -1,9 +1,9 @@
 package com.code_of_duty.utracker_api.controllers.api
 
-import com.code_of_duty.utracker_api.data.models.Cycle
-import com.code_of_duty.utracker_api.data.models.Degree
-import com.code_of_duty.utracker_api.services.api.degree.DegreeService
-import com.code_of_duty.utracker_api.utils.JwtUtils
+import com.code_of_duty.utracker_api.services.api.cycle.CycleService
+import com.code_of_duty.utracker_api.services.api.subject.SubjectService
+import com.code_of_duty.utracker_api.utils.GeneralUtils
+import com.code_of_duty.utracker_api.utils.UnauthorizedException
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
@@ -16,15 +16,22 @@ import java.util.*
 @RequestMapping("\${api.base-path}/cycle")
 @Tag(name = "API")
 class CycleController(
-    private val degreeService: DegreeService,
-    private val jwtUtils: JwtUtils
+    private val cycleService: CycleService,
+    private val subjectService: SubjectService,
+    private val generalUtils: GeneralUtils
 ) {
     @GetMapping("/")
     fun getAllCycles(
-        @RequestParam(required = false) id: UUID,
+        @RequestParam(required = false) id: UUID?,
         request: HttpServletRequest
     ): ResponseEntity<Any> {
-        TODO()
+        return try {
+            val studentCode = generalUtils.extractJWT(request)
+            val cycles = cycleService.getAllCycles(studentCode)
+            ResponseEntity.ok(cycles)
+        } catch (e: UnauthorizedException) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        }
     }
     @GetMapping("/getCycleByStudent")
     @SecurityRequirement(name = "ApiAuth")

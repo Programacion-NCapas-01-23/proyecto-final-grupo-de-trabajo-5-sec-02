@@ -12,5 +12,7 @@ data class Degree(
     val name: String,
     @ManyToOne
     @JoinColumn(name = "faculty_fk", referencedColumnName = "id")
-    val faculty: Faculty?
+    val faculty: Faculty?,
+    @OneToMany(mappedBy = "degree", fetch = FetchType.EAGER)
+    val pensums: List<Pensum>? = null
 )
