@@ -8,7 +8,7 @@ export const createClassTime = (classTime: ClassTime): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(createClassTimeStart());
-            const createdClassTime = await apiService.post<ClassTime>(routes.faculties.add, [classTime]);
+            const createdClassTime = await apiService.post<ClassTime>(routes.classTime.add, [classTime]);
             dispatch(createClassTimeSuccess(createdClassTime));
         } catch (error) {
             dispatch(createClassTimeFailure(error.message));

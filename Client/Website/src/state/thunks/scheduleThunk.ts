@@ -8,7 +8,7 @@ export const createSchedule = (schedule: Schedule): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(createScheduleStart());
-            const createdSchedule = await apiService.post<Schedule>(routes.faculties.add, [schedule]);
+            const createdSchedule = await apiService.post<Schedule>(routes.schedule.add, [schedule]);
             dispatch(createScheduleSuccess(createdSchedule));
         } catch (error) {
             dispatch(createScheduleFailure(error.message));

@@ -8,7 +8,7 @@ export const createPensum = (pensum: Pensum): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(createPensumStart());
-            const createdPensum = await apiService.post<Pensum>(routes.faculties.add, [pensum]);
+            const createdPensum = await apiService.post<Pensum>(routes.pensum.add, [pensum]);
             dispatch(createPensumSuccess(createdPensum));
         } catch (error) {
             dispatch(createPensumFailure(error.message));

@@ -8,7 +8,7 @@ export const createSubject = (subject: Subject): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(createSubjectStart());
-            const createdSubject = await apiService.post<Subject>(routes.faculties.add, [subject]);
+            const createdSubject = await apiService.post<Subject>(routes.subject.add, [subject]);
             dispatch(createSubjectSuccess(createdSubject));
         } catch (error) {
             dispatch(createSubjectFailure(error.message));

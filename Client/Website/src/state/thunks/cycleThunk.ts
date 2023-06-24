@@ -8,7 +8,7 @@ export const createCycle = (cycle: Cycle): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(createCycleStart());
-            const createdCycle = await apiService.post<Cycle>(routes.faculties.add, [cycle]);
+            const createdCycle = await apiService.post<Cycle>(routes.cycle.add, [cycle]);
             dispatch(createCycleSuccess(createdCycle));
         } catch (error) {
             dispatch(createCycleFailure(error.message));
