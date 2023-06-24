@@ -3,6 +3,8 @@ package com.code_of_duty.u_tracker.ui.components.ui
 import android.util.Patterns
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults.textFieldColors
@@ -18,15 +20,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme as MaterialTheme3
+import androidx.compose.ui.text.input.KeyboardType as KeyboardType3
 
 @Composable
 fun EditTextField(
     label: String,
     value: MutableState<String>,
     onValueChange: (String) -> Unit,
-    isPassword: Boolean = false,
-    isEmail: Boolean = false,
-    icon: @Composable (() -> Unit)? = null
+    icon: @Composable (() -> Unit)? = null,
+    type: KeyboardType = KeyboardType.Text,
 ) {
     TextField(
         value = value.value,
@@ -41,29 +43,58 @@ fun EditTextField(
             )
         },
         modifier = Modifier
-            .padding(16.dp)
             .fillMaxWidth()
             .padding(8.dp),
         textStyle = TextStyle(color = MaterialTheme3.colorScheme.onSurface),
         leadingIcon = icon,
         singleLine = true,
         maxLines = 1,
-        isError = isEmail && !Patterns.EMAIL_ADDRESS.matcher(value.value).matches(),
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        isError = when(type) {
+            KeyboardType.Email -> !Patterns.EMAIL_ADDRESS.matcher(value.value).matches()
+            else -> false
+        },
         colors = textFieldColors(
             backgroundColor = MaterialTheme3.colorScheme.surfaceVariant,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
-        )
+        ),
+        shape = RoundedCornerShape(8.dp),
+        keyboardOptions = when(type) {
+            KeyboardType.Text -> KeyboardType.Text.keyboardType
+            KeyboardType.Number -> KeyboardType.Number.keyboardType
+            KeyboardType.Email -> KeyboardType.Email.keyboardType
+            KeyboardType.Password -> KeyboardType.Password.keyboardType
+        },
+        visualTransformation = when(type){
+            KeyboardType.Password -> PasswordVisualTransformation()
+            else -> VisualTransformation.None
+        }
     )
+}
+
+sealed class KeyboardType() {
+    object Text : KeyboardType() {
+        val keyboardType = KeyboardOptions.Default.copy(keyboardType = KeyboardType3.Text)
+    }
+
+    object Number : KeyboardType() {
+        val keyboardType = KeyboardOptions.Default.copy(keyboardType = KeyboardType3.Number)
+    }
+
+    object Email : KeyboardType() {
+        val keyboardType = KeyboardOptions.Default.copy(keyboardType = KeyboardType3.Email)
+    }
+    object Password : KeyboardType() {
+        val keyboardType = KeyboardOptions.Default.copy(keyboardType = KeyboardType3.Password)
+    }
 }
 
 @Preview
 @Composable
 fun EditTextPreview() {
     val value = remember {
-        mutableStateOf("00271419")
+        mutableStateOf("")
     }
     EditTextField(
         label = "carnet",

@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.screens.schedule
+package com.code_of_duty.u_tracker.ui.models.screens.cum
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,15 +13,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ScheduleScreen () {
+fun CUMScreen () {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Cyan),
+            .background(Color.Black),
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = "SCHEDULE",
+            text = "CUM",
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             fontWeight = FontWeight.Bold,
             color = Color.White
@@ -31,6 +31,6 @@ fun ScheduleScreen () {
 
 @Preview
 @Composable
-fun ScheduleScreenPreview() {
-    ScheduleScreen()
+fun CUMScreenPreview() {
+    CUMScreen()
 }

@@ -6,20 +6,26 @@ import androidx.compose.runtime.remember
 import com.code_of_duty.u_tracker.ui.components.ui.CustomButton
 import com.code_of_duty.u_tracker.ui.components.ui.EditTextField
 import com.code_of_duty.u_tracker.ui.components.ui.FormsCard
+import com.code_of_duty.u_tracker.ui.components.ui.KeyboardType
+import com.code_of_duty.u_tracker.ui.models.screens.login.LoginViewModel
 
 @Composable
-fun LoginForm(onClick: () -> Unit) {
+fun LoginForm(
+    loginViewModel: LoginViewModel,
+    onClick: () -> Unit
+) {
     //TODO: change for viewModel and use state
     val code = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     FormsCard(
-        title = "login",
+        title = "Login",
         editFields = listOf(
             {
                 EditTextField(
                     label = "carnet",
                     value = code,
                     onValueChange = {code.value = it},
+                    type = KeyboardType.Number
                 )
             },
             {
@@ -27,11 +33,13 @@ fun LoginForm(onClick: () -> Unit) {
                     label = "contraseña",
                     value = password,
                     onValueChange = {password.value = it},
-                    isPassword = true
+                    type = KeyboardType.Password
                 )
             },
             {
-                CustomButton(text = "Ingresar", onClick = onClick)
+                CustomButton(text = "Ingresar"){
+                    loginViewModel.login(code.value, password.value, onSuccess = onClick, onError = {})
+                }
             }
         ),
         onClick = {}
