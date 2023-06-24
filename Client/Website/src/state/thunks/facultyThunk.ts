@@ -1,4 +1,4 @@
-import {AppThunk, RootState} from '@/state/store';
+import {AppDispatch, AppThunk, RootState} from '@/state/store';
 import apiService from '@/api/appService';
 import {
     createFacultyFailure,
@@ -28,7 +28,7 @@ export const fetchFaculties = (): AppThunk => {
 };
 
 export const createFaculty = (faculty: Faculty): AppThunk => {
-    return async (dispatch: ThunkDispatch<RootState, null, Action<string>>) => {
+    return async (dispatch: AppDispatch) => {
         try {
             dispatch(createFacultyStart());
             const createdFaculty = await apiService.post<Faculty>(routes.faculties.add, [faculty]);
@@ -36,8 +36,9 @@ export const createFaculty = (faculty: Faculty): AppThunk => {
         } catch (error) {
             dispatch(createFacultyFailure(error.message));
         }
-    }
+    };
 };
+
 
 export const updateFaculty = (faculty: Faculty): AppThunk => async (dispatch) => {
     try {

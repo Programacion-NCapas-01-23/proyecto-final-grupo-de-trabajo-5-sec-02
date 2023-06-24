@@ -1,16 +1,15 @@
-import Career from "@/interfaces/Career";
-import {AppThunk, RootState} from "@/state/store";
+import {Career} from "@/interfaces/Career";
+import {AppDispatch, AppThunk} from "@/state/store";
 import {createCareerFailure, createCareerStart, createCareerSuccess} from "@/state/slices/careerSlice";
 import apiService from "@/api/appService";
 import {routes} from "@/api/routes";
-import {Action, ThunkDispatch} from "@reduxjs/toolkit";
 
 export const createCareer = (career: Career): AppThunk => {
-    return async (dispatch: ThunkDispatch<RootState, null, Action<string>>) => {
+    return async (dispatch: AppDispatch) => {
         try {
             dispatch(createCareerStart());
-            const careers = await apiService.post<Career>(routes.career.add, [career]);
-            dispatch(createCareerSuccess(careers));
+            const createdCareer = await apiService.post<Career>(routes.faculties.add, [career]);
+            dispatch(createCareerSuccess(createdCareer));
         } catch (error) {
             dispatch(createCareerFailure(error.message));
         }

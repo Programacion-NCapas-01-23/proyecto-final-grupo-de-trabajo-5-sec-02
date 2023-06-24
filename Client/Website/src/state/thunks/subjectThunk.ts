@@ -1,16 +1,15 @@
-import Subject from "@/interfaces/Subject";
-import {AppThunk, RootState} from "@/state/store";
-import {Action, ThunkDispatch} from "@reduxjs/toolkit";
+import {Subject} from "@/interfaces/Subject";
+import {AppDispatch, AppThunk, RootState} from "@/state/store";
 import {createSubjectFailure, createSubjectStart, createSubjectSuccess} from "@/state/slices/subjectSlice";
 import apiService from "@/api/appService";
 import {routes} from "@/api/routes";
 
 export const createSubject = (subject: Subject): AppThunk => {
-    return async (dispatch: ThunkDispatch<RootState, null, Action<string>>) => {
+    return async (dispatch: AppDispatch) => {
         try {
             dispatch(createSubjectStart());
-            const subjects = await apiService.post<Subject>(routes.subject.add, [subject]);
-            dispatch(createSubjectSuccess(subjects));
+            const createdSubject = await apiService.post<Subject>(routes.faculties.add, [subject]);
+            dispatch(createSubjectSuccess(createdSubject));
         } catch (error) {
             dispatch(createSubjectFailure(error.message));
         }
