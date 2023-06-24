@@ -5,6 +5,7 @@ type cycleRelation = [{
 
 export interface Subject {
     id?: string;
+    code: string;
     estimatedGrade?: number;
     name: string;
     uv: number;

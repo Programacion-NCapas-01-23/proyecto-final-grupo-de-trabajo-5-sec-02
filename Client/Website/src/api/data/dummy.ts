@@ -82,40 +82,19 @@ export const cycles: CyclePreview[] = [
 
 export const subjects: SubjectPreview[] = [
     {
-        id: '001',
         name: 'Precalculo',
-        estimatedGrade: 6,
-        uv: 0,
-        cycleRelation: [
-            {
-                id: '86079fb4-e912-4466-962b-ea8fb7f53af0',
-                correlative: 1,
-            },
-        ],
+        code: '010180',
+        uv: 4,
     },
     {
-        id: '002',
         name: 'Taller Espacial I',
-        estimatedGrade: 6,
-        uv: 0,
-        cycleRelation: [
-            {
-                id: '86079fb4-e912-4466-962b-ea8fb7f53af0',
-                correlative: 2,
-            },
-        ],
+        code: '220032',
+        uv: 4,
     },
     {
-        id: '003',
         name: 'Comunicaciones I',
-        estimatedGrade: 6,
-        uv: 0,
-        cycleRelation: [
-            {
-                id: '86079fb4-e912-4466-962b-ea8fb7f53af0',
-                correlative: 3,
-            },
-        ],
+        code: '220066',
+        uv: 4,
     },
 ];
 
