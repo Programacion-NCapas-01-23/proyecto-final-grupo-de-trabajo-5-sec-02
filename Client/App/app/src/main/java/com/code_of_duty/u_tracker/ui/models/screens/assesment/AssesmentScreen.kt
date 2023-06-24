@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.screens.pensum
+package com.code_of_duty.u_tracker.ui.models.screens.assesment
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,15 +13,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun PensumScreen () {
+fun AssesmentScreen () {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Blue),
+            .background(Color.Magenta),
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = "PENSUM",
+            text = "ASSESMENTS",
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             fontWeight = FontWeight.Bold,
             color = Color.White
@@ -31,6 +31,6 @@ fun PensumScreen () {
 
 @Preview
 @Composable
-fun PensumScreenPreview() {
-    PensumScreen()
+fun AssesmentScreenPreview() {
+    AssesmentScreen()
 }

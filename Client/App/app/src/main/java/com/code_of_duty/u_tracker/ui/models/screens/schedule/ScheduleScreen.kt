@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.screens.assesment
+package com.code_of_duty.u_tracker.ui.models.screens.schedule
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,15 +13,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun AssesmentScreen () {
+fun ScheduleScreen () {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Magenta),
+            .background(Color.Cyan),
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = "ASSESMENTS",
+            text = "SCHEDULE",
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             fontWeight = FontWeight.Bold,
             color = Color.White
@@ -31,6 +31,6 @@ fun AssesmentScreen () {
 
 @Preview
 @Composable
-fun AssesmentScreenPreview() {
-    AssesmentScreen()
+fun ScheduleScreenPreview() {
+    ScheduleScreen()
 }
