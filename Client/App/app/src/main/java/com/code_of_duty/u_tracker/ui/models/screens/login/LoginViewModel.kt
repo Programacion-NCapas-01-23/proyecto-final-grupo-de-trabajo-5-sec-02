@@ -17,6 +17,7 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
     private var code: MutableState<String> = mutableStateOf("")
     private var password: MutableState<String> = mutableStateOf("")
+    private var login: MutableState<Boolean> = mutableStateOf(false)
 
     fun getCode(): MutableState<String> {
         return code
@@ -33,12 +34,20 @@ class LoginViewModel @Inject constructor(
     fun setPassword(password: String) {
         this.password.value = password
     }
-
-    fun login(): Boolean {
-        var login = false
-        viewModelScope.launch {
-            login = loginRepository.login(code.value, password.value)
-        }
+    fun getLogin(): MutableState<Boolean> {
         return login
+    }
+
+    fun login() {
+        viewModelScope.launch {
+            try {
+                val loginResponse = loginRepository.login(code.value, password.value)
+                loginResponse.token?.let {
+                    login.value = true
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }

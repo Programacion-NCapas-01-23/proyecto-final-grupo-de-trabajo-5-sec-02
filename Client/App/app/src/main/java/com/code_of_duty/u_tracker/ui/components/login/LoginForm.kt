@@ -18,7 +18,6 @@ fun LoginForm(
     loginViewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
-    val login = remember { mutableStateOf(false) }
     val error = remember { mutableStateOf(false) }
     val loading = remember { mutableStateOf(false) }
 
@@ -44,8 +43,7 @@ fun LoginForm(
             {
                 CustomButton(text = "Ingresar", loading = loading.value){
                     loading.value = true
-                    login.value = loginViewModel.login()
-                    if (login.value) {
+                    if (loginViewModel.getLogin().value) {
                         onClick()
                     } else {
                         error.value = true

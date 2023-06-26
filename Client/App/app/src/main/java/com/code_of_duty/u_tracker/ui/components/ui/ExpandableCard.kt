@@ -109,7 +109,6 @@ fun ExpandableCardPreview() {
                 { Text(text = "Info 1") },
                 { Text(text = "Info 2") },
                 { Text(text = "Info 3") },
-                { Button(onClick = {}){} }
             )
         )
     }
