@@ -12,7 +12,7 @@ import dagger.hilt.android.components.ViewModelComponent
 object ViewModelModule {
     @Provides
     fun providesLoginViewModel(): LoginViewModel {
-        return LoginViewModel(loginRepository = LoginRepository())
+        return LoginViewModel(loginRepository = LoginRepository(apiClient = NetworkModule.providesApi(retrofit = NetworkModule.providesUtracker(moshi = NetworkModule.providesMoshi(), okHttpClient = NetworkModule.providesOkHttpClient()))))
     }
 
 }
