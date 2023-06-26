@@ -1,9 +1,13 @@
 package com.code_of_duty.u_tracker.ui.components.login
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.code_of_duty.u_tracker.ui.components.ui.CustomButton
+import com.code_of_duty.u_tracker.ui.components.ui.DialogAlert
 import com.code_of_duty.u_tracker.ui.components.ui.EditTextField
 import com.code_of_duty.u_tracker.ui.components.ui.FormsCard
 import com.code_of_duty.u_tracker.ui.components.ui.KeyboardType
@@ -14,34 +18,55 @@ fun LoginForm(
     loginViewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
-    //TODO: change for viewModel and use state
-    val code = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
+    val login = remember { mutableStateOf(false) }
+    val error = remember { mutableStateOf(false) }
+    val loading = remember { mutableStateOf(false) }
+
     FormsCard(
         title = "Login",
         editFields = listOf(
             {
                 EditTextField(
                     label = "carnet",
-                    value = code,
-                    onValueChange = {code.value = it},
+                    value = loginViewModel.getCode(),
+                    onValueChange = {loginViewModel.setCode(it)},
                     type = KeyboardType.Number
                 )
             },
             {
                 EditTextField(
                     label = "contraseña",
-                    value = password,
-                    onValueChange = {password.value = it},
+                    value = loginViewModel.getPassword(),
+                    onValueChange = {loginViewModel.setPassword(it)},
                     type = KeyboardType.Password
                 )
             },
             {
-                CustomButton(text = "Ingresar"){
-                    loginViewModel.login(code.value, password.value, onSuccess = onClick, onError = {})
+                CustomButton(text = "Ingresar", loading = loading.value){
+                    loading.value = true
+                    login.value = loginViewModel.login()
+                    if (login.value) {
+                        onClick()
+                    } else {
+                        error.value = true
+                    }
+                    loading.value = false
                 }
             }
         ),
         onClick = {}
     )
+
+    if (error.value) {
+        DialogAlert(
+            title = "Error",
+            message = "Carnet o contraseña incorrectos",
+            onConfirm = {
+                error.value = false
+                loginViewModel.setCode("")
+                loginViewModel.setPassword("")
+            },
+            needCancel = false
+        )
+    }
 }
