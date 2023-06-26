@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.models.screens.forgotPassword.getVerificationToken
+package com.code_of_duty.u_tracker.ui.screens.forgotPassword.getVerificationToken
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

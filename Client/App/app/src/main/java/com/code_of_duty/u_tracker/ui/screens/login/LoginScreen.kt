@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.models.screens.login
+package com.code_of_duty.u_tracker.ui.screens.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,8 +18,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.code_of_duty.u_tracker.ui.components.login.LoginForm
 import com.code_of_duty.u_tracker.ui.components.login.LoginHeader
-import com.code_of_duty.u_tracker.ui.graphs.AuthScreen
 import com.code_of_duty.u_tracker.ui.graphs.Graph
+import com.code_of_duty.u_tracker.ui.models.AuthNavItems
 import com.code_of_duty.u_tracker.ui.theme.Typography
 
 @Composable
@@ -34,10 +34,10 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel(), navController: Nav
             }
         },
         onSignUpClick = {
-            navController.navigate(AuthScreen.SignUp.route)
+            navController.navigate(AuthNavItems.SignUp.route)
         },
         onForgotClick = {
-            navController.navigate(AuthScreen.Forgot.route)
+            navController.navigate(AuthNavItems.Forgot.route)
         }
     )
 }

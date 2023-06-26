@@ -7,7 +7,7 @@ import com.code_of_duty.u_tracker.ui.components.ui.CustomButton
 import com.code_of_duty.u_tracker.ui.components.ui.EditTextField
 import com.code_of_duty.u_tracker.ui.components.ui.FormsCard
 import com.code_of_duty.u_tracker.ui.components.ui.KeyboardType
-import com.code_of_duty.u_tracker.ui.models.screens.login.LoginViewModel
+import com.code_of_duty.u_tracker.ui.screens.login.LoginViewModel
 
 @Composable
 fun LoginForm(

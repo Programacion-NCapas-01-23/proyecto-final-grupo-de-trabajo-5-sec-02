@@ -59,7 +59,7 @@ fun EditTextField(
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
         ),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(16.dp),
         keyboardOptions = when(type) {
             KeyboardType.Text -> KeyboardType.Text.keyboardType
             KeyboardType.Number -> KeyboardType.Number.keyboardType
