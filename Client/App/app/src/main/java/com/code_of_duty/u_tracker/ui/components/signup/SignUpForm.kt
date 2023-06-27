@@ -29,7 +29,6 @@ FormsCard(
                 EditTextField(
                     label = "Ingresa tu carnet",
                     value = code,
-                    onValueChange = {code.value = it},
                     type = KeyboardType.Number
                 )
             },
@@ -37,7 +36,6 @@ FormsCard(
                 EditTextField(
                     label = "Ingresa tus nombres",
                     value = names,
-                    onValueChange = {names.value = it},
                     type = KeyboardType.Text
                 )
             },
@@ -45,7 +43,6 @@ FormsCard(
                 EditTextField(
                     label = "Ingresa tus apellidos",
                     value = lastnames,
-                    onValueChange = {lastnames.value = it},
                     type = KeyboardType.Text
                 )
             },
@@ -53,7 +50,6 @@ FormsCard(
                 EditTextField(
                     label = "Ingresa tu correo electrónico",
                     value = email,
-                    onValueChange = {email.value = it},
                     type = KeyboardType.Email
                 )
             },
@@ -61,7 +57,6 @@ FormsCard(
                 EditTextField(
                     label = "Ingresa una contraseña",
                     value = password,
-                    onValueChange = {password.value = it},
                     type = KeyboardType.Password,
                 )
             },
@@ -69,7 +64,6 @@ FormsCard(
                 EditTextField(
                     label = "Confirma tu contraseña",
                     value = confirmPass,
-                    onValueChange = {confirmPass.value = it},
                     type = KeyboardType.Password
                 )
             },
