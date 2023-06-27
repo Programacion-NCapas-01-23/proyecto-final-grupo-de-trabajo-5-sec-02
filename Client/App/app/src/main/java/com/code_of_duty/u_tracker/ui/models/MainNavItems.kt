@@ -1,44 +1,42 @@
 package com.code_of_duty.u_tracker.ui.models
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import com.code_of_duty.u_tracker.R
 
-sealed class NavItems (
+sealed class MainNavItems (
     val route: String,
     val name: String,
     val icon: Int)
 {
-    object Term : NavItems(
+    object Term : MainNavItems(
         name = "Ciclo",
         route = "term",
         icon = R.drawable.book_clock
     )
 
-    object Pensum : NavItems(
+    object Pensum : MainNavItems(
         name = "Pensum",
         route = "pensum",
         icon = R.drawable.school
     )
 
-    object Assesment : NavItems(
+    object Assesment : MainNavItems(
         name = "Evaluaciones",
         route = "assessment",
         icon = R.drawable.format_list_numbered
     )
 
-    object Schedule : NavItems(
+    object Schedule : MainNavItems(
         name = "Horarios",
         route = "schedule",
         icon = R.drawable.table_clock
     )
 
-    object CUM : NavItems(
+    object CUM : MainNavItems(
         name = "CUM",
         route = "cum",
         icon = R.drawable.chart_sankey
     )
-    object  Profile: NavItems(
+    object  Profile: MainNavItems(
         name = "Perfil",
         route = "profile",
         icon = R.drawable.account_circle

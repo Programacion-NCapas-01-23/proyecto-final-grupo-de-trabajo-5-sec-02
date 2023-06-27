@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.code_of_duty.u_tracker.ui.components.login.LoginForm
 import com.code_of_duty.u_tracker.ui.components.login.LoginHeader
-import com.code_of_duty.u_tracker.ui.graphs.AuthScreen
 import com.code_of_duty.u_tracker.ui.graphs.Graph
+import com.code_of_duty.u_tracker.ui.models.AuthNavItems
 import com.code_of_duty.u_tracker.ui.theme.Typography
 import androidx.hilt.navigation.compose.hiltViewModel
 
@@ -34,10 +34,10 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(), navController:
             }
         },
         onSignUpClick = {
-            navController.navigate(AuthScreen.SignUp.route)
+            navController.navigate(AuthNavItems.SignUp.route)
         },
         onForgotClick = {
-            navController.navigate(AuthScreen.Forgot.route)
+            navController.navigate(AuthNavItems.Forgot.route)
         }
     )
 }
