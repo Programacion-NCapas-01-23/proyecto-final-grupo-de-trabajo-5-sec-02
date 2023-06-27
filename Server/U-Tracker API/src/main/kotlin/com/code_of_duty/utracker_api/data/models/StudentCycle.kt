@@ -22,5 +22,5 @@ data class StudentCycle(
         joinColumns = [JoinColumn(name = "studentCycle_fk", referencedColumnName = "studentCycleId")],
         inverseJoinColumns = [JoinColumn(name = "subject_fk", referencedColumnName = "code")]
     )
-    val subjects: List<Subject>
+    var subjects: List<Subject>
 )

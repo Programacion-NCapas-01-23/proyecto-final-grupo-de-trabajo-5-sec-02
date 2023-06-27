@@ -4,7 +4,9 @@ import java.util.UUID
 
 data class StudentCycleDto(
     val id: String?,
-    val studentUUID: UUID,
-    val userCycleId: String,
-    val subjects: List<UUID>
+    val studentCode: String,
+    val cycleType: Int,
+    val year: Int,
+    val subjects: List<String>?
 )
+

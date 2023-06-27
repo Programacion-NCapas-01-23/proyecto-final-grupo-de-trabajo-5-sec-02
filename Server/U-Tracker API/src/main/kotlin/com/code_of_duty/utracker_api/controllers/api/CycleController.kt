@@ -1,7 +1,10 @@
 package com.code_of_duty.utracker_api.controllers.api
 
+import com.code_of_duty.utracker_api.data.dtos.CycleDto
+import com.code_of_duty.utracker_api.data.dtos.StudentCycleDto
 import com.code_of_duty.utracker_api.services.api.cycle.CycleService
 import com.code_of_duty.utracker_api.services.api.subject.SubjectService
+import com.code_of_duty.utracker_api.utils.ExceptionNotFound
 import com.code_of_duty.utracker_api.utils.GeneralUtils
 import com.code_of_duty.utracker_api.utils.UnauthorizedException
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -43,12 +46,26 @@ class CycleController(
 
     @PostMapping("/createCycle")
     @SecurityRequirement(name = "ApiAuth")
-    fun createCycle(
+    fun createStudentCycle(
         request: HttpServletRequest,
-        @RequestBody body: Any//TODO: Add CycleRequest
+        @RequestBody body: StudentCycleDto
     ): ResponseEntity<Any> {
-        TODO()
+        return try {
+            val studentCode = generalUtils.extractJWT(request)
+            cycleService.createStudentCycle(
+                studentCode = studentCode,
+                cycleType = body.cycleType,
+                year = body.year
+            )
+            ResponseEntity.ok().build()
+        } catch (e: UnauthorizedException) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        } catch (e: ExceptionNotFound) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+        }
     }
+
+
 
     @PostMapping("/addSubject")
     @SecurityRequirement(name = "ApiAuth")

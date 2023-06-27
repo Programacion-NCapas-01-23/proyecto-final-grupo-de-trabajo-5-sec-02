@@ -10,7 +10,8 @@ data class SubjectPerStudentCycle(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: UUID = UUID.randomUUID(),
-    val status: SubjectStatus,
+    var status: SubjectStatus,
+    var grade: Float,
     @ManyToOne
     @JoinColumn(name = "studentCycle_fk", referencedColumnName = "studentCycleId")
     val studentCycle: StudentCycle,
