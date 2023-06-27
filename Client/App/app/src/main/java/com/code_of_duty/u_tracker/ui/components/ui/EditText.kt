@@ -1,16 +1,18 @@
 package com.code_of_duty.u_tracker.ui.components.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TextFieldDefaults.textFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme as MaterialTheme3
 import androidx.compose.ui.text.input.KeyboardType as KeyboardType3
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditTextField(
     label: String,
@@ -33,34 +34,60 @@ fun EditTextField(
     supportText: String? = null,
     type: KeyboardType = KeyboardType.Text,
 ) {
+    val showContent = remember { mutableStateOf(true) }
+    val visualTransformation =
+        if (type == KeyboardType.Password && showContent.value)
+            PasswordVisualTransformation()
+        else
+            VisualTransformation.None
+
     TextField(
         value = value.value,
-        onValueChange = { value.value = it },
-        label = { Text(label) },
-        supportingText = {
-            Text(text = supportText ?: "")
+        onValueChange = {
+            value.value = it
         },
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        leadingIcon = icon,
-        color = TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedContainerColor = MaterialTheme3.colorScheme.surface,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent),
+        label = {
+            Text(
+                text = label,
+                style = MaterialTheme3.typography.bodyMedium
+            )
+        },
         isError = isError,
-        keyboardOptions = when(type) {
+        visualTransformation = visualTransformation,
+        supportingText = {
+            if (isError) {
+                Text(
+                    text = supportText!!,
+                    style = MaterialTheme3.typography.bodySmall,
+                    color = Color.Red
+                )
+            }
+        },
+        keyboardOptions = when (type) {
             KeyboardType.Text -> KeyboardType.Text.keyboardType
             KeyboardType.Number -> KeyboardType.Number.keyboardType
             KeyboardType.Email -> KeyboardType.Email.keyboardType
             KeyboardType.Password -> KeyboardType.Password.keyboardType
         },
         shape = RoundedCornerShape(16.dp),
-        visualTransformation = when(type) {
-            KeyboardType.Password -> PasswordVisualTransformation()
-            else -> VisualTransformation.None
-        },
+        leadingIcon = icon,
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+            errorIndicatorColor = Color.Transparent,
+            focusedContainerColor = MaterialTheme3.colorScheme.surface
+        ),
+        trailingIcon = {
+            if (type == KeyboardType.Password) {
+                Icon(imageVector = Icons.Filled.Lock, contentDescription = "Password", modifier = Modifier.clickable {
+                    showContent.value = !showContent.value
+                })
+            }
+        }
     )
 }
 
