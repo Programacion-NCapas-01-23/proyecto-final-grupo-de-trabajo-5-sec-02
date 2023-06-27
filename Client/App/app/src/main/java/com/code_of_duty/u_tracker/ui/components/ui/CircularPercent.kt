@@ -72,6 +72,6 @@ fun PartialCircle(
 @Composable
 fun PreviewPartialCircle(){
     UTrackerTheme() {
-        PartialCircle(completed = 9f, total = 10f, cum = 7.8f)
+        PartialCircle(completed = 5f, total = 10f, cum = 7.8f)
     }
 }

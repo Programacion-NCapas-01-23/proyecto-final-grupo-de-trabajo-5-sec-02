@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.models.screens.profile
+package com.code_of_duty.u_tracker.ui.screens.cum
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,15 +13,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ProfileScreen () {
+fun CUMScreen () {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.DarkGray),
+            .background(Color.Black),
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = "PROFILE",
+            text = "CUM",
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             fontWeight = FontWeight.Bold,
             color = Color.White
@@ -31,6 +31,6 @@ fun ProfileScreen () {
 
 @Preview
 @Composable
-fun ProfileScreenPreview() {
-    ProfileScreen()
+fun CUMScreenPreview() {
+    CUMScreen()
 }

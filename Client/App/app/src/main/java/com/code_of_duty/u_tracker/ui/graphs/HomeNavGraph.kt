@@ -7,12 +7,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 
 import com.code_of_duty.u_tracker.ui.models.NavItems
-import com.code_of_duty.u_tracker.ui.models.screens.ScreenContent
-import com.code_of_duty.u_tracker.ui.models.screens.cum.CUMScreen
-import com.code_of_duty.u_tracker.ui.models.screens.pensum.PensumScreen
-import com.code_of_duty.u_tracker.ui.models.screens.schedule.ScheduleScreen
-import com.code_of_duty.u_tracker.ui.models.screens.term.TermScreen
-import com.code_of_duty.u_tracker.ui.models.screens.profile.ProfileScreen
+import com.code_of_duty.u_tracker.ui.screens.ScreenContent
+import com.code_of_duty.u_tracker.ui.screens.cum.CUMScreen
+import com.code_of_duty.u_tracker.ui.screens.pensum.PensumScreen
+import com.code_of_duty.u_tracker.ui.screens.schedule.ScheduleScreen
+import com.code_of_duty.u_tracker.ui.screens.term.TermScreen
+import com.code_of_duty.u_tracker.ui.screens.profile.ProfileScreen
 
 fun NavGraphBuilder.homeNavGraph(navController: NavController) {
     navigation(

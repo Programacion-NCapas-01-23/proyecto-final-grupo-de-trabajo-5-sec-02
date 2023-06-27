@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.models.screens.login
+package com.code_of_duty.u_tracker.ui.screens.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,16 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.code_of_duty.u_tracker.ui.components.login.LoginForm
 import com.code_of_duty.u_tracker.ui.components.login.LoginHeader
 import com.code_of_duty.u_tracker.ui.graphs.AuthScreen
 import com.code_of_duty.u_tracker.ui.graphs.Graph
 import com.code_of_duty.u_tracker.ui.theme.Typography
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel = viewModel(), navController: NavController){
+fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(), navController: NavController){
     LoginContent(
         loginViewModel = loginViewModel,
         onClick = {

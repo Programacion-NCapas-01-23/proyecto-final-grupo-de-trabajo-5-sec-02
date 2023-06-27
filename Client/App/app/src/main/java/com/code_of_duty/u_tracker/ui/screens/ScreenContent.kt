@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.models.screens
+package com.code_of_duty.u_tracker.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
