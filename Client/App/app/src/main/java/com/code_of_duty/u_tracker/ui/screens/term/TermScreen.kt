@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.models.screens.term
+package com.code_of_duty.u_tracker.ui.screens.term
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

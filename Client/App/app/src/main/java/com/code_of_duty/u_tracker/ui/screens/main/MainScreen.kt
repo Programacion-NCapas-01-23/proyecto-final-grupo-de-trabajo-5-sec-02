@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.models.screens.main
+package com.code_of_duty.u_tracker.ui.screens.main
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.ExperimentalMaterial3Api

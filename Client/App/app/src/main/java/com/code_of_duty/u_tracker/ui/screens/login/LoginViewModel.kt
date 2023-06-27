@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.models.screens.login
+package com.code_of_duty.u_tracker.ui.screens.login
 
 
 import androidx.compose.runtime.MutableState
@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.code_of_duty.u_tracker.data.repositories.LoginRepository
+import com.code_of_duty.u_tracker.enums.LoginStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,7 +18,7 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
     private var code: MutableState<String> = mutableStateOf("")
     private var password: MutableState<String> = mutableStateOf("")
-    private var login: MutableState<Boolean> = mutableStateOf(false)
+    private var login: MutableState<LoginStatus> = mutableStateOf(LoginStatus.NONE)
 
     fun getCode(): MutableState<String> {
         return code
@@ -34,19 +35,25 @@ class LoginViewModel @Inject constructor(
     fun setPassword(password: String) {
         this.password.value = password
     }
-    fun getLogin(): MutableState<Boolean> {
+    fun getLogin(): MutableState<LoginStatus> {
         return login
+    }
+
+    fun setLogin(status: LoginStatus) {
+        login.value = status
     }
 
     fun login() {
         viewModelScope.launch {
             try {
                 val loginResponse = loginRepository.login(code.value, password.value)
-                loginResponse.token?.let {
-                    login.value = true
+                loginResponse.token.let {
+                    login.value = LoginStatus.LOGIN_SUCCESS
+                    val token = it
+                    //loginRepository.saveToken(token)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                login.value = LoginStatus.LOGIN_FAILED
             }
         }
     }

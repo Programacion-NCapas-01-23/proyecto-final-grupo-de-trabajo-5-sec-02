@@ -2,16 +2,15 @@ package com.code_of_duty.u_tracker.ui.components.login
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import com.code_of_duty.u_tracker.enums.LoginStatus
 import com.code_of_duty.u_tracker.ui.components.ui.CustomButton
 import com.code_of_duty.u_tracker.ui.components.ui.DialogAlert
 import com.code_of_duty.u_tracker.ui.components.ui.EditTextField
 import com.code_of_duty.u_tracker.ui.components.ui.FormsCard
 import com.code_of_duty.u_tracker.ui.components.ui.KeyboardType
-import com.code_of_duty.u_tracker.ui.models.screens.login.LoginViewModel
+import com.code_of_duty.u_tracker.ui.screens.login.LoginViewModel
 
 @Composable
 fun LoginForm(
@@ -21,6 +20,20 @@ fun LoginForm(
     val error = remember { mutableStateOf(false) }
     val loading = remember { mutableStateOf(false) }
 
+    LaunchedEffect(loginViewModel.getLogin().value){
+        when(loginViewModel.getLogin().value){
+            LoginStatus.LOGIN_SUCCESS -> {
+                onClick()
+            }
+            LoginStatus.LOGIN_FAILED -> {
+                error.value = true
+                loading.value = false
+                loginViewModel.setLogin(LoginStatus.NONE)
+            }
+            else -> {}
+        }
+    }
+
     FormsCard(
         title = "Login",
         editFields = listOf(
@@ -28,7 +41,6 @@ fun LoginForm(
                 EditTextField(
                     label = "carnet",
                     value = loginViewModel.getCode(),
-                    onValueChange = {loginViewModel.setCode(it)},
                     type = KeyboardType.Number
                 )
             },
@@ -36,19 +48,13 @@ fun LoginForm(
                 EditTextField(
                     label = "contraseña",
                     value = loginViewModel.getPassword(),
-                    onValueChange = {loginViewModel.setPassword(it)},
                     type = KeyboardType.Password
                 )
             },
             {
                 CustomButton(text = "Ingresar", loading = loading.value){
                     loading.value = true
-                    if (loginViewModel.getLogin().value) {
-                        onClick()
-                    } else {
-                        error.value = true
-                    }
-                    loading.value = false
+                    loginViewModel.login()
                 }
             }
         ),

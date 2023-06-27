@@ -4,9 +4,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.code_of_duty.u_tracker.ui.models.screens.ScreenContent
-import com.code_of_duty.u_tracker.ui.models.screens.forgotPassword.getVerificationToken.GetVerificationTokenScreen
-import com.code_of_duty.u_tracker.ui.models.screens.login.LoginScreen
+import com.code_of_duty.u_tracker.ui.screens.ScreenContent
+import com.code_of_duty.u_tracker.ui.screens.forgotPassword.getVerificationToken.GetVerificationTokenScreen
+import com.code_of_duty.u_tracker.ui.screens.login.LoginScreen
 
 fun NavGraphBuilder.authNavGraph(navController: NavController) {
     navigation(
