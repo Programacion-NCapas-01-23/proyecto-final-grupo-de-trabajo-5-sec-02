@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.code_of_duty.u_tracker.ui.components.BottomBar
 import com.code_of_duty.u_tracker.ui.components.TopAppBar
+import com.code_of_duty.u_tracker.ui.models.AuthNavItems
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,7 +34,7 @@ fun RootNavigationGraph(navController: NavHostController) {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            if (actualDestination == AuthScreen.Login.route || actualDestination == AuthScreen.SignUp.route) {
+            if (actualDestination == AuthNavItems.Login.route) {
 
             } else {
                 TopAppBar(navController = navController, scrollBehavior = scrollBehavior, destination = actualDestination)

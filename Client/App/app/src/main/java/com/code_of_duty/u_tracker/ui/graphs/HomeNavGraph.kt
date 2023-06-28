@@ -2,11 +2,10 @@ package com.code_of_duty.u_tracker.ui.graphs
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 
-import com.code_of_duty.u_tracker.ui.models.NavItems
+import com.code_of_duty.u_tracker.ui.models.MainNavItems
 import com.code_of_duty.u_tracker.ui.screens.ScreenContent
 import com.code_of_duty.u_tracker.ui.screens.cum.CUMScreen
 import com.code_of_duty.u_tracker.ui.screens.pensum.PensumScreen
@@ -17,29 +16,29 @@ import com.code_of_duty.u_tracker.ui.screens.profile.ProfileScreen
 fun NavGraphBuilder.homeNavGraph(navController: NavController) {
     navigation(
         route = Graph.HOME,
-        startDestination = NavItems.Term.route
+        startDestination = MainNavItems.Term.route
     ) {
-        composable(route = NavItems.Schedule.route){
+        composable(route = MainNavItems.Schedule.route){
             ScheduleScreen()
         }
-        composable(route = NavItems.Assesment.route){
+        composable(route = MainNavItems.Assesment.route){
             ScreenContent(
-                name = NavItems.Assesment.route,
+                name = MainNavItems.Assesment.route,
                 onClick = {
                     navController.navigate(Graph.DETAILS)
                 }
             )
         }
-        composable(route = NavItems.CUM.route){
+        composable(route = MainNavItems.CUM.route){
             CUMScreen()
         }
-        composable(route = NavItems.Term.route){
+        composable(route = MainNavItems.Term.route){
             TermScreen()
         }
-        composable(route = NavItems.Pensum.route){
+        composable(route = MainNavItems.Pensum.route){
             PensumScreen()
         }
-        composable(route = NavItems.Profile.route){
+        composable(route = MainNavItems.Profile.route){
             ProfileScreen()
         }
         detailsNavGraph(navController = navController)

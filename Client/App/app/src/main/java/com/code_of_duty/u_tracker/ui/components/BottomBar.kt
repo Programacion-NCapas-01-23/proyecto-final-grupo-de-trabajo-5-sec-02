@@ -19,24 +19,24 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.code_of_duty.u_tracker.ui.models.NavItems
+import com.code_of_duty.u_tracker.ui.models.MainNavItems
 import com.code_of_duty.u_tracker.ui.theme.Typography
 import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf (
-        NavItems.Pensum,
-        NavItems.Assesment,
-        NavItems.Term,
-        NavItems.CUM,
-        NavItems.Schedule,
+        MainNavItems.Pensum,
+        MainNavItems.Assesment,
+        MainNavItems.Term,
+        MainNavItems.CUM,
+        MainNavItems.Schedule,
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    val bottomBarDestination = screens.any {it.route == currentDestination?.route} || currentDestination?.route == NavItems.Profile.route
+    val bottomBarDestination = screens.any {it.route == currentDestination?.route} || currentDestination?.route == MainNavItems.Profile.route
     if (bottomBarDestination) {
         NavigationBar() {
             screens.forEach { screen ->
@@ -52,7 +52,7 @@ fun BottomBar(navController: NavHostController) {
 
 @Composable
 fun RowScope.AddItem(
-    screen: NavItems,
+    screen: MainNavItems,
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {

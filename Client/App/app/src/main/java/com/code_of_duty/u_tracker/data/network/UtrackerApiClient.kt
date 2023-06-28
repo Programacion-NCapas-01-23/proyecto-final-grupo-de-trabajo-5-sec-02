@@ -5,6 +5,7 @@ import com.code_of_duty.u_tracker.data.network.request.LoginRequest
 import com.code_of_duty.u_tracker.data.network.request.RegisterRequest
 import com.code_of_duty.u_tracker.data.network.response.LoginResponse
 import com.code_of_duty.u_tracker.data.network.response.MessageResponse
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -15,12 +16,12 @@ interface UtrackerApiClient {
     @POST("auth/register")
     suspend fun register(
         @Body registerRequest: RegisterRequest
-    ): MessageResponse
+    ): Response<MessageResponse>
 
     @POST("auth/login")
     suspend fun login(
         @Body loginRequest: LoginRequest
-    ): LoginResponse
+    ): Response<LoginResponse>
 
     @GET("auth/getVerificationToken")
     suspend fun getVerificationToken(
