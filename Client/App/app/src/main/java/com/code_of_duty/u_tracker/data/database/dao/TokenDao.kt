@@ -14,7 +14,7 @@ interface TokenDao {
 
     @Query("SELECT * FROM userToken")
     suspend fun getToken(): String
-
-    @Delete(entity = UserToken::class)
+    //delete all tokens using the @Delete annotation and the deleteToken() method
+    @Delete
     suspend fun deleteToken(token: UserToken)
 }
