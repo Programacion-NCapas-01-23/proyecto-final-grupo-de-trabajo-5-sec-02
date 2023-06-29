@@ -1,6 +1,6 @@
 package com.code_of_duty.u_tracker.data.network.request
 
-data class RegisterRequest(
+data class SignUpRequest(
     val code: String,
     val username: String,
     val email: String,

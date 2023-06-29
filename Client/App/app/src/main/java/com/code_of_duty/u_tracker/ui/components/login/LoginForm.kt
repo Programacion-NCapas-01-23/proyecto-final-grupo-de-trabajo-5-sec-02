@@ -14,8 +14,8 @@ import com.code_of_duty.u_tracker.ui.screens.login.LoginViewModel
 
 @Composable
 fun LoginForm(
-    loginViewModel: LoginViewModel,
-    onClick: () -> Unit
+        loginViewModel: LoginViewModel,
+        onClick: () -> Unit
 ) {
     val error = remember { mutableStateOf(false) }
     val loading = remember { mutableStateOf(false) }
@@ -67,7 +67,6 @@ fun LoginForm(
             message = "Carnet o contraseña incorrectos",
             onConfirm = {
                 error.value = false
-                loginViewModel.setCode("")
                 loginViewModel.setPassword("")
             },
             needCancel = false
