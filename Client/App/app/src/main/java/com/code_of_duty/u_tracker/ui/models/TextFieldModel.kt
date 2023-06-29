@@ -5,6 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 
 data class TextFieldModel(
     var text: MutableState<String> = mutableStateOf(""),
-    var isError: Boolean = false,
-    var supportText: String = ""
+    var isError: MutableState<Boolean> = mutableStateOf(false),
+    var supportText: MutableState<String> = mutableStateOf("")
 )

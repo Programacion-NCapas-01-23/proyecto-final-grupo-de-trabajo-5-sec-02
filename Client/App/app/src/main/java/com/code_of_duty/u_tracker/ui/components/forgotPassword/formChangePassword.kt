@@ -23,15 +23,15 @@ fun ChangePasswordCard(
     //check if the password is valid
     LaunchedEffect(newPassword.value.text.value) {
         newPassword.value.apply {
-            isError = !text.value.matches(Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))
-            supportText = if (isError) "La contraseña debe tener al menos 8 caracteres, 1 mayuscula, 1 minuscula, 1 numero y un caracter especial" else ""
+            isError.value = !text.value.matches(Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))
+            supportText.value = if (isError.value) "La contraseña debe tener al menos 8 caracteres, 1 mayuscula, 1 minuscula, 1 numero y un caracter especial" else ""
         }
     }
 
     LaunchedEffect(confirmPassword.value.text.value) {
         confirmPassword.value.apply {
-            isError = newPassword.value.text.value != text.value
-            supportText = if (isError) "Las contraseñas no coinciden" else ""
+            isError.value = newPassword.value.text.value != text.value
+            supportText.value = if (isError.value) "Las contraseñas no coinciden" else ""
         }
     }
 
@@ -76,7 +76,7 @@ fun ChangePasswordCard(
             },
             {
                 CustomButton(text ="Cambiar contraseña") {
-                    if (!newPassword.value.isError && !confirmPassword.value.isError)
+                    if (!newPassword.value.isError.value && !confirmPassword.value.isError.value)
                         onContinue()
                 }
             }
