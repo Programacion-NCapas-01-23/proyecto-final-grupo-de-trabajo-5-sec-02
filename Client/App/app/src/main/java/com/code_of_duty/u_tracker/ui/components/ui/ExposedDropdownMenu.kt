@@ -25,22 +25,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.code_of_duty.u_tracker.ui.models.ProvisionalFaculty
-import com.code_of_duty.u_tracker.ui.models.ProvisionalResponse
+import com.code_of_duty.u_tracker.ui.models.Provisional
+import com.code_of_duty.u_tracker.ui.models.careers
+import com.code_of_duty.u_tracker.ui.models.faculties
 import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 
 @Composable
 fun <T: Any> CenteredExposedDropdown (
     label: String,
-    options: List<T>,
+    options: MutableList<T>,
     enableState: MutableState<Boolean> = mutableStateOf(true),
+    selectedIdValue: MutableState<String>,
+    selectedNameValue: MutableState<String>,
     optionNameProvider: (T) -> String,
     optionIdProvider: (T) -> String
 ) {
     //VARIABLES
     val expandedState = remember { mutableStateOf(false) }
-    val selectedIdValue = remember { mutableStateOf("") }
-    val selectedNameValue = remember { mutableStateOf("") }
 
     Column (
         modifier = Modifier
@@ -51,8 +52,13 @@ fun <T: Any> CenteredExposedDropdown (
             expanded = expandedState.value,
             onExpandedChange = {
                 if(enableState.value) expandedState.value = !expandedState.value},
-            modifier = Modifier
-                .clickable(enabled = enableState.value, onClick = {})
+            modifier = Modifier.let {
+                if (!enableState.value) {
+                    it.clickable(enabled = enableState.value, onClick = {})
+                } else {
+                    it
+                }
+            }
                 .fillMaxWidth()
                 .padding(8.dp)
                 .wrapContentSize(Alignment.Center),
@@ -101,31 +107,26 @@ fun <T: Any> CenteredExposedDropdown (
 @Composable
 fun ExposedDropdownPreview() {
 
-    val options = listOf(
-        ProvisionalResponse.Arquitecure,
-        ProvisionalResponse.CivilEngineering,
-        ProvisionalResponse.InformaticEngineering,
-        ProvisionalResponse.MechanicalEngineering,
-        ProvisionalResponse.ElectricalEngineering,
-        ProvisionalResponse.IndustrialEngineering,
-        ProvisionalResponse.EnergeticEngineering,
-    )
+    var careersList = mutableListOf<Provisional>()
+    var facultiesList = mutableListOf<Provisional>()
 
-    val faculty = listOf(
-        ProvisionalFaculty.Communications,
-        ProvisionalFaculty.Economics,
-        ProvisionalFaculty.Engineering,
-        ProvisionalFaculty.Education,
-        ProvisionalFaculty.Humanities,
-        ProvisionalFaculty.Law
-    )
+    facultiesList = faculties
+    careersList = careers.filter { it.faculty == "2" }.toMutableList()
 
-    var enableState = remember {
-        mutableStateOf(false)
+    val enableState = remember {
+        mutableStateOf(true)
+    }
+
+    val selectedIdValue = remember {
+        mutableStateOf("")
+    }
+
+    val selectedNameValue = remember {
+        mutableStateOf("")
     }
 
     val label = "Carrera"
     UTrackerTheme() {
-        CenteredExposedDropdown(label, options, enableState, {option -> option.name}, {option -> option.id})
+        CenteredExposedDropdown(label, careersList, enableState, selectedIdValue, selectedNameValue,{option -> option.name}, {option -> option.id})
     }
 }
