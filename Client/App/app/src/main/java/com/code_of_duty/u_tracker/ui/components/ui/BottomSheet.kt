@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -47,8 +48,8 @@ import kotlinx.coroutines.launch
 fun BottomSheet(
     openButtonLabel: String,
     closeButtonLabel: String,
-    edgeToEdgeEnabled: MutableState<Boolean>? = null,
-    skipPartiallyExpanded: MutableState<Boolean>? = null,
+    edgeToEdgeEnabled: MutableState<Boolean> = mutableStateOf(false),
+    skipPartiallyExpanded: MutableState<Boolean> = mutableStateOf(false),
     bottomSheetState: SheetState,
     scope: CoroutineScope,
     editFields: List<@Composable () -> Unit>,
@@ -56,7 +57,10 @@ fun BottomSheet(
     ) {
 // App content
     Column(
-        modifier = Modifier.fillMaxWidth().padding(top = 16.dp).wrapContentSize(Alignment.Center),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+            .wrapContentSize(Alignment.Center),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 //        Row(
@@ -99,7 +103,10 @@ fun BottomSheet(
             editFields.forEach { editField ->
                 editField()
             }
-            Row(Modifier.fillMaxWidth().padding(bottom = 24.dp), horizontalArrangement = Arrangement.Center) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp), horizontalArrangement = Arrangement.Center) {
                 Button(
                     // Note: If you provide logic outside of onDismissRequest to remove the sheet,
                     // you must additionally handle intended state cleanup, if any.
@@ -163,27 +170,28 @@ fun BottomSheetPreview() {
     var selectedOptionTextState2 = remember {
         mutableStateOf(options2[0])
     }
+    UTrackerTheme() {
+        BottomSheet(
+            bottomSheetState = bottomSheetState,
+            scope = scope,
+            editFields = listOf(
+//            { CenteredExposedDropdown(
+//                label = label ,
+//                options = options,
+//                expanded = expandedState,
+//                selectedOptionText = selectedOptionTextState
+//            ) },
+//            { CenteredExposedDropdown(
+//                label = label2 ,
+//                options = options2,
+//                expanded = expandedState2,
+//                selectedOptionText = selectedOptionTextState2
+//            ) }
+            ),
+            openBottomSheet = openBottomSheet,
+            openButtonLabel = "Elegir carrera",
+            closeButtonLabel = "Volver al formulario"
+        )
+    }
 
-    BottomSheet(
-        skipPartiallyExpanded = skipPartiallyExpanded,
-        bottomSheetState = bottomSheetState,
-        scope = scope,
-        editFields = listOf(
-            { CenteredExposedDropdown(
-                label = label ,
-                options = options,
-                expanded = expandedState,
-                selectedOptionText = selectedOptionTextState
-            ) },
-            { CenteredExposedDropdown(
-                label = label2 ,
-                options = options2,
-                expanded = expandedState2,
-                selectedOptionText = selectedOptionTextState2
-            ) }
-        ),
-        openBottomSheet = openBottomSheet,
-        openButtonLabel = "Elegir carrera",
-        closeButtonLabel = "Volver al formulario"
-    )
 }

@@ -12,13 +12,14 @@ import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.code_of_duty.u_tracker.ui.components.signup.SignUpForm
 import com.code_of_duty.u_tracker.ui.graphs.Graph
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun SignUpScreen(signUpViewModel: SignUpViewModel = viewModel(), navController: NavController) {
+fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel(), navController: NavController) {
     SignUpContent(
         signUpViewModel = signUpViewModel,
         onClick = {
-            navController.navigate(Graph.HOME){
+            navController.navigate(Graph.AUTHENTICATION){
                 popUpTo(Graph.AUTHENTICATION){
                     inclusive = true
                 }
