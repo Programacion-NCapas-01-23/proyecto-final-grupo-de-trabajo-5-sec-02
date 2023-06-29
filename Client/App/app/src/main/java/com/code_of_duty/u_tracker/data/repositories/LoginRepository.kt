@@ -28,6 +28,7 @@ class LoginRepository @Inject constructor(
     suspend fun saveToken(token: String) = tokenDao.insertToken(UserToken(token))
     suspend fun getToken() = tokenDao.getToken()
     suspend fun deleteToken(token: String) = tokenDao.deleteToken(UserToken(token))
-
     suspend fun saveUser(code: String, password: String) = userDao.insertUser(User(code, password))
+    suspend fun getUser() = userDao.getUser()
+    suspend fun deleteUser(user: User) = userDao.deleteUser(user)
 }

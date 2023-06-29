@@ -60,16 +60,33 @@ fun SignUpForm (
 
     //check if the password is valid
     LaunchedEffect(newPassword.value.text.value) {
-        newPassword.value.apply {
-            isError = !text.value.matches(Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))
-            supportText = if (isError) "La contraseña debe tener al menos 8 caracteres, 1 mayuscula, 1 minuscula, 1 numero y un caracter especial" else ""
+        newPassword.value.apply{
+            if (text.value != ""){
+                isError = !text.value.matches(Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))
+                supportText = if (isError) "La contraseña debe tener al menos 8 caracteres, 1 mayuscula, 1 minuscula, 1 numero y un caracter especial" else ""
+
+                if(!isError){
+                    signUpViewModel.getPassword().value = text.value
+                    isError = false
+                    supportText = ""
+                }
+            }
         }
+
     }
 
     LaunchedEffect(confirmPassword.value.text.value) {
-        confirmPassword.value.apply {
-            isError = newPassword.value.text.value != text.value
-            supportText = if (isError) "Las contraseñas no coinciden" else ""
+        confirmPassword.value.apply{
+            if (text.value != ""){
+                isError = text.value != newPassword.value.text.value
+                supportText = if (isError) "Las contraseñas no coinciden" else ""
+
+                if(!isError){
+                    signUpViewModel.getConfirm().value = text.value
+                    isError = false
+                    supportText = ""
+                }
+            }
         }
     }
 
@@ -112,7 +129,7 @@ fun SignUpForm (
                 {
                     EditTextField(
                         label = "Ingresa una contraseña",
-                        value = signUpViewModel.getPassword(),
+                        value = newPassword.value.text,
                         type = KeyboardType.Password,
                         isError = newPassword.value.isError,
                         supportText = newPassword.value.supportText
@@ -121,7 +138,7 @@ fun SignUpForm (
                 {
                     EditTextField(
                         label = "Confirma tu contraseña",
-                        value = signUpViewModel.getConfirm(),
+                        value = confirmPassword.value.text,
                         type = KeyboardType.Password,
                         isError = confirmPassword.value.isError,
                         supportText = confirmPassword.value.supportText
@@ -179,6 +196,7 @@ fun SignUpForm (
                 },
                 {
                     CustomButton(text = "Registrarse", loading = loading.value) {
+                        //TODO: validate fields
                         loading.value = true
                         signUpViewModel.signUp()
                     }
