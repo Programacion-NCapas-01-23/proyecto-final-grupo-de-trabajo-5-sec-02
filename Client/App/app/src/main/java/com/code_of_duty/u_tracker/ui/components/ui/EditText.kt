@@ -33,7 +33,7 @@ fun EditTextField(
     isError: MutableState<Boolean> = mutableStateOf(false),
     supportText: MutableState<String> = mutableStateOf(""),
     type: KeyboardType = KeyboardType.Text,
-    isEnabled: Boolean = true
+    isEnabled: MutableState<Boolean> = mutableStateOf(true)
 ) {
     val showContent = remember { mutableStateOf(true) }
     val visualTransformation =
@@ -94,7 +94,7 @@ fun EditTextField(
                 )
             }
         },
-        enabled = isEnabled,
+        enabled = isEnabled.value,
         textStyle = Typography.bodySmall,
         singleLine = true
     )

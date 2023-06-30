@@ -26,10 +26,10 @@ interface UtrackerApiClient {
     @GET("auth/getVerificationToken")
     suspend fun getVerificationToken(
         @Path("email") email: String
-    ): MessageResponse
+    ): Response<MessageResponse>
 
     @POST("auth/changePassword")
     suspend fun changePassword(
         @Body changePasswordRequest: ChangePasswordRequest
-    ): MessageResponse
+    ): Response<MessageResponse>
 }
