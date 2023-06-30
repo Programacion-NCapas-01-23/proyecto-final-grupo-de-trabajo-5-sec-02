@@ -1,9 +1,0 @@
-version: 1.0
-services:
-    runtime: java17
-    build:
-        commands:
-            - ./gradlew clean build
-        start-command: java -jar build/libs/U-tracker_API.jar
-    port: 8080
-    
