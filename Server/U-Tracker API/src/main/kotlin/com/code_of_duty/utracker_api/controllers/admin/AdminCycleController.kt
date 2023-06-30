@@ -2,6 +2,7 @@ package com.code_of_duty.utracker_api.controllers.admin
 
 import com.code_of_duty.utracker_api.data.dtos.CycleDto
 import com.code_of_duty.utracker_api.data.dtos.MessageDto
+import com.code_of_duty.utracker_api.data.models.Cycle
 import com.code_of_duty.utracker_api.services.admin.cycle.AdminCycleService
 import com.code_of_duty.utracker_api.utils.GeneralUtils
 import io.swagger.v3.oas.annotations.Operation
@@ -14,10 +15,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("\${admin.base-path}/cycles")
@@ -26,6 +24,13 @@ class AdminCycleController(
     private val adminCycleService: AdminCycleService,
     private val generalUtils: GeneralUtils
 ) {
+    @GetMapping("/all")
+    fun getAllCycles(): ResponseEntity<List<Cycle>> {
+        return ResponseEntity(
+            adminCycleService.getAllCycles(),
+            HttpStatus.OK
+        )
+    }
     //region add_docs
     @Operation(
         summary = "Add cycles",
@@ -129,7 +134,7 @@ class AdminCycleController(
         ]
     )
     //endregion
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     fun deleteCycle(
         request: HttpServletRequest,
         @Valid @RequestBody cycles: List<String>
@@ -187,7 +192,7 @@ class AdminCycleController(
         ]
     )
     //endregion
-    @PostMapping("/update")
+    @PatchMapping("/update")
     fun updateCycle(
         request: HttpServletRequest,
         @Valid @RequestBody cycle: CycleDto

@@ -29,7 +29,6 @@ class CycleServiceImp(
 
         return pensums.flatMap { pensum ->
             pensum.cycles?.map { cycle ->
-                val cycleId = cycle.id
                 StudentCycleResponseDto(
                     name = cycle.name,
                     cycleType = cycle.cycleType.ordinal,
