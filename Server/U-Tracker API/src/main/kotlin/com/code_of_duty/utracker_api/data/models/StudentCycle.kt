@@ -1,6 +1,7 @@
 package com.code_of_duty.utracker_api.data.models
 
 import com.code_of_duty.utracker_api.data.enums.CycleType
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import java.util.UUID
 
@@ -16,11 +17,12 @@ data class StudentCycle(
     @JoinColumn(name = "student_fk", referencedColumnName = "code")
     val student: Student,
 
-    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(
         name = "subject_x_student_cycle",
         joinColumns = [JoinColumn(name = "studentCycle_fk", referencedColumnName = "studentCycleId")],
         inverseJoinColumns = [JoinColumn(name = "subject_fk", referencedColumnName = "code")]
     )
-    val subjects: List<Subject>
+    var subjects: List<Subject> = emptyList()
 )

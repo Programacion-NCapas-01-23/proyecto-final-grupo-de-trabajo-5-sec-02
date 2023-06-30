@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service
 
 @Service
 interface AdminDegreeService {
+    fun getAllDegrees(): List<DegreeDto>
     fun addAllDegrees(degrees: List<DegreeDto>)
     fun deleteAllDegrees(degrees: List<String>)
     fun updateDegree(degree: UpdateDegreeDto)

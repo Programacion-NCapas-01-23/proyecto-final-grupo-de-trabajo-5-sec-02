@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 interface AdminFacultyService {
+    fun getAllFaculties(): List<Faculty>
     fun addAllFaculties(faculties: List<FacultyDto>)
     fun deleteFaculties(faculties: List<String>)
     fun updateFaculty(faculty: Faculty)

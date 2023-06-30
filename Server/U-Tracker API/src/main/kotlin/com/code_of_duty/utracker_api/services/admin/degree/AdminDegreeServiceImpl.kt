@@ -14,6 +14,16 @@ class AdminDegreeServiceImpl(
     private val facultyDao: FacultyDao,
     private val degreeDao: DegreeDao
 ) : AdminDegreeService {
+
+    override fun getAllDegrees(): List<DegreeDto> {
+        return degreeDao.findAll().map {
+            DegreeDto(
+                id = it.id,
+                name = it.name,
+                facultyId = it.faculty!!.id
+            )
+        }
+    }
     override fun addAllDegrees(degrees: List<DegreeDto>) {
         degrees.forEach {
             val faculty = facultyDao.findById(it.facultyId).orElseThrow {
