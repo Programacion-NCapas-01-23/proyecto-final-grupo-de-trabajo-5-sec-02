@@ -10,6 +10,8 @@ import java.util.UUID
 interface SubjectPerStudentCycleDao : JpaRepository<SubjectPerStudentCycle, Long> {
     fun findByStudentCycleAndSubjectCode(studentCycleId: UUID, subjectCode: String): SubjectPerStudentCycle?
 
+    fun findBySubjectCodeAndStudentCycle(subjectCode: String, studentCycleId: UUID): SubjectPerStudentCycle?
+
     @Query("SELECT s FROM SubjectPerStudentCycle s JOIN FETCH s.subject WHERE s.studentCycle.studentCycleId = :studentId")
     fun getSubjectStatusesForStudent(studentId: String): List<SubjectPerStudentCycle>
 

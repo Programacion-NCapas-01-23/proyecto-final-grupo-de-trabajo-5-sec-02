@@ -3,6 +3,7 @@ package com.code_of_duty.utracker_api.controllers.admin
 import com.code_of_duty.utracker_api.data.dtos.ErrorsDto
 import com.code_of_duty.utracker_api.data.dtos.MessageDto
 import com.code_of_duty.utracker_api.data.dtos.SubjectDto
+import com.code_of_duty.utracker_api.data.dtos.SubjectXPrerequisiteDto
 import com.code_of_duty.utracker_api.data.models.Subject
 import com.code_of_duty.utracker_api.services.admin.subject.AdminSubjectService
 import com.code_of_duty.utracker_api.utils.GeneralUtils
@@ -236,6 +237,20 @@ class AdminSubjectController(
         adminSubjectService.deleteAllSubjects()
         return ResponseEntity(
             MessageDto("Subjects deleted successfully"),
+            HttpStatus.OK
+        )
+    }
+
+    @PostMapping("/addPrerequisite")
+    @SecurityRequirement(name = "AdminAuth")
+    fun addPrerequisite(
+        request: HttpServletRequest,
+        @Valid @RequestBody subjects: List<SubjectXPrerequisiteDto>
+    ): ResponseEntity<MessageDto> {
+        generalUtils.extractJWT(request)
+        adminSubjectService.addPrerequisites(subjects)
+        return ResponseEntity(
+            MessageDto("Subject updated successfully"),
             HttpStatus.OK
         )
     }

@@ -1,6 +1,9 @@
 package com.code_of_duty.utracker_api.data.models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
+import lombok.ToString
+
 
 @Entity
 @Table(name = "subject")
@@ -10,9 +13,14 @@ data class Subject(
     val name: String,
     val uv: Int,
     var estimateGrade: Int = 6,
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
     val assessments: MutableList<Assessment> = mutableListOf(),
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
+    @JsonIgnore
     val subjectPerCycles: MutableList<SubjectPerCycle> = mutableListOf()
-)
+) {
+    override fun toString(): String {
+        return "Subject(code='$code', name='$name', uv=$uv, estimateGrade=$estimateGrade, assessments=$assessments)"
+    }
+}

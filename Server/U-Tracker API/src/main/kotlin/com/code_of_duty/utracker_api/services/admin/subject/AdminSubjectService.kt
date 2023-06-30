@@ -1,6 +1,7 @@
 package com.code_of_duty.utracker_api.services.admin.subject
 
 import com.code_of_duty.utracker_api.data.dtos.SubjectDto
+import com.code_of_duty.utracker_api.data.dtos.SubjectXPrerequisiteDto
 import org.springframework.stereotype.Service
 
 @Service
@@ -10,4 +11,5 @@ interface AdminSubjectService {
     fun deleteAllListedSubjects(subjects: List<String>)
     fun updateSubject(subject: SubjectDto)
     fun deleteAllSubjects()
+    fun addPrerequisites(subjects: List<SubjectXPrerequisiteDto>)
 }

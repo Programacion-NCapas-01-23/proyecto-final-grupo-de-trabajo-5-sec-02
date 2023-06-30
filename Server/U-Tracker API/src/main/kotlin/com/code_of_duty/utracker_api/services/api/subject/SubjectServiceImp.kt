@@ -42,8 +42,7 @@ class SubjectServiceImp(
                         id = cycle.id.toString(),
                         type = cycle.cycleType.ordinal,
                         name = cycle.name,
-                        pensumId = cycle.pensum.id.toString(),
-                        subjects = null
+                        pensumId = cycle.pensum.id.toString()
                     )
                 )
             }

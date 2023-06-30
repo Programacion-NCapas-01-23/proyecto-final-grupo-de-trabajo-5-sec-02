@@ -9,5 +9,4 @@ data class CycleDto(
     val name: String,
     @field:NotEmpty(message = "Pensum id cannot be empty")
     val pensumId: String,
-    val subjects: List<SubjectDto>?
 )

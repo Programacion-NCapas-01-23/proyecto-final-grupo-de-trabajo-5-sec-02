@@ -1,6 +1,5 @@
 package com.code_of_duty.utracker_api.controllers.api
 
-import com.code_of_duty.utracker_api.data.dtos.CycleDto
 import com.code_of_duty.utracker_api.data.dtos.StudentCycleDto
 import com.code_of_duty.utracker_api.services.api.cycle.CycleService
 import com.code_of_duty.utracker_api.services.api.subject.SubjectService

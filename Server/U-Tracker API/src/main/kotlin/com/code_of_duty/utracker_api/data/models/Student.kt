@@ -21,7 +21,7 @@ data class Student(
     @JoinColumn(name = "degree_fk", referencedColumnName = "id", nullable = true)
     var degree: Degree? = null,
 
-    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     @JsonIgnore
     val studentCycles: List<StudentCycle>? = null
 ){

@@ -4,12 +4,14 @@ import com.code_of_duty.utracker_api.data.dtos.*
 import com.code_of_duty.utracker_api.services.api.auth.AuthService
 import com.code_of_duty.utracker_api.services.api.student.StudentService
 import com.code_of_duty.utracker_api.services.api.verificationToken.VerificationTokenService
+import com.code_of_duty.utracker_api.utils.GeneralUtils
 import com.code_of_duty.utracker_api.utils.PasswordUtils
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Email
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,6 +39,9 @@ class AuthController (private val passwordUtils: PasswordUtils){
 
     @Autowired
     private lateinit var templateEngine: TemplateEngine
+
+    @Autowired
+    private lateinit var generalUtils: GeneralUtils
 
     @Operation(
         summary = "Register a new user",
@@ -195,5 +200,13 @@ class AuthController (private val passwordUtils: PasswordUtils){
     ): ResponseEntity<MessageDto>{
         authService.changePassword(forgotPasswordDto)
         return ResponseEntity(MessageDto("Password changed successfully"), HttpStatus.OK)
+    }
+
+    @PostMapping("/verifyToken")
+    fun verifyToken(request: HttpServletRequest): ResponseEntity<Any> {
+        val student = generalUtils.extractJWT(request)
+            ?: return ResponseEntity(MessageDto("Invalid verification token"), HttpStatus.BAD_REQUEST)
+
+        return ResponseEntity(MessageDto("Verification successful"), HttpStatus.OK)
     }
 }

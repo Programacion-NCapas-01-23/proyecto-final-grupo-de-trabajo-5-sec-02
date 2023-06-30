@@ -1,13 +1,14 @@
 package com.code_of_duty.utracker_api.services.admin.subject
 
 import com.code_of_duty.utracker_api.data.dao.CycleDao
+import com.code_of_duty.utracker_api.data.dao.PrerequisitesDao
 import com.code_of_duty.utracker_api.data.dao.SubjectDao
 import com.code_of_duty.utracker_api.data.dao.SubjectPerCycleDao
 import com.code_of_duty.utracker_api.data.dtos.CycleDto
 import com.code_of_duty.utracker_api.data.dtos.CycleRelationDto
 import com.code_of_duty.utracker_api.data.dtos.SubjectDto
-import com.code_of_duty.utracker_api.data.models.Subject
-import com.code_of_duty.utracker_api.data.models.SubjectPerCycle
+import com.code_of_duty.utracker_api.data.dtos.SubjectXPrerequisiteDto
+import com.code_of_duty.utracker_api.data.models.*
 import com.code_of_duty.utracker_api.utils.ExceptionNotFound
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Component
@@ -17,7 +18,8 @@ import java.util.*
 class AdminSubjectServiceImpl(
     private val subjectDao: SubjectDao,
     private val cycleDao: CycleDao,
-    private val subjectPerCycleDao: SubjectPerCycleDao
+    private val subjectPerCycleDao: SubjectPerCycleDao,
+    private val prerequisitesDao: PrerequisitesDao
 ) : AdminSubjectService {
 
     override fun getAllSubjects(
@@ -56,8 +58,7 @@ class AdminSubjectServiceImpl(
                         id = cycle.id.toString(),
                         type = cycle.cycleType.ordinal,
                         name = cycle.name,
-                        pensumId = cycle.pensum.id.toString(),
-                        subjects = null
+                        pensumId = cycle.pensum.id.toString()
                     )
                 )
             }
@@ -137,4 +138,24 @@ class AdminSubjectServiceImpl(
         subjectPerCycleDao.deleteAll()
         subjectDao.deleteAll()
     }
+
+    override fun addPrerequisites(subjects: List<SubjectXPrerequisiteDto>) {
+        subjects.forEach { subjectDto ->
+            val subject = subjectDao.findById(subjectDto.subjectCode).orElse(null)
+
+            if (subject != null) {
+                subjectDto.prerequisites.forEach { prerequisiteCode ->
+                    val prerequisiteSubjectPerCycle = subjectPerCycleDao.findBySubject(prerequisiteCode)
+
+                    if (prerequisiteSubjectPerCycle != null) {
+                        val newPrerequisite = Prerequisite(
+                            prerequisite = PrerequisiteID(subjectCode = subject, prerequisiteCode = prerequisiteSubjectPerCycle)
+                        )
+                        prerequisitesDao.save(newPrerequisite)
+                    }
+                }
+            }
+        }
+    }
+
 }

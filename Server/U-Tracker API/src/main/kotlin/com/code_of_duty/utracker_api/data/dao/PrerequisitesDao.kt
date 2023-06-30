@@ -8,4 +8,9 @@ import java.util.UUID
 interface PrerequisitesDao : JpaRepository<Prerequisite, Long> {
     @Query("SELECT p FROM Prerequisite p WHERE p.prerequisite.subjectCode.code IN :subjects")
     fun getPrerequisitesForSubjects(subjects: List<String>): List<Prerequisite>
+
+    @Query("SELECT p FROM Prerequisite p WHERE p.prerequisite.subjectCode.code = :subjectCode AND p.prerequisite.prerequisiteCode.correlative = :prerequisiteCorrelative")
+    fun findBySubjectCodeAndPrerequisiteCorrelative(subjectCode: String, prerequisiteCorrelative: Int): Prerequisite?
+
+    fun findByPrerequisiteSubjectCode(subjectCode: String): List<Prerequisite>
 }
