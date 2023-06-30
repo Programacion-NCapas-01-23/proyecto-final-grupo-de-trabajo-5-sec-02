@@ -40,6 +40,9 @@ dependencies {
     implementation 'org.thymeleaf:thymeleaf:3.1.1.RELEASE'
     implementation 'org.thymeleaf:thymeleaf-spring5:3.1.1.RELEASE'
     implementation 'org.thymeleaf:thymeleaf-spring5:3.1.1.RELEASE'
+    //OR tools
+    implementation "com.google.ortools:ortools-java:9.6.2534"
+
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

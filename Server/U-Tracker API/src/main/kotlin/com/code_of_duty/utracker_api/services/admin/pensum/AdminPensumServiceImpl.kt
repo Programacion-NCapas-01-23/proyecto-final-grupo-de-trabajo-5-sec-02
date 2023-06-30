@@ -13,6 +13,16 @@ class AdminPensumServiceImpl(
     private val pensumDao: PensumDao,
     private val degreeDao: DegreeDao
 ) : AdminPensumService{
+
+    override fun getAllPensums(): List<PensumDto> {
+        return pensumDao.findAll().map {
+            PensumDto(
+                id = it.id.toString(),
+                plan = it.plan,
+                degreeId = it.degree.id.toString()
+            )
+        }
+    }
     override fun addAllPensums(pensums: List<PensumDto>) {
         pensums.forEach {
             val degree = degreeDao.findById(UUID.fromString(it.degreeId))
@@ -23,7 +33,7 @@ class AdminPensumServiceImpl(
             if (pensum == null) {
                 val newPensum = Pensum(
                     plan = it.plan,
-                    degree = degree
+                    degree = degree,
                 )
                 pensumDao.save(newPensum)
             }
@@ -50,7 +60,7 @@ class AdminPensumServiceImpl(
         val pensumToUpdate = Pensum(
             id = UUID.fromString(pensum.id),
             plan = pensum.plan,
-            degree = degree
+            degree = degree,
         )
 
         pensumDao.save(pensumToUpdate)

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service
 
 @Service
 interface AdminPensumService {
+
+    fun getAllPensums(): List<PensumDto>
     fun addAllPensums(pensums: List<PensumDto>)
 
     fun deleteAllListedPensums(ids: List<String>)
