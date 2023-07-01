@@ -1,12 +1,7 @@
 package com.code_of_duty.utracker_api.controllers.api
 
-import com.code_of_duty.utracker_api.data.dtos.MessageDto
-import com.code_of_duty.utracker_api.data.dtos.NewStudentCycleDto
-import com.code_of_duty.utracker_api.data.dtos.StudentCycleDto
-import com.code_of_duty.utracker_api.data.dtos.StudentCycleResponseDto
-import com.code_of_duty.utracker_api.data.models.Cycle
+import com.code_of_duty.utracker_api.data.dtos.*
 import com.code_of_duty.utracker_api.services.api.cycle.CycleService
-import com.code_of_duty.utracker_api.services.api.subject.SubjectService
 import com.code_of_duty.utracker_api.utils.ExceptionNotFound
 import com.code_of_duty.utracker_api.utils.GeneralUtils
 import com.code_of_duty.utracker_api.utils.UnauthorizedException
@@ -27,13 +22,12 @@ import java.util.*
 @Tag(name = "API")
 class CycleController(
     private val cycleService: CycleService,
-    private val subjectService: SubjectService,
     private val generalUtils: GeneralUtils
 ) {
     @Operation(
         summary = "Get all cycles",
         description = "Get all cycles",
-        security = [SecurityRequirement(name = "ApiAuth")],
+
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -74,17 +68,13 @@ class CycleController(
         ]
     )
     @GetMapping("/")
+    @SecurityRequirement(name = "APIAuth")
     fun getAllCycles(
-        @RequestParam(required = false) id: UUID?,
         request: HttpServletRequest
     ): ResponseEntity<Any> {
-        return try {
-            val studentCode = generalUtils.extractJWT(request)
-            val cycles = cycleService.getAllCycles(studentCode)
-            ResponseEntity.ok(cycles)
-        } catch (e: UnauthorizedException) {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
-        }
+        val studentCode = generalUtils.extractJWT(request)
+        val cycles = cycleService.getAllCycles(studentCode)
+        return ResponseEntity.ok(cycles)
     }
 
     @Operation(
@@ -200,7 +190,72 @@ class CycleController(
                 cycleType = body.cycleType,
                 year = body.year
             )
-            ResponseEntity.ok().build()
+            ResponseEntity(MessageDto("Cycle created successfully"), HttpStatus.OK)
+        } catch (e: UnauthorizedException) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        } catch (e: ExceptionNotFound) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+        }
+    }
+
+    @Operation(
+        summary = "Add a subject to cycle",
+        description = "Add a subject to a student cycle",
+        security = [SecurityRequirement(name = "APIAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Subject added successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Not Found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
+    @PostMapping("/addSubject")
+    @SecurityRequirement(name = "APIAuth")
+    fun addSubjectToStudentCycle(
+        request: HttpServletRequest,
+        @RequestBody body: SubjectInStudentCycleDto
+    ): ResponseEntity<Any> {
+        return try {
+            cycleService.addSubjectToStudentPerCycle(
+                studentCycleId = UUID.fromString(body.studentCycleId),
+                subjectCode = body.subjectCode
+            )
+            ResponseEntity(
+                MessageDto("Subject added successfully"),
+                HttpStatus.OK
+            )
         } catch (e: UnauthorizedException) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         } catch (e: ExceptionNotFound) {
