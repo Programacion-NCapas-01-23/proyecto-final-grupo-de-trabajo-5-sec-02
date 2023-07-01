@@ -6,6 +6,7 @@ import cycleReducer from './slices/cycleSlice'
 import pensumReducer from './slices/pensumSlice'
 import scheduleReducer from './slices/scheduleSlice'
 import subjectReducer from './slices/subjectSlice'
+import authReducer from './slices/authSlice'
 
 const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
         pensum: pensumReducer,
         schedule: scheduleReducer,
         subject: subjectReducer,
+        auth: authReducer,
     },
 })
 
