@@ -1,10 +1,10 @@
-import {Pensum} from "@/interfaces/Pensum";
+import {Pensum, PensumPreview} from "@/interfaces/Pensum";
 import {AppDispatch, AppThunk} from "@/state/store";
 import {createPensumFailure, createPensumStart, createPensumSuccess} from "@/state/slices/pensumSlice";
 import apiService from "@/api/appService";
 import {routes} from "@/api/routes";
 
-export const createPensum = (pensum: Pensum): AppThunk => {
+export const createPensum = (pensum: PensumPreview): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(createPensumStart());
