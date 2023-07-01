@@ -13,6 +13,6 @@ interface CycleService {
     fun removeSubjectFromStudentPerCycle(studentCycleId: UUID, subjectCode: String)
     fun deleteStudentCycle(studentCode: String, studentCycleId: UUID)
     fun getStudentCycles(studentCode: String): List<StudentCycleDto>
-    fun findBestStudentCycle(studentCode: String, userCycleId: String, subjects: List<String>): StudentCycleDto
+    /*fun findBestStudentCycle(studentCode: String, userCycleId: String, subjects: List<String>): StudentCycleDto*/
 
 }

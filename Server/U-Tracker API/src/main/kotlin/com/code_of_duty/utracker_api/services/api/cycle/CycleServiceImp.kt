@@ -63,11 +63,18 @@ class CycleServiceImp(
     }
 
     override fun addSubjectToStudentPerCycle(studentCycleId: UUID, subjectCode: String) {
-        val studentCycle = studentCycleDao.findById(studentCycleId.toString())
+        val studentCycle = studentCycleDao.findById(studentCycleId)
             .orElseThrow { ExceptionNotFound("Student cycle not found") }
 
         val subject = subjectDao.findByCode(subjectCode)
             ?: throw ExceptionNotFound("Subject not found")
+
+        val prerequisites = prerequisitesDao.getPrerequisitesForSubjects(listOf(subjectCode))
+
+        val prerequisitesSatisfied = arePrerequisitesSatisfied(prerequisites.map { it.prerequisite.subjectCode.code }, studentCycle.student.code)
+        if (!prerequisitesSatisfied) {
+            throw Exception("Prerequisites for the subject are not satisfied")
+        }
 
         val subjectPerStudentCycle = SubjectPerStudentCycle(
             status = SubjectStatus.APPROVED,
@@ -126,7 +133,7 @@ class CycleServiceImp(
         studentCycleDao.delete(studentCycle)
     }
 
-    override fun findBestStudentCycle(
+    /*override fun findBestStudentCycle(
         studentCode: String,
         userCycleId: String,
         subjects: List<String>
@@ -209,7 +216,7 @@ class CycleServiceImp(
                 subjects = emptyList()
             )
         }
-    }
+    }*/
 
     private fun getScheduleForSubjects(subjectId: List<String>): List<SchedulesDto> {
         val scheduleDao = scheduleDao
@@ -228,26 +235,25 @@ class CycleServiceImp(
         return schedulesDtos
     }
 
-    private fun arePrerequisitesSatisfied(subjects: List<String>?, studentCode: String): Boolean {
+    private fun arePrerequisitesSatisfied(subjectCodes: List<String>, studentCode: String): Boolean {
         val subjectPerStudentCycles = subjectPerStudentCycleDao.getSubjectStatusesForStudent(studentCode)
 
-        if (subjects != null) {
-            for (subjectCode in subjects) {
-                val prerequisites = prerequisitesDao.getPrerequisitesForSubjects(listOf(subjectCode))
+        for (subjectCode in subjectCodes) {
+            val prerequisites = prerequisitesDao.getPrerequisitesForSubjects(listOf(subjectCode))
 
-                for (prerequisite in prerequisites) {
-                    val prerequisiteSubjectCode = prerequisite.prerequisite.prerequisiteCode.subject.code
+            for (prerequisite in prerequisites) {
+                val prerequisiteSubjectCode = prerequisite.prerequisite.prerequisiteCode.subject.code
 
-                    val subjectStatus = subjectPerStudentCycles
-                        .find { it.subject.code == prerequisiteSubjectCode }
-                        ?.status
+                val subjectStatus = subjectPerStudentCycles
+                    .find { it.subject.code == prerequisiteSubjectCode }
+                    ?.status
 
-                    if (subjectStatus != SubjectStatus.APPROVED) {
-                        return false
-                    }
+                if (subjectStatus != SubjectStatus.APPROVED) {
+                    return false
                 }
             }
         }
+
         return true
     }
 }
