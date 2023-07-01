@@ -17,6 +17,7 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -30,6 +31,43 @@ class AdminPensumController(
     private val generalUtils: GeneralUtils,
     private val adminPensumService: AdminPensumService
 ) {
+    @Operation(
+        summary = "Get all pensums",
+        description = "Get all pensums",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "pensums retrieved successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = PensumDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
+    @GetMapping("/all")
+    fun getAllPensums(): ResponseEntity<List<PensumDto>> {
+        return ResponseEntity(
+            adminPensumService.getAllPensums(),
+            HttpStatus.OK
+        )
+    }
     //region add_doc
     @Operation(
         summary = "new Pensum",

@@ -14,25 +14,29 @@ class AdminCycleServiceImpl(
     private val cycleDao: CycleDao,
     private val pensumDao: PensumDao,
 ) : AdminCycleService {
+    override fun getAllCycles(): List<Cycle> {
+        return cycleDao.findAll()
+    }
     override fun addAllCycles(cycles: List<CycleDto>) {
-        cycles.forEach {
-            val pensum =  pensumDao.findById(UUID.fromString(it.pensumId)).orElse(null)
+        cycles.forEach { cycleDto ->
+            val pensum = pensumDao.findById(UUID.fromString(cycleDto.pensumId)).orElse(null)
             if (pensum != null) {
-                val cycleType = CycleType.fromInt(it.type)
-                val cycle = cycleDao.findByNameAndPensum(it.name, pensum)
+                val cycleType = CycleType.fromInt(cycleDto.type)
+                val cycle = cycleDao.findByNameAndPensum(cycleDto.name, pensum)
                 if (cycle == null) {
+                    val orderValue = if (pensum.cycles.isNullOrEmpty()) 1 else (pensum.cycles.maxByOrNull { it.orderValue ?: 0 }?.orderValue ?: 0) + 1
                     cycleDao.save(
                         Cycle(
                             cycleType = cycleType,
                             pensum = pensum,
-                            name = it.name
+                            name = cycleDto.name,
+                            orderValue = orderValue
                         )
                     )
                 }
-            }else{
+            } else {
                 throw ExceptionNotFound("Pensum not found")
             }
-
         }
     }
 
@@ -60,4 +64,5 @@ class AdminCycleServiceImpl(
             throw ExceptionNotFound("Cycle not found")
         }
     }
+
 }

@@ -1,23 +1,24 @@
 package com.code_of_duty.utracker_api.services.api.subject
 
-import com.code_of_duty.utracker_api.data.dao.AssesmentDao
-import com.code_of_duty.utracker_api.data.dao.CycleDao
-import com.code_of_duty.utracker_api.data.dao.SubjectDao
+import com.code_of_duty.utracker_api.data.dao.*
 import com.code_of_duty.utracker_api.data.dtos.AssesmentDto
 import com.code_of_duty.utracker_api.data.dtos.CycleDto
 import com.code_of_duty.utracker_api.data.dtos.CycleRelationDto
 import com.code_of_duty.utracker_api.data.dtos.SubjectDto
+import com.code_of_duty.utracker_api.data.enums.SubjectStatus
 import com.code_of_duty.utracker_api.data.models.Assessment
 import com.code_of_duty.utracker_api.data.models.Subject
+import com.code_of_duty.utracker_api.data.models.SubjectPerStudentCycle
 import jakarta.persistence.EntityNotFoundException
-import org.hibernate.validator.constraints.UUID
 import org.springframework.stereotype.Component
 
 @Component
 class SubjectServiceImp(
     private val subjectDao: SubjectDao,
-    private val assessmentDao: AssesmentDao,
-    private val cycleDao: CycleDao
+    private val assesmentDao: AssesmentDao,
+    private val subjectPerStudentCycleDao: SubjectPerStudentCycleDao,
+    private val cycleDao: CycleDao,
+    private val studentCycleDao: StudentCycleDao
 ) : SubjectService {
 
     override fun getAllSubjects(
@@ -27,22 +28,7 @@ class SubjectServiceImp(
         pensumFilter: String?,
         facultyFilter: String?
     ): List<SubjectDto> {
-        var subjects = subjectDao.findAllWithSubjectPerCycles()
-
-        if (nameFilter != null) {
-            subjects = subjects.filter { it.name.startsWith(nameFilter, ignoreCase = true) }
-        }
-
-        if (degreeFilter != null || pensumFilter != null || facultyFilter != null) {
-            subjects = subjects.filter { subject ->
-                subject.subjectPerCycles.all { subjectPerCycle ->
-                    val degreeMatches = degreeFilter == null || subjectPerCycle.cycle.pensum.degree.name.equals(degreeFilter, ignoreCase = true)
-                    val pensumMatches = pensumFilter == null || subjectPerCycle.cycle.pensum.plan.equals(pensumFilter, ignoreCase = true)
-                    val facultyMatches = facultyFilter == null || subjectPerCycle.cycle.pensum.degree.faculty?.name.equals(facultyFilter, ignoreCase = true)
-                    degreeMatches && pensumMatches && facultyMatches
-                }
-            }
-        }
+        val subjects = subjectDao.findAllWithSubjectPerCycles()
 
         return subjects.map { subject ->
             val cycleRelation = subject.subjectPerCycles.map { subjectPerCycle ->
@@ -71,19 +57,47 @@ class SubjectServiceImp(
         }
     }
 
-    override fun setAssessment(uuid: UUID, assessmentDto: AssesmentDto): Subject {
-        TODO("Not yet implemented")
-//        val subject = subjectDao.findById(uuid)
-//            .orElseThrow { EntityNotFoundException("Subject not found with id: $uuid") }
-//        val assessment = Assessment(
-//            name = assessmentDto.name,
-//            percentage = assessmentDto.percentage,
-//            date = assessmentDto.date,
-//            grade = assessmentDto.grade,
-//            subject = subject
-//        )
-//        assessmentDao.save(assessment)
-//        return subject
+    override fun updateSubjectCompletion(studentCode: String, subjectCode: String, completed: Boolean, grade: Float?): Subject {
+        val studentCycles = studentCycleDao.findByStudentCode(studentCode)
+
+        var matchingSubjectPerStudentCycle: SubjectPerStudentCycle? = null
+
+        for (studentCycle in studentCycles) {
+            matchingSubjectPerStudentCycle = subjectPerStudentCycleDao.findBySubjectCodeAndStudentCycle(subjectCode, studentCycle)
+            if (matchingSubjectPerStudentCycle != null) {
+                break
+            }
+        }
+
+        if (matchingSubjectPerStudentCycle == null) {
+            throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode and student code: $studentCode")
+        }
+
+        matchingSubjectPerStudentCycle.status = if (completed) SubjectStatus.APPROVED else SubjectStatus.IN_PROGRESS
+
+        if (grade != null) {
+            matchingSubjectPerStudentCycle.grade = grade
+        }
+
+        // Save the updated SubjectPerStudentCycle entity
+        subjectPerStudentCycleDao.save(matchingSubjectPerStudentCycle)
+
+        return matchingSubjectPerStudentCycle.subject
+    }
+
+    override fun setAssessment(subjectCode: String, assessmentDto: AssesmentDto): Subject {
+
+        val subject = subjectDao.findById(subjectCode)
+            .orElseThrow { EntityNotFoundException("Subject not found with id: $subjectCode") }
+        val assessment = Assessment(
+            name = assessmentDto.name,
+            percentage = assessmentDto.percentage,
+            date = assessmentDto.date,
+            grade = assessmentDto.grade,
+            subject = subject
+        )
+        assesmentDao.save(assessment)
+        return subject
     }
 
 
@@ -128,4 +142,5 @@ class SubjectServiceImp(
         }
         return gradeNeededPerAssessment
     }
+
 }

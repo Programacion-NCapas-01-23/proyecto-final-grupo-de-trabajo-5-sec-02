@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -31,6 +32,56 @@ class AdminFacultiesController(
 ) {
     @Autowired
     lateinit var adminFacultyService: AdminFacultyService
+
+    @Operation(
+        summary = "Get all faculties",
+        description = "Get all faculties",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "faculties retrieved successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = Faculty::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
+    @GetMapping("/all")
+    fun getAllFaculties(): ResponseEntity<List<Faculty>> {
+        return ResponseEntity(
+            adminFacultyService.getAllFaculties(),
+            HttpStatus.OK
+        )
+    }
 
     //region addFaculty_doc
     @Operation(

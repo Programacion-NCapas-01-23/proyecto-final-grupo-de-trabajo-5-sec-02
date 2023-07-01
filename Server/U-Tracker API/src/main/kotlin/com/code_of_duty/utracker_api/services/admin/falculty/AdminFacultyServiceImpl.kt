@@ -11,6 +11,9 @@ import java.util.*
 class AdminFacultyServiceImpl(
     private val facultyDao: FacultyDao
 ) : AdminFacultyService {
+    override fun getAllFaculties(): List<Faculty> {
+        return facultyDao.findAll()
+    }
     override fun addAllFaculties(faculties: List<FacultyDto>) {
         faculties.forEach {
             val faculty = Faculty(

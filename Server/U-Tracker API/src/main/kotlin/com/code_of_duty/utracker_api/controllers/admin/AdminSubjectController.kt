@@ -3,6 +3,7 @@ package com.code_of_duty.utracker_api.controllers.admin
 import com.code_of_duty.utracker_api.data.dtos.ErrorsDto
 import com.code_of_duty.utracker_api.data.dtos.MessageDto
 import com.code_of_duty.utracker_api.data.dtos.SubjectDto
+import com.code_of_duty.utracker_api.data.dtos.SubjectXPrerequisiteDto
 import com.code_of_duty.utracker_api.data.models.Subject
 import com.code_of_duty.utracker_api.services.admin.subject.AdminSubjectService
 import com.code_of_duty.utracker_api.utils.GeneralUtils
@@ -17,10 +18,12 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -30,6 +33,46 @@ class AdminSubjectController(
     private val generalUtils: GeneralUtils,
     private val adminSubjectService: AdminSubjectService
 ) {
+    @Operation(
+        summary = "Get all subjects",
+        description = "Get all subjects",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Subjects retrieved successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = SubjectDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
+    @GetMapping("/getAllSubjects")
+    fun getAllSubjects(
+        @RequestParam(name = "nameFilter", required = false) nameFilter: String?,
+        @RequestParam(name = "sortBy", required = false) sortBy: String?,
+        @RequestParam(name = "degreeFilter", required = false) degreeFilter: String?,
+        @RequestParam(name = "pensumFilter", required = false) pensumFilter: String?,
+        @RequestParam(name = "facultyFilter", required = false) facultyFilter: String?
+    ): List<SubjectDto> {
+        return adminSubjectService.getAllSubjects(nameFilter, sortBy, degreeFilter, pensumFilter, facultyFilter)
+    }
     //region Add_docs
     @Operation(
         summary = "Add subjects",
@@ -236,6 +279,20 @@ class AdminSubjectController(
         adminSubjectService.deleteAllSubjects()
         return ResponseEntity(
             MessageDto("Subjects deleted successfully"),
+            HttpStatus.OK
+        )
+    }
+
+    @PostMapping("/addPrerequisite")
+    @SecurityRequirement(name = "AdminAuth")
+    fun addPrerequisite(
+        request: HttpServletRequest,
+        @Valid @RequestBody subjects: List<SubjectXPrerequisiteDto>
+    ): ResponseEntity<MessageDto> {
+        generalUtils.extractJWT(request)
+        adminSubjectService.addPrerequisites(subjects)
+        return ResponseEntity(
+            MessageDto("Subject updated successfully"),
             HttpStatus.OK
         )
     }

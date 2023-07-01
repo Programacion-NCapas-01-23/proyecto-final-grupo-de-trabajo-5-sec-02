@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 
 @Service
 interface AdminScheduleService {
+    fun getAllSchedules(): List<SchedulesDto>
     fun addAllSchedules(schedules: List<SchedulesDto>)
     fun deleteAllListedSchedules(schedules: List<String>)
     fun updateSchedule(schedule: SchedulesDto)
