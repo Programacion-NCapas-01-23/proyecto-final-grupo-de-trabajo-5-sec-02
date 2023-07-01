@@ -4,7 +4,7 @@ import com.code_of_duty.u_tracker.enums.CycleType
 
 data class Cycle(
     val name: String,
-    val cycleType: CycleType,
+    val cycleType: Int,
     val orderValue: Int,
     val subjects: List<Subject>
 )
