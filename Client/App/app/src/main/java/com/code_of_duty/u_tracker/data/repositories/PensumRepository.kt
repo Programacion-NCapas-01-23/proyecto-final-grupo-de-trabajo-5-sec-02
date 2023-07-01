@@ -7,7 +7,7 @@ import com.code_of_duty.u_tracker.data.database.entities.UserToken
 import com.code_of_duty.u_tracker.data.network.SafeApiRequest
 import com.code_of_duty.u_tracker.data.network.UtrackerApiClient
 import com.code_of_duty.u_tracker.data.network.request.LoginRequest
-import com.code_of_duty.u_tracker.ui.models.Cycle
+import com.code_of_duty.u_tracker.data.network.response.IdealTermResponse
 import javax.inject.Inject
 //TODO: Implement DataBase for this model
 class PensumRepository @Inject constructor(
@@ -16,7 +16,7 @@ class PensumRepository @Inject constructor(
     private val userDao: UserDao
 ): SafeApiRequest(){
 
-    suspend fun getPensum(token: String): List<Cycle>{
+    suspend fun getPensum(token: String): List<IdealTermResponse>{
         return apiRequest {
             Log.d("PensumRepository", "Getting pensum")
             apiClient.getPensum(token)
