@@ -10,12 +10,12 @@ import com.code_of_duty.utracker_api.data.models.Assessment
 import com.code_of_duty.utracker_api.data.models.Subject
 import com.code_of_duty.utracker_api.data.models.SubjectPerStudentCycle
 import jakarta.persistence.EntityNotFoundException
-import org.hibernate.validator.constraints.UUID
 import org.springframework.stereotype.Component
 
 @Component
 class SubjectServiceImp(
     private val subjectDao: SubjectDao,
+    private val assesmentDao: AssesmentDao,
     private val subjectPerStudentCycleDao: SubjectPerStudentCycleDao,
     private val cycleDao: CycleDao,
     private val studentCycleDao: StudentCycleDao
@@ -85,21 +85,19 @@ class SubjectServiceImp(
         return matchingSubjectPerStudentCycle.subject
     }
 
+    override fun setAssessment(subjectCode: String, assessmentDto: AssesmentDto): Subject {
 
-
-    override fun setAssessment(uuid: UUID, assessmentDto: AssesmentDto): Subject {
-        TODO("Not yet implemented")
-//        val subject = subjectDao.findById(uuid)
-//            .orElseThrow { EntityNotFoundException("Subject not found with id: $uuid") }
-//        val assessment = Assessment(
-//            name = assessmentDto.name,
-//            percentage = assessmentDto.percentage,
-//            date = assessmentDto.date,
-//            grade = assessmentDto.grade,
-//            subject = subject
-//        )
-//        assessmentDao.save(assessment)
-//        return subject
+        val subject = subjectDao.findById(subjectCode)
+            .orElseThrow { EntityNotFoundException("Subject not found with id: $subjectCode") }
+        val assessment = Assessment(
+            name = assessmentDto.name,
+            percentage = assessmentDto.percentage,
+            date = assessmentDto.date,
+            grade = assessmentDto.grade,
+            subject = subject
+        )
+        assesmentDao.save(assessment)
+        return subject
     }
 
 

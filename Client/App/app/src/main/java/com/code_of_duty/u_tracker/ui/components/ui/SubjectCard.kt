@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.material3.Card
@@ -27,18 +29,19 @@ import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 fun SubjectCard(
     sort: Int = 0,
     subjectName: String = "Subject Name",
-    prerequisites: List<String> = List(0) { "prerequisite" },
+    prerequisites: List<Int>? = List(0) { 0 },
     uv: Int = 0,
     passed: Boolean = false,
 ) {
-    val prerequisitesString = remember { if(prerequisites.isEmpty()){ "bachillerato" } else { prerequisites.joinToString(", ") }}
+    val prerequisitesString = remember { if(prerequisites.isNullOrEmpty()){ "bachillerato" } else { prerequisites?.joinToString(", ") }}
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme3.colorScheme.surface,
-            contentColor = MaterialTheme3.colorScheme.onSurface,
-            disabledContainerColor = MaterialTheme3.colorScheme.surface,
-            disabledContentColor = MaterialTheme3.colorScheme.onSurface,
+            containerColor = MaterialTheme3.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme3.colorScheme.onSurfaceVariant,
+            disabledContainerColor = MaterialTheme3.colorScheme.surfaceVariant,
+            disabledContentColor = MaterialTheme3.colorScheme.onSurfaceVariant,
         ),
+        modifier = Modifier.width(180.dp)
     ){
         Column(
             modifier = Modifier.padding(8.dp),
@@ -57,7 +60,10 @@ fun SubjectCard(
                 })
                 Checkbox(checked = passed, onCheckedChange = {}, enabled = false)
             }
-            Text(text = subjectName)
+            Text(
+                text = subjectName,
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -66,7 +72,7 @@ fun SubjectCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = buildAnnotatedString {
-                    append("prerequisitos: ")
+                    append("pre: ")
                     withStyle(style = SpanStyle(color = MaterialTheme3.colorScheme.primary)) {
                         append(prerequisitesString)
                     }

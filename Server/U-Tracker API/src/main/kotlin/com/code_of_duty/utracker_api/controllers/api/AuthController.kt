@@ -202,6 +202,32 @@ class AuthController (private val passwordUtils: PasswordUtils){
         return ResponseEntity(MessageDto("Password changed successfully"), HttpStatus.OK)
     }
 
+    @Operation(
+        summary = "Verify Token",
+        description = "Verify Token",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Verification successful",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid verification token",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorsDto::class)
+                    )
+                ]
+            )
+        ]
+    )
     @PostMapping("/verifyToken")
     fun verifyToken(request: HttpServletRequest): ResponseEntity<Any> {
         val student = generalUtils.extractJWT(request)

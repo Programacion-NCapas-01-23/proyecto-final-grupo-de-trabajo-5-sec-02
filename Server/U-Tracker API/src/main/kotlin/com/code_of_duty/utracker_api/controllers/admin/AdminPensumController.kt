@@ -31,6 +31,36 @@ class AdminPensumController(
     private val generalUtils: GeneralUtils,
     private val adminPensumService: AdminPensumService
 ) {
+    @Operation(
+        summary = "Get all pensums",
+        description = "Get all pensums",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "pensums retrieved successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = PensumDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
     @GetMapping("/all")
     fun getAllPensums(): ResponseEntity<List<PensumDto>> {
         return ResponseEntity(

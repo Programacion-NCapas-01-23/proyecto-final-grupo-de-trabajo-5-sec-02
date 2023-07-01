@@ -33,6 +33,48 @@ class AdminFacultiesController(
     @Autowired
     lateinit var adminFacultyService: AdminFacultyService
 
+    @Operation(
+        summary = "Get all faculties",
+        description = "Get all faculties",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "faculties retrieved successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = Faculty::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
     @GetMapping("/all")
     fun getAllFaculties(): ResponseEntity<List<Faculty>> {
         return ResponseEntity(

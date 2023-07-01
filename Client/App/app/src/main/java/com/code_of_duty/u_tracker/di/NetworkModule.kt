@@ -16,16 +16,22 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
     /*para test emulador*/
-    private const val BASE_URL = "http://10.0.2.2:8080/api/"
+    private const val EMULATOR_URL = "http://10.0.2.2:8080/api/"
     //private const val BASE_URL = "https://10.0.20.40:8085/api/"
+  
+    //REAL API
+    private const val BASE_URL = "https://utracker.me/api/"
+    //TESTING API
+    private const val TESTING_URL = "http://192.168.1.2:8080/api/"
 
     @Provides
     @Singleton
     fun providesUtracker(moshi: Moshi, okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .baseUrl(BASE_URL)
+        .baseUrl(TESTING_URL)
         .build()
 
     @Provides
