@@ -1,8 +1,8 @@
 interface ClassTime {
     id?: string,
-    days: number,
-    startHour: string,
-    totalHours: number,
+    day: number,
+    start: string,
+    end: number,
 }
 
 export default ClassTime;

@@ -6,4 +6,4 @@ export interface Pensum {
     career: Career;
 }
 
-export type PensumPreview = {careerId: string} & Omit<Pensum, "career">;
+export type PensumPreview = {degreeId: string} & Omit<Pensum, "career">;

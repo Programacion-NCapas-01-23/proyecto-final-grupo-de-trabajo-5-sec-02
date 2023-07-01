@@ -2,7 +2,7 @@ import {Pensum} from "@/interfaces/Pensum";
 
 export interface Cycle {
     id?: string,
-    cycleType: number,
+    type: number,
     name: string,
     pensum: Pensum,
 }
