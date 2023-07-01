@@ -1,4 +1,4 @@
-package com.code_of_duty.u_tracker.ui.screens.forgotPassword.getVerificationToken
+package com.code_of_duty.u_tracker.ui.screens.forgotPassword
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,10 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.code_of_duty.u_tracker.ui.components.forgotPassword.ChangePasswordCard
 
 @Composable
 fun GetVerificationTokenScreen (
+    viewModel: ForgotPasswordViewModel = hiltViewModel(),
     onContinue: () -> Unit
 ) {
     Column(
@@ -21,7 +23,7 @@ fun GetVerificationTokenScreen (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ChangePasswordCard {
+        ChangePasswordCard(viewModel = viewModel) {
             onContinue()
         }
     }

@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.code_of_duty.u_tracker.ui.models.AuthNavItems
-import com.code_of_duty.u_tracker.ui.screens.forgotPassword.getVerificationToken.GetVerificationTokenScreen
+import com.code_of_duty.u_tracker.ui.screens.forgotPassword.GetVerificationTokenScreen
 import com.code_of_duty.u_tracker.ui.screens.login.LoginScreen
 import com.code_of_duty.u_tracker.ui.screens.signup.SignUpScreen
 
