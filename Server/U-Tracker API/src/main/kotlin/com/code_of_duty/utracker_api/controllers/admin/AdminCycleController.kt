@@ -24,6 +24,48 @@ class AdminCycleController(
     private val adminCycleService: AdminCycleService,
     private val generalUtils: GeneralUtils
 ) {
+    @Operation(
+        summary = "Get all cycles",
+        description = "Get all cycles",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Cycles retrieved successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = Cycle::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
     @GetMapping("/all")
     fun getAllCycles(): ResponseEntity<List<Cycle>> {
         return ResponseEntity(

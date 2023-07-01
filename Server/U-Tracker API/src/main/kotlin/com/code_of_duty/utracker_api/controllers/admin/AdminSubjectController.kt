@@ -33,6 +33,36 @@ class AdminSubjectController(
     private val generalUtils: GeneralUtils,
     private val adminSubjectService: AdminSubjectService
 ) {
+    @Operation(
+        summary = "Get all subjects",
+        description = "Get all subjects",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Subjects retrieved successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = SubjectDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
     @GetMapping("/getAllSubjects")
     fun getAllSubjects(
         @RequestParam(name = "nameFilter", required = false) nameFilter: String?,

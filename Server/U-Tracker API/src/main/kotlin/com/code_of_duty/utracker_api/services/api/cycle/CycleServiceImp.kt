@@ -24,7 +24,6 @@ class CycleServiceImp(
     override fun getAllCycles(studentCode: String): List<StudentCycleResponseDto> {
         val student = studentDao.findByCode(studentCode) ?: throw ExceptionNotFound("Student not found")
         val pensums: Iterable<Pensum> = student.degree?.pensums ?: emptyList()
-
         val prerequisites: List<Prerequisite> = prerequisitesDao.findAll()
 
         return pensums.flatMap { pensum ->
@@ -35,14 +34,17 @@ class CycleServiceImp(
                     orderValue = cycle.orderValue,
                     subjects = cycle.subjects.map { subject ->
                         val subjectCode = subject.code
-                        val prerequisite = prerequisites.find { it.prerequisite.subjectCode.code == subjectCode }
+                        val prerequisitesForSubject = prerequisites.filter { it.prerequisite.subjectCode.code == subjectCode }
+                        val prerequisiteIDs = prerequisitesForSubject.map { it.prerequisite.prerequisiteCode.correlative }
+                        val correlativeList = subject.subjectPerCycles.map { it.correlative }
 
                         StudentSubjectDto(
                             code = subject.code,
                             name = subject.name,
+                            correlative = correlativeList[0],
                             uv = subject.uv,
                             estimateGrade = subject.estimateGrade,
-                            prerequisiteID = prerequisite?.prerequisite?.prerequisiteCode?.correlative?.let { listOf(it) }
+                            prerequisiteID = prerequisiteIDs
                         )
                     }
                 )
@@ -88,18 +90,19 @@ class CycleServiceImp(
         subjectPerStudentCycleDao.delete(subjectPerStudentCycle)
     }
 
-/*    override fun getStudentCycles(studentCode: String): List<StudentCycleDto> {
+    override fun getStudentCycles(studentCode: String): List<StudentCycleDto> {
         val student = studentDao.findByCode(studentCode) ?: throw ExceptionNotFound("Student not found")
         val studentCycles = student.studentCycles ?: emptyList()
 
         return studentCycles.map { studentCycle ->
             val subjects = studentCycle.subjects.map { subject ->
-                StudentSubjectDto(
+                val prerequisiteID = subject.subjectPerCycles.map { it.correlative }
+                StudentSubjectXCycleDto(
                     code = subject.code,
                     name = subject.name,
                     uv = subject.uv,
                     estimateGrade = subject.estimateGrade,
-                    prerequisiteID = null // Set prerequisites if needed
+                    prerequisiteID = prerequisiteID // Set prerequisites if needed
                 )
             }
 
@@ -108,10 +111,10 @@ class CycleServiceImp(
                 studentCode = studentCode,
                 cycleType = studentCycle.cycleType.ordinal,
                 year = studentCycle.year,
-                subjects = subjects
+                subjects = subjects.map { it.code } // Map subjects to their codes
             )
         }
-    }*/
+    }
 
 
     override fun deleteStudentCycle(studentCode: String, studentCycleId: UUID) {

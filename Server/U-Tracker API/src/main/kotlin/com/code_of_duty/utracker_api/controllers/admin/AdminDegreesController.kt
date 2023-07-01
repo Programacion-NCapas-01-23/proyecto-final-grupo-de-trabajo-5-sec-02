@@ -28,6 +28,48 @@ class AdminDegreesController(
     @Autowired
     lateinit var adminDegreeService: AdminDegreeService
 
+    @Operation(
+        summary = "Get all degrees",
+        description = "Get all degrees",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "degrees retrieved successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = DegreeDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
     @GetMapping("/all")
     fun getAllDegrees(): ResponseEntity<List<DegreeDto>> {
         return ResponseEntity(
