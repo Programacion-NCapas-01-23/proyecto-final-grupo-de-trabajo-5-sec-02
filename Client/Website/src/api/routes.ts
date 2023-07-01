@@ -13,8 +13,8 @@ export const api: AxiosInstance = axios.create({
 
 export const routes = {
     auth: {
-        login: `${baseURL}/login`,
-        register: `${baseURL}/Register`,
+        login: `${baseURL}/auth/login`,
+        register: `${baseURL}/auth/Register`,
     },
     classTime: {
         add: `${baseURL}/class-time/add`,
