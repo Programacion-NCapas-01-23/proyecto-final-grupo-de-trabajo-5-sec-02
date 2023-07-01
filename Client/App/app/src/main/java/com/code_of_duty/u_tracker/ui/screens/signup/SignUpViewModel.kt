@@ -1,10 +1,14 @@
 package com.code_of_duty.u_tracker.ui.screens.signup
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.code_of_duty.u_tracker.data.network.response.DegreesResponse
+import com.code_of_duty.u_tracker.data.network.response.FacultiesResponse
 import com.code_of_duty.u_tracker.data.repositories.SignUpRepository
+import com.code_of_duty.u_tracker.enums.DegreeStatus
 import com.code_of_duty.u_tracker.enums.SignUpStatus
 import com.code_of_duty.u_tracker.ui.models.ExposedDropdownModel
 import com.code_of_duty.u_tracker.ui.models.Provisional
@@ -27,26 +31,38 @@ class SignUpViewModel @Inject constructor(
     private var faculty: MutableState<ExposedDropdownModel> = mutableStateOf(ExposedDropdownModel())
     private var degree: MutableState<ExposedDropdownModel> = mutableStateOf(ExposedDropdownModel())
     private var signup: MutableState<SignUpStatus> = mutableStateOf(SignUpStatus.NONE)
-    private var careersListAll = mutableListOf<Provisional>()
-    private var careersList = mutableListOf<Provisional>()
-    private var facultiesList = mutableListOf<Provisional>()
+    private var careersList = mutableListOf<DegreesResponse>()
+    private var facultiesList = mutableListOf<FacultiesResponse>()
+    private var careerStatus: MutableState<DegreeStatus> = mutableStateOf(DegreeStatus.NONE)
     fun loadSelectsData() {
-        viewModelScope.launch { /*TODO: Use API*/
-            facultiesList = faculties
-            careersListAll = careers
+        viewModelScope.launch {
+            facultiesList = signUpRepository.getAllFaculties().toMutableList()
         }
     }
-    fun filterCareers() = careersListAll.filter { it.faculty == getFacultyId().value  }.toMutableList()
+    suspend fun filterCareers(): MutableList<DegreesResponse> {
+        try{
+            careersList = signUpRepository.getDegreesByFaculty(getFacultyId().value).toMutableList()
+            setCareerStatus(DegreeStatus.DEGREE_LOADED)
+            return careersList
+        } catch (e: Exception) {
+            setCareerStatus(DegreeStatus.DEGREE_FAILED)
+            return emptyList<DegreesResponse>().toMutableList()
+        }
+    }
 
-    fun getFacultiesList(): MutableList<Provisional> {
+    fun getFacultiesList(): MutableList<FacultiesResponse> {
         return facultiesList
     }
-    fun getCareersList(): MutableList<Provisional> {
+    fun getCareersList(): MutableList<DegreesResponse> {
         return careersList
     }
 
-    fun setCareersList(careersList: MutableList<Provisional>) {
-        this.careersList = careersList
+    fun getCareerStatus(): MutableState<DegreeStatus> {
+        return careerStatus
+    }
+
+    fun setCareerStatus(status: DegreeStatus) {
+        this.careerStatus.value = status
     }
 
     fun getCode(): MutableState<String> {

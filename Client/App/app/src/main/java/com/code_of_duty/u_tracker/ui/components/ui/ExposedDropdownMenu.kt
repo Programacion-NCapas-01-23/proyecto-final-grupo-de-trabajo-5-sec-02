@@ -97,9 +97,6 @@ fun <T: Any> CenteredExposedDropdown (
                 }
             }
         }
-        Row (horizontalArrangement = Arrangement.Center) {
-            Text(text = "ID: ${selectedIdValue.value}")
-        }
     }
 }
 

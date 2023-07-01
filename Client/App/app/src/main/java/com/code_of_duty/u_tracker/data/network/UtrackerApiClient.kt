@@ -3,6 +3,8 @@ package com.code_of_duty.u_tracker.data.network
 import com.code_of_duty.u_tracker.data.network.request.ChangePasswordRequest
 import com.code_of_duty.u_tracker.data.network.request.LoginRequest
 import com.code_of_duty.u_tracker.data.network.request.SignUpRequest
+import com.code_of_duty.u_tracker.data.network.response.DegreesResponse
+import com.code_of_duty.u_tracker.data.network.response.FacultiesResponse
 import com.code_of_duty.u_tracker.data.network.response.LoginResponse
 import com.code_of_duty.u_tracker.data.network.response.MessageResponse
 import com.code_of_duty.u_tracker.ui.models.Cycle
@@ -12,6 +14,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface UtrackerApiClient {
 
@@ -44,4 +47,13 @@ interface UtrackerApiClient {
     suspend fun verifyToken(
         @Header("Authorization") token: String
     ): Response<MessageResponse>
+  
+  //Faculties
+    @GET("faculty/")
+    suspend fun getFaculties(): Response<List<FacultiesResponse>>
+
+    @GET("degree/")
+    suspend fun getDegreesByFaculty(
+        @Query("id") facultyId: String
+    ): Response<List<DegreesResponse>>
 }

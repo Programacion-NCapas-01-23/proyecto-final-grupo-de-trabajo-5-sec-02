@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.painterResource
 import com.code_of_duty.u_tracker.R
+import com.code_of_duty.u_tracker.enums.DegreeStatus
 import com.code_of_duty.u_tracker.enums.SignUpStatus
 import com.code_of_duty.u_tracker.ui.components.ui.BottomSheet
 import com.code_of_duty.u_tracker.ui.components.ui.CenteredExposedDropdown
@@ -29,6 +30,7 @@ import com.code_of_duty.u_tracker.ui.models.careers
 import com.code_of_duty.u_tracker.ui.models.faculties
 import com.code_of_duty.u_tracker.ui.screens.signup.SignUpViewModel
 import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
+
 
 @Composable
 fun SignUpForm (
@@ -107,12 +109,16 @@ fun SignUpForm (
     LaunchedEffect(signUpViewModel.getFacultyId().value) {
         signUpViewModel.setDegreeId("")
         signUpViewModel.setDegreeText("")
-        if (signUpViewModel.getFacultyId().value != "") {
-            enableStateCareer.value = true;
-            careerList.value = signUpViewModel.filterCareers();
+        signUpViewModel.setCareerStatus(DegreeStatus.NONE)
+        enableStateCareer.value = false
+
+        if (signUpViewModel.getFacultyId().value != "" ) {
+            careerList.value = signUpViewModel.filterCareers()
+            if(signUpViewModel.getCareerStatus().value == DegreeStatus.DEGREE_LOADED) {
+                enableStateCareer.value = true
+            }
         }
     }
-
 
     UTrackerTheme() {
         FormsCard(
