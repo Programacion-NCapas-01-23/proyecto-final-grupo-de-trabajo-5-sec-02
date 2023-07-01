@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useAppDispatch} from '@/hooks/reduxHooks';
 import {CareerPreview} from "@/interfaces/Career";
 import {createCareer} from "@/state/thunks/careerThunk";
-import {Button, Form, Input, Typography, Select, SelectProps} from 'antd';
+import {Button, Form, Input, Select, SelectProps, Typography} from 'antd';
 import {faculties} from "@/api/data/dummy";
 
 const options: SelectProps['options'] = [];
@@ -14,12 +14,6 @@ faculties.map(faculty => {
 })
 
 const {Title} = Typography;
-const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e?.fileList;
-};
 
 const CareerForm = () => {
     const dispatch = useAppDispatch();
