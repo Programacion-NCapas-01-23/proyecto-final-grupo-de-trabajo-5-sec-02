@@ -2,7 +2,9 @@
 
 package com.code_of_duty.u_tracker.ui.components.signup
 
+import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,6 +12,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.res.painterResource
+import com.code_of_duty.u_tracker.R
 import com.code_of_duty.u_tracker.enums.SignUpStatus
 import com.code_of_duty.u_tracker.ui.components.ui.BottomSheet
 import com.code_of_duty.u_tracker.ui.components.ui.CenteredExposedDropdown
@@ -58,34 +62,43 @@ fun SignUpForm (
         }
     }
 
-    //check if the password is valid
+    // LaunchedEffect para validar la nueva contraseña
     LaunchedEffect(newPassword.value.text.value) {
-        newPassword.value.apply{
-            if (text.value != ""){
-                isError = !text.value.matches(Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))
-                supportText = if (isError) "La contraseña debe tener al menos 8 caracteres, 1 mayuscula, 1 minuscula, 1 numero y un caracter especial" else ""
+        newPassword.value.apply {
+            if (text.value != "") {
+                isError.value = !text.value.matches(Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))
+                supportText.value = if (isError.value) "La contraseña debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula, 1 número y un carácter especial" else ""
 
-                if(!isError){
+                if (!isError.value) {
                     signUpViewModel.getPassword().value = text.value
-                    isError = false
-                    supportText = ""
+                    isError.value = false
+                    supportText.value = ""
                 }
             }
         }
-
     }
 
-    LaunchedEffect(confirmPassword.value.text.value) {
-        confirmPassword.value.apply{
-            if (text.value != ""){
-                isError = text.value != newPassword.value.text.value
-                supportText = if (isError) "Las contraseñas no coinciden" else ""
+    // LaunchedEffect para validar la confirmación de contraseña
+    LaunchedEffect(confirmPassword.value.text.value, newPassword.value.text.value) {
 
-                if(!isError){
-                    signUpViewModel.getConfirm().value = text.value
-                    isError = false
-                    supportText = ""
+        val newPasswordText = newPassword.value.text.value
+        val confirmPasswordText = confirmPassword.value.text.value
+
+        confirmPassword.value.apply {
+            if (text.value != "") {
+                val passwordsMatch = newPasswordText == confirmPasswordText
+                isError.value = !passwordsMatch
+
+                Log.d("ConfirmPassword", "isError: $isError")
+                supportText.value = if (isError.value) "Las contraseñas no coinciden" else ""
+
+                if (passwordsMatch) {
+                    signUpViewModel.getConfirm().value = confirmPasswordText
+                    signUpViewModel.getPassword().value = newPasswordText
                 }
+            } else {
+                isError.value = false
+                supportText.value = ""
             }
         }
     }
@@ -109,21 +122,39 @@ fun SignUpForm (
                     EditTextField(
                         label = "Ingresa tu carnet",
                         value = signUpViewModel.getCode(),
-                        type = KeyboardType.Number
+                        type = KeyboardType.Number,
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.numeral),
+                                contentDescription = "Carnet icon"
+                            )
+                        }
                     )
                 },
                 {
                     EditTextField(
                         label = "Ingresa un nombre de usuario",
                         value = signUpViewModel.getUsername(),
-                        type = KeyboardType.Text
+                        type = KeyboardType.Text,
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.account_circle),
+                                contentDescription = "Username icon"
+                            )
+                        }
                     )
                 },
                 {
                     EditTextField(
                         label = "Ingresa tu correo electrónico",
                         value = signUpViewModel.getEmail(),
-                        type = KeyboardType.Email
+                        type = KeyboardType.Email,
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.contact_mail),
+                                contentDescription = "Username icon"
+                            )
+                        }
                     )
                 },
                 {
@@ -132,7 +163,13 @@ fun SignUpForm (
                         value = newPassword.value.text,
                         type = KeyboardType.Password,
                         isError = newPassword.value.isError,
-                        supportText = newPassword.value.supportText
+                        supportText = newPassword.value.supportText,
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.lock_person),
+                                contentDescription = "Username icon"
+                            )
+                        }
                     )
                 },
                 {
@@ -141,7 +178,13 @@ fun SignUpForm (
                         value = confirmPassword.value.text,
                         type = KeyboardType.Password,
                         isError = confirmPassword.value.isError,
-                        supportText = confirmPassword.value.supportText
+                        supportText = confirmPassword.value.supportText,
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.check_circle),
+                                contentDescription = "Username icon"
+                            )
+                        }
                     )
                 },
                 {

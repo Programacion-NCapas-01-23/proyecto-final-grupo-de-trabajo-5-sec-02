@@ -30,8 +30,8 @@ fun EditTextField(
     label: String,
     value: MutableState<String>,
     icon: @Composable (() -> Unit)? = null,
-    isError: Boolean = false,
-    supportText: String? = null,
+    isError: MutableState<Boolean> = mutableStateOf(false),
+    supportText: MutableState<String> = mutableStateOf(""),
     type: KeyboardType = KeyboardType.Text,
     isEnabled: Boolean = true
 ) {
@@ -57,12 +57,12 @@ fun EditTextField(
                 style = Typography.labelMedium
             )
         },
-        isError = isError,
+        isError = isError.value,
         visualTransformation = visualTransformation,
         supportingText = {
-            if (isError) {
+            if (isError.value) {
                 Text(
-                    text = supportText!!,
+                    text = supportText.value,
                     style = MaterialTheme3.typography.bodySmall,
                     color = Color.Red
                 )
@@ -126,7 +126,9 @@ fun EditTextPreview() {
     EditTextField(
         label = "carnet",
         value = value,
-        supportText = "Error",
+        supportText = remember {
+            mutableStateOf("Error")
+        } ,
         icon = {
             Icon(
                 painter = painterResource(id = R.drawable.logout),
