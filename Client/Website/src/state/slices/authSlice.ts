@@ -1,13 +1,14 @@
 import {Admin, Login} from "@/interfaces/Admin";
-import InitialState from "@/interfaces/InitialState";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {DefaultState} from "@/interfaces/DefaultState";
+import {any} from "prop-types";
 
 type Auth = Admin | Login;
 
-const initialState: InitialState<Auth> = {
-    data: [],
+const initialState: DefaultState<Auth> = {
+    data: any,
     loading: false,
-    error: null,
+    error: undefined,
 }
 
 const authSlice = createSlice({
@@ -19,7 +20,7 @@ const authSlice = createSlice({
             state.error = null;
         },
         registerSuccess(state, action: PayloadAction<Admin>) {
-            state.data.push(action.payload);
+            state.data = action.payload;
             state.loading = false;
             state.error = null;
         },
@@ -32,9 +33,10 @@ const authSlice = createSlice({
             state.error = null;
         },
         loginSuccess(state, action: PayloadAction<Login>) {
-            state.data.push(action.payload);
+            state.data = action.payload;
             state.loading = false;
             state.error = null;
+            localStorage.setItem('token', action.payload.token!);
         },
         loginFailure(state, action: PayloadAction<string>) {
             state.loading = false;

@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation'
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
 
-export const Sidebar = ({ children }: { children: ReactNode }) => {
+export const NavigationBar = ({ children }: { children: ReactNode }) => {
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
