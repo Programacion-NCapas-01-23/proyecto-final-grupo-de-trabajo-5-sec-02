@@ -1,6 +1,7 @@
 package com.code_of_duty.u_tracker.data.network
 
 import com.code_of_duty.u_tracker.data.network.request.ChangePasswordRequest
+import com.code_of_duty.u_tracker.data.network.request.CreatePersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.LoginRequest
 import com.code_of_duty.u_tracker.data.network.request.SignUpRequest
 import com.code_of_duty.u_tracker.data.network.response.DegreesResponse
@@ -103,9 +104,11 @@ interface UtrackerApiClient {
         @Header("Authorization") token: String
     ): Response<List<PersonalTermResponse>>
 
-
-
-
+    @POST("cycle/createCycle")
+    suspend fun  createPersonalTerm(
+        @Header("Authorization") token: String,
+        @Body createPersonalTermRequest: CreatePersonalTermRequest
+    ): Response<MessageResponse>
 }
 
 

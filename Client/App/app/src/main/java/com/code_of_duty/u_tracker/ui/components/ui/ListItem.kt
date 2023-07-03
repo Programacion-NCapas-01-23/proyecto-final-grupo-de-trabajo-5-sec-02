@@ -25,9 +25,9 @@ import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 
 @Composable
 fun<T: Any> ListItemTerm(
-    subjectTerm: MutableList<T>,
+    subjectTerm: List<T>,
     subjectNameProvider: (T) -> String,
-    subjectGradeProvider: (T) -> String
+//    subjectGradeProvider: (T) -> String
 ) {
     Column(
     ) {
@@ -52,16 +52,16 @@ fun<T: Any> ListItemTerm(
                             ),
                             modifier = Modifier.weight(1f),
                         )
-                        Text(
-                            text = subjectGradeProvider(subject),
-                            style = TextStyle(
-                                fontSize = Typography.titleLarge.fontSize,
-                                lineHeight = Typography.titleSmall.lineHeight,
-                                fontWeight = Typography.titleSmall.fontWeight,
-                                letterSpacing = Typography.titleSmall.letterSpacing,
-                                color = MaterialTheme.colorScheme.primary,
-                            ),
-                        )
+//                        Text(
+//                            text = subjectGradeProvider(subject),
+//                            style = TextStyle(
+//                                fontSize = Typography.titleLarge.fontSize,
+//                                lineHeight = Typography.titleSmall.lineHeight,
+//                                fontWeight = Typography.titleSmall.fontWeight,
+//                                letterSpacing = Typography.titleSmall.letterSpacing,
+//                                color = MaterialTheme.colorScheme.primary,
+//                            ),
+//                        )
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -80,6 +80,6 @@ fun ListItemTermPreview() {
     subjectsTerm = subjectTermDummy
 
     UTrackerTheme() {
-        ListItemTerm(subjectsTerm, {it.subject}, {it.grade})
+        ListItemTerm(subjectsTerm, {it.subject})
     }
 }
