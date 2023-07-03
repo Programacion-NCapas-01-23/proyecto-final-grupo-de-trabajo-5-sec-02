@@ -101,7 +101,6 @@ export const NavigationBar = ({children}: { children: ReactNode }) => {
                         background: colorBgContainer,
                         display: 'flex',
                         flexFlow: 'column wrap',
-                        justifyContent: 'space-between',
                         alignItems: 'flex-start',
                     }}
                 >
