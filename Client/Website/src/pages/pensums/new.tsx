@@ -45,9 +45,24 @@ const PensumForm = () => {
     };
 
     return (
-        <div className="">
-            <div className="form-container">
-                <Title>Crear Pensum</Title>
+        <div style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            background: '#000000',
+            alignItems: "center",
+            justifyContent: "center",
+            width: '100%',
+            height: '100%',
+        }}>
+            <div style={{
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                minWidth: '360px',
+                background: '#FFFFFF',
+                padding: '32px',
+
+            }}>
+                <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Pensum</Title>
                 <Form
                     name="newPensum"
                     form={form}
@@ -57,13 +72,14 @@ const PensumForm = () => {
                     initialValues={{remember: true}}
                     onFinish={handleSubmit}
                     autoComplete="off"
+                    layout="vertical"
                 >
                     <Form.Item
                         label="Plan"
                         name="plan"
                         rules={[{required: true, message: 'Ingresa el plan del pensum!'}]}
                     >
-                        <Input style={{width: 300}}/>
+                        <Input style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Form.Item
                         label="Carrera"
@@ -71,11 +87,16 @@ const PensumForm = () => {
                         rules={[{required: true, message: 'Selecciona una carrera!'}]}
                     >
                         <Select
-                            style={{width: 300}}
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
                             options={options}
+                            bordered={false}
                         />
                     </Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit" style={{
+                        borderRadius: '0',
+                        backgroundColor: '#275DAD',
+                        margin: '1rem 0',
+                    }}>
                         Submit
                     </Button>
                 </Form>

@@ -52,9 +52,24 @@ const ClassTimeForm = () => {
     };
 
     return (
-        <div className="">
-            <div className="form-container">
-                <Title>Crear Tiempos de Clase</Title>
+        <div style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            background: '#000000',
+            alignItems: "center",
+            justifyContent: "center",
+            width: '100%',
+            height: '100%',
+        }}>
+            <div style={{
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                minWidth: '360px',
+                background: '#FFFFFF',
+                padding: '32px',
+
+            }}>
+                <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Tiempos de Clase</Title>
                 <Form
                     name="newClassTime"
                     form={form}
@@ -64,6 +79,7 @@ const ClassTimeForm = () => {
                     initialValues={{remember: true}}
                     onFinish={handleSubmit}
                     autoComplete="off"
+                    layout="vertical"
                 >
                     <Form.Item
                         label="Dia"
@@ -71,9 +87,10 @@ const ClassTimeForm = () => {
                         rules={[{required: true, message: 'Selecciona un dia!'}]}
                     >
                         <Select
-                            style={{width: 150}}
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
                             onChange={value => setDays(value)}
                             options={options}
+                            bordered={false}
                         />
                     </Form.Item>
                     <Form.Item
@@ -84,7 +101,7 @@ const ClassTimeForm = () => {
                         <TimePicker
                             onChange={value => setHour(value!.format("HH:mm").toString())}
                             format={'HH:mm'}
-                            style={{width: 150}}
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
                         />
                     </Form.Item>
                     <Form.Item
@@ -92,9 +109,13 @@ const ClassTimeForm = () => {
                         name="end"
                         rules={[{required: true, message: 'Ingresa la cantidad de horas!'}]}
                     >
-                        <InputNumber min={0} max={10} style={{width: 150}}/>
+                        <InputNumber min={0} max={10} style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit" style={{
+                        borderRadius: '0',
+                        backgroundColor: '#275DAD',
+                        margin: '1rem 0',
+                    }}>
                         Submit
                     </Button>
                 </Form>

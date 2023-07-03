@@ -54,9 +54,24 @@ const ScheduleForm = () => {
     };
 
     return (
-        <div className="">
-            <div className="form-container">
-                <Title>Crear Horario</Title>
+        <div style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            background: '#000000',
+            alignItems: "center",
+            justifyContent: "center",
+            width: '100%',
+            height: '100%',
+        }}>
+            <div style={{
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                minWidth: '360px',
+                background: '#FFFFFF',
+                padding: '32px',
+
+            }}>
+                <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Horario</Title>
                 <Form
                     name="newSchedule"
                     form={form}
@@ -66,6 +81,7 @@ const ScheduleForm = () => {
                     initialValues={{remember: true}}
                     onFinish={handleSubmit}
                     autoComplete="off"
+                    layout="vertical"
                 >
                     <Form.Item
                         label="Materia"
@@ -73,8 +89,9 @@ const ScheduleForm = () => {
                         rules={[{required: true, message: 'Selecciona el tiempo de clase!'}]}
                     >
                         <Select
-                            style={{width: 300}}
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
                             options={subjectsSelect}
+                            bordered={false}
                         />
                     </Form.Item>
                     <Form.Item
@@ -83,11 +100,16 @@ const ScheduleForm = () => {
                         rules={[{required: true, message: 'Selecciona el tiempo de clase!'}]}
                     >
                         <Select
-                            style={{width: 300}}
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
                             options={classTimeSelect}
+                            bordered={false}
                         />
                     </Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit" style={{
+                        borderRadius: '0',
+                        backgroundColor: '#275DAD',
+                        margin: '1rem 0',
+                    }}>
                         Submit
                     </Button>
                 </Form>

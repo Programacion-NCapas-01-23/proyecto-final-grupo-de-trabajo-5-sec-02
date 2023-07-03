@@ -56,10 +56,25 @@ const FacultyForm = ({ faculty }: FacultyFormProps) => {
     };
 
     return (
-        <div className="">
-            <div className="form-container">
+        <div style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            background: '#000000',
+            alignItems: "center",
+            justifyContent: "center",
+            width: '100%',
+            height: '100%',
+        }}>
+            <div style={{
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                minWidth: '360px',
+                background: '#FFFFFF',
+                padding: '32px',
+
+            }}>
                 {
-                    faculty ? <Title>Editar Facultad</Title> : <Title>Crear Facultad</Title>
+                    faculty ? <Title style={{color: '#275DAD', alignSelf: "center"}}>Editar Facultad</Title> : <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Facultad</Title>
                 }
                 <Form
                     name="newFaculty"
@@ -70,25 +85,27 @@ const FacultyForm = ({ faculty }: FacultyFormProps) => {
                     initialValues={{remember: true}}
                     onFinish={handleSubmit}
                     autoComplete="off"
+                    layout="vertical"
                 >
                     <Form.Item
                         label="Nombre"
                         name="name"
                         rules={[{required: true, message: 'Ingresa el nombre de la facultad!'}]}
                     >
-                        <Input/>
+                        <Input style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Form.Item
                         label="Descripcion"
                         name="description"
                         rules={[{required: true, message: 'Ingresa la descripción de la facultad!'}]}
                     >
-                        <TextArea rows={3}/>
+                        <TextArea rows={3} style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0', resize: 'none'}}/>
                     </Form.Item>
                     <Form.Item label="Logo"
                                name="logo"
                                valuePropName="fileList"
                                getValueFromEvent={(e) => normFile(e)}
+
                     >
                         <Upload action="/upload.do"
                                 listType="picture-card"
@@ -99,8 +116,12 @@ const FacultyForm = ({ faculty }: FacultyFormProps) => {
                             </div>
                         </Upload>
                     </Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Submit
+                    <Button type="primary" htmlType="submit" style={{
+                        borderRadius: '0',
+                        backgroundColor: '#275DAD',
+                        margin: '1rem 0',
+                    }}>
+                        Crear Facultad
                     </Button>
                 </Form>
             </div>
