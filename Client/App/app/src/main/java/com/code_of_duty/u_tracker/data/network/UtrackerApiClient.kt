@@ -14,8 +14,8 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UtrackerApiClient {
@@ -32,10 +32,10 @@ interface UtrackerApiClient {
 
     @GET("auth/getVerificationToken")
     suspend fun getVerificationToken(
-        @Path("email") email: String
+        @Query("email") email: String
     ): Response<MessageResponse>
 
-    @POST("auth/changePassword")
+    @PATCH("auth/changePassword")
     suspend fun changePassword(
         @Body changePasswordRequest: ChangePasswordRequest
     ): Response<MessageResponse>
@@ -59,46 +59,6 @@ interface UtrackerApiClient {
         @Query("id") facultyId: String
     ): Response<List<DegreesResponse>>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @GET("cycle/getStudentCycles")
     suspend fun getPersonalTerms(
         @Header("Authorization") token: String
@@ -110,43 +70,3 @@ interface UtrackerApiClient {
         @Body createPersonalTermRequest: CreatePersonalTermRequest
     ): Response<MessageResponse>
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
