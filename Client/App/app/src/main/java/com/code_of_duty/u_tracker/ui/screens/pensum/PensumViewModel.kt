@@ -1,6 +1,6 @@
 package com.code_of_duty.u_tracker.ui.screens.pensum
 
-import android.util.Log
+import com.code_of_duty.u_tracker.data.database.entities.Cycle as CycleEntity
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -29,11 +29,14 @@ class PensumViewModel @Inject constructor(
                 val token =  repository.getToken()
                 if (token.isNotEmpty()){
                     _pensum = repository.getPensum(token).toMutableList()
-                    Log.d("PensumViewModel", "Pensum: $_pensum")
                     pensumStatus.value = PensumState.DONE
+                    val cycles = mutableListOf<CycleEntity>()
+                    _pensum.forEach {
+                        cycles.add(CycleEntity(it.orderValue, it.name, it.orderValue, it.cycleType))
+                    }
+                    repository.saveCycles(cycles)
                 }
             } catch (e: Exception){
-                Log.e("PensumViewModel", "error: ${e.message}")
                 pensumStatus.value = PensumState.ERROR
             }
         }

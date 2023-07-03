@@ -87,7 +87,7 @@ fun PensumScreen (
                     cycle.subjects.forEach { subject ->
                         Spacer(modifier = Modifier.padding(8.dp))
                         SubjectCard(
-                            sort = 1,
+                            sort = subject.correlative,
                             subjectName = subject.name,
                             prerequisites = subject.prerequisiteID,
                             uv = subject.uv,

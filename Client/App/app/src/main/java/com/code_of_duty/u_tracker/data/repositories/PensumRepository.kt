@@ -1,8 +1,10 @@
 package com.code_of_duty.u_tracker.data.repositories
 
 import android.util.Log
+import com.code_of_duty.u_tracker.data.database.dao.CycleDao
 import com.code_of_duty.u_tracker.data.database.dao.TokenDao
 import com.code_of_duty.u_tracker.data.database.dao.UserDao
+import com.code_of_duty.u_tracker.data.database.entities.Cycle as CycleEntities
 import com.code_of_duty.u_tracker.data.database.entities.UserToken
 import com.code_of_duty.u_tracker.data.network.SafeApiRequest
 import com.code_of_duty.u_tracker.data.network.UtrackerApiClient
@@ -13,7 +15,8 @@ import javax.inject.Inject
 class PensumRepository @Inject constructor(
     private val apiClient: UtrackerApiClient,
     private val tokenDao: TokenDao,
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val cycleDao: CycleDao
 ): SafeApiRequest(){
 
     suspend fun getPensum(token: String): List<IdealTermResponse>{
@@ -70,5 +73,9 @@ class PensumRepository @Inject constructor(
         tokenDao.deleteToken(UserToken(oldToken))
         tokenDao.insertToken(UserToken(res.token))
         return res.token
+    }
+
+    suspend fun saveCycles(cycles: List<CycleEntities>) {
+        cycleDao.insertCycle(cycles)
     }
 }
