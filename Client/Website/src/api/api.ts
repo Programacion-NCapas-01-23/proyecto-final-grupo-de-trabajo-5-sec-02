@@ -1,7 +1,8 @@
 import {NextApiResponse} from 'next';
 import {AxiosResponse, AxiosError} from 'axios';
 import apiService from "@/api/appService";
-import {api} from "@/api/routes";
+import {api, routes} from "@/api/routes";
+import {useRouter} from "next/navigation";
 
 // Response interceptor
 api.interceptors.response.use(
@@ -15,6 +16,12 @@ api.interceptors.response.use(
             // You can handle specific error status codes here
             const {status, data} = error.response;
             console.error(`HTTP Error ${status}:`, data);
+
+            if (status === 401) {
+                // Redirect to login page
+                const router = useRouter();
+                router.push('/login');
+            }
             // Return the error response to the client
             return Promise.reject(data);
         } else if (error.request) {

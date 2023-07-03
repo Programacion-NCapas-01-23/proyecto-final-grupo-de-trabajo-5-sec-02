@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useAppDispatch} from '@/hooks/reduxHooks';
-import Faculty from "@/interfaces/Faculty";
-import {createFaculty} from "@/state/thunks/facultyThunk";
+import {Faculty} from "@/interfaces/Faculty";
+import {createFaculty, updateFaculty} from "@/state/thunks/facultyThunk";
 import {Button, Form, Input, Typography, Upload} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
+import {createCareer, updateCareer} from "@/state/thunks/careerThunk";
+import {useRouter} from "next/navigation";
 
 const {TextArea} = Input;
 const {Title} = Typography;
@@ -14,24 +16,51 @@ const normFile = (e: any) => {
     return e?.fileList;
 };
 
-const FacultyForm = () => {
+interface FacultyFormProps {
+    faculty?: Faculty;
+}
+
+const FacultyForm = ({ faculty }: FacultyFormProps) => {
+    const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
 
+    useEffect(() => {
+        if (faculty) {
+            form.setFieldsValue(faculty);
+        }
+    }, [faculty, form]);
+
     const handleSubmit = async (values: Faculty) => {
         const {name, description, logo} = values;
-        const newFaculty: Faculty = {
+        const facultyData: Faculty = {
             name,
             description,
             logo,
         };
-        dispatch(createFaculty(newFaculty));
+        if (faculty) {
+            try {
+                await dispatch(updateFaculty({ ...faculty, ...facultyData }));
+                router.push('/faculties');
+            } catch (error) {
+                console.log('Updating error:', error);
+            }
+        } else {
+            try {
+                await dispatch(createFaculty(facultyData));
+                router.push('/faculties');
+            } catch (error) {
+                console.log('Creation error:', error);
+            }
+        }
     };
 
     return (
         <div className="">
             <div className="form-container">
-                <Title>Crear Facultad</Title>
+                {
+                    faculty ? <Title>Editar Facultad</Title> : <Title>Crear Facultad</Title>
+                }
                 <Form
                     name="newFaculty"
                     form={form}

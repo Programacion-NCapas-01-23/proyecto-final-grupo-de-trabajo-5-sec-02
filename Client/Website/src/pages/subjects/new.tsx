@@ -3,10 +3,12 @@ import {useAppDispatch} from '@/hooks/reduxHooks';
 import {Subject} from "@/interfaces/Subject";
 import {createSubject} from "@/state/thunks/subjectThunk";
 import {Button, Form, Input, InputNumber, Typography} from 'antd';
+import {useRouter} from "next/navigation";
 
 const {Title} = Typography;
 
 const SubjectForm = () => {
+    const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
 
@@ -19,7 +21,13 @@ const SubjectForm = () => {
             uv,
         };
         console.log(newSubject);
-        dispatch(createSubject(newSubject));
+
+        try {
+            await dispatch(createSubject(newSubject));
+            router.push('/subjects');
+        } catch (error) {
+            console.log('Creation error:', error);
+        }
     };
 
     return (

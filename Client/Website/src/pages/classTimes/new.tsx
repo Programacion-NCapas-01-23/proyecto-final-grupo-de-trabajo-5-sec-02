@@ -3,6 +3,7 @@ import {useAppDispatch} from '@/hooks/reduxHooks';
 import ClassTime from "@/interfaces/ClassTime";
 import {createClassTime} from "@/state/thunks/classTimeThunk";
 import {Button, Form, InputNumber, Select, SelectProps, TimePicker, Typography} from 'antd';
+import {useRouter} from "next/navigation";
 
 enum Days {
     Lunes,
@@ -27,6 +28,7 @@ keys.forEach((key, index) => {
 const {Title} = Typography;
 
 const ClassTimeForm = () => {
+    const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
     const [days, setDays] = useState(0);
@@ -40,8 +42,13 @@ const ClassTimeForm = () => {
             start: hour,
             end,
         };
-        console.log(newClassTime);
-        dispatch(createClassTime(newClassTime));
+
+        try {
+            await dispatch(createClassTime(newClassTime));
+            router.push('/schedules');
+        } catch (error) {
+            console.log('Creation error:', error);
+        }
     };
 
     return (

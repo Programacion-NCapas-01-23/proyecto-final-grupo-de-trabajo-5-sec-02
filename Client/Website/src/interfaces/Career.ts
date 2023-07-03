@@ -1,4 +1,4 @@
-import Faculty from "@/interfaces/Faculty";
+import {Faculty} from "@/interfaces/Faculty";
 
 export interface Career {
     id?: string;

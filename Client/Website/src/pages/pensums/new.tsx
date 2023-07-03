@@ -1,23 +1,32 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useAppDispatch} from '@/hooks/reduxHooks';
 import {PensumPreview} from "@/interfaces/Pensum";
 import {createPensum} from "@/state/thunks/pensumThunk";
 import {Button, Form, Input, Select, SelectProps, Typography} from 'antd';
-import {careers} from "@/api/data/dummy";
-
-const options: SelectProps['options'] = [];
-careers.map(career => {
-    options.push({
-        value: career.id,
-        label: career.name,
-    });
-})
+import {fetchCareers} from "@/state/thunks/careerThunk";
+import {useSelector} from "react-redux";
+import {RootState} from "@/state/store";
+import {useRouter} from "next/navigation";
 
 const {Title} = Typography;
 
 const PensumForm = () => {
+    const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
+    const careers = useSelector((state: RootState) => state.career.data);
+
+    const options: SelectProps['options'] = [];
+    careers.map(career => {
+        options.push({
+            value: career.id,
+            label: career.name,
+        });
+    })
+
+    useEffect(() => {
+        dispatch(fetchCareers());
+    }, [dispatch]);
 
     const handleSubmit = async (values: PensumPreview) => {
         const {plan, degreeId} = values;
@@ -26,7 +35,13 @@ const PensumForm = () => {
             plan,
             degreeId,
         };
-        dispatch(createPensum(newPensum));
+
+        try {
+            await dispatch(createPensum(newPensum));
+            router.push('/pensums');
+        } catch (error) {
+            console.log('Creation error:', error);
+        }
     };
 
     return (

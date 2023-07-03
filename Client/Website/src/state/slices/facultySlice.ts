@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import Faculty from "@/interfaces/Faculty";
+import  {Faculty} from "@/interfaces/Faculty";
 import InitialState from "@/interfaces/InitialState";
 
 const initialState: InitialState<Faculty> = {
@@ -55,6 +55,23 @@ const facultySlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+        deleteFacultyStart(state) {
+            state.loading = true;
+            state.error = null;
+        },
+        deleteFacultySuccess(state, action: PayloadAction<Faculty>) {
+            const deletedFaculty = action.payload;
+            const index = state.data.findIndex((faculty) => faculty.id === deletedFaculty.id);
+            if (index !== -1) {
+                state.data[index] = deletedFaculty;
+            }
+            state.loading = false;
+            state.error = null;
+        },
+        deleteFacultyFailure(state, action: PayloadAction<string>) {
+            state.loading = false;
+            state.error = action.payload;
+        },
     },
 });
 
@@ -68,6 +85,9 @@ export const {
     updateFacultyStart,
     updateFacultySuccess,
     updateFacultyFailure,
+    deleteFacultyStart,
+    deleteFacultyFailure,
+    deleteFacultySuccess,
 } = facultySlice.actions;
 
 export default facultySlice.reducer;

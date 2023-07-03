@@ -1,24 +1,16 @@
-import {Admin, Login} from "@/interfaces/Admin";
+import {Admin, Login, LoginResponse} from "@/interfaces/Admin";
 import {AppDispatch, AppThunk} from "@/state/store";
-import {
-    loginFailure,
-    loginStart,
-    loginSuccess,
-    registerFailure,
-    registerStart,
-    registerSuccess
-} from "@/state/slices/authSlice";
+import {registerFailure, registerStart, registerSuccess} from "@/state/slices/authSlice";
 import apiService from "@/api/appService";
 import {routes} from "@/api/routes";
 
 export const loginAdmin = (login: Login): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
-            dispatch(loginStart());
-            const access = await apiService.post<Login>(routes.auth.login, login);
-            dispatch(loginSuccess(access));
+            const access = await apiService.post<LoginResponse>(routes.auth.login, login);
+            await localStorage.setItem('token', access.token)
         } catch (error) {
-            dispatch(loginFailure(error.message))
+            console.log(error);
         }
     }
 }

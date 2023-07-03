@@ -12,4 +12,3 @@ export interface Subject {
     cycleRelation?: cycleRelation;
 }
 
-export type SubjectPreview = Subject;

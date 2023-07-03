@@ -1,52 +1,55 @@
-import React from 'react';
-import {Card, Image, Typography} from 'antd';
-import Faculty from "@/interfaces/Faculty";
+import React, {useEffect} from 'react';
+import {Button, Card, Image, Layout, Typography} from 'antd';
+import {useAppDispatch} from "@/hooks/reduxHooks";
+import {useSelector} from "react-redux";
+import {RootState} from "@/state/store";
+import {fetchFaculties} from "@/state/thunks/facultyThunk";
+import {useRouter} from "next/navigation";
 
-const { Title } = Typography;
+const {Title} = Typography;
 const {Meta} = Card;
-
-const cards: Faculty[] = [
-    {
-        id: "1",
-        name: "FIA",
-        description: "This is the description",
-        logo: "https://redconose.org//wp-content/uploads/2017/08/LogoUCAnegro-PNG2016-222x300.png",
-    },
-    {
-        id: "2",
-        name: "Economia y Negocios",
-        description: "This is the description",
-        logo: "https://redconose.org//wp-content/uploads/2017/08/LogoUCAnegro-PNG2016-222x300.png",
-    },
-    {
-        id: "3",
-        name: "Humanidades",
-        description: "This is the description",
-        logo: "https://redconose.org//wp-content/uploads/2017/08/LogoUCAnegro-PNG2016-222x300.png",
-    },
-]
+const {Content} = Layout;
 
 const Page = (): JSX.Element => {
-    return(
+    const router = useRouter();
+    const dispatch = useAppDispatch();
+    const faculties = useSelector((state: RootState) => state.faculty.data);
+    const loading = useSelector((state: RootState) => state.faculty.loading);
+
+    useEffect(() => {
+        dispatch(fetchFaculties());
+    }, [dispatch]);
+
+    return (
         <>
             <Title>Facultades</Title>
-            {cards.map(card =>
-                    <Card
-                        key={card.id}
-                        style={{width: 300}}
-                        cover={
-                            <Image
-                                alt={card.name}
-                                src={card.logo}
-                                preview={false}
-                            />
-                        }
-                    >
-                        <Meta
-                            title={card.name}
-                            description={card.description}
-                        />
-                    </Card>)}
+            <Button type="primary" onClick={() => router.push('/faculties/new')}>Agregar Facultad</Button>
+            <Content
+                style={{
+                    padding: 24,
+                    display: 'flex',
+                    flexFlow: 'row wrap',
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
+                    width: '100%'
+                }}
+            >
+                {loading ? (
+                    <div>Loading faculties...</div>
+                ) : (
+                    faculties.map((faculty) => (
+                        <Card
+                            key={faculty.id}
+                            style={{width: 300}}
+                            cover={<Image alt={faculty.name} src={faculty.logo} preview={false}/>}
+                        >
+                            <Meta title={faculty.name} description={faculty.description}/>
+                            {/*<Button type="primary" onClick={() => router.push(`/faculties/${faculty.id}`)}>Modificar</Button>*/}
+                            <Button type="primary" onClick={() => router.push(`/faculties/${faculty.id}`)}>Eliminar</Button>
+                        </Card>
+                    ))
+                )}
+            </Content>
         </>
     )
 };

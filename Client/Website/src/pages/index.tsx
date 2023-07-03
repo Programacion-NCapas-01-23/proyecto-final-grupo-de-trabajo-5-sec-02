@@ -1,8 +1,9 @@
-import {Card, Image} from 'antd';
+import {Card, Image, Layout} from 'antd';
 import React, {MouseEventHandler} from "react";
 import Link from 'next/link';
 
 const {Meta} = Card;
+const {Content} = Layout;
 
 const cards = [
     {
@@ -40,6 +41,13 @@ const cards = [
         source: "https://mundocampusvirtual.com/wp-content/uploads/2022/09/4886002039_8c186c8b17_b-scaled.jpg",
         href: '/schedules',
     },
+    {
+        key: "6",
+        title: "Descarga",
+        description: "Descarga nuestra aplicacion",
+        source: "https://mundocampusvirtual.com/wp-content/uploads/2022/09/4886002039_8c186c8b17_b-scaled.jpg",
+        href: '/download',
+    },
 ]
 
 export default function Home() {
@@ -51,6 +59,16 @@ export default function Home() {
 
     return (
         <>
+            <Content
+                style={{
+                    padding: 24,
+                    display: 'flex',
+                    flexFlow: 'row wrap',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    width: '100%'
+                }}
+            >
             {cards.map(card =>
                 <Link href={card.href} key={card.key}>
                     <Card
@@ -69,6 +87,7 @@ export default function Home() {
                         />
                     </Card>
                 </Link>)}
+            </Content>
         </>
     )
 }

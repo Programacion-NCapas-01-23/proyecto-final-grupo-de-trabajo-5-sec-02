@@ -1,4 +1,4 @@
-import {AppDispatch, AppThunk, RootState} from '@/state/store';
+import {AppDispatch, AppThunk} from '@/state/store';
 import apiService from '@/api/appService';
 import {
     createFacultyFailure,
@@ -11,15 +11,14 @@ import {
     updateFacultyStart,
     updateFacultySuccess
 } from "@/state/slices/facultySlice";
-import Faculty from "@/interfaces/Faculty";
+import {Faculty} from "@/interfaces/Faculty";
 import {routes} from "@/api/routes";
-import {Action, ThunkDispatch} from "@reduxjs/toolkit";
 
 export const fetchFaculties = (): AppThunk => {
-    return async (dispatch) => {
+    return async (dispatch: AppDispatch) => {
         try {
             dispatch(fetchFacultiesStart());
-            const faculties = await apiService.get<Faculty[]>(routes.faculties.delete);
+            const faculties = await apiService.get<Faculty[]>(routes.faculties.all);
             dispatch(fetchFacultiesSuccess(faculties));
         } catch (error) {
             dispatch(fetchFacultiesFailure(error.message));
@@ -40,12 +39,14 @@ export const createFaculty = (faculty: Faculty): AppThunk => {
 };
 
 
-export const updateFaculty = (faculty: Faculty): AppThunk => async (dispatch) => {
-    try {
-        dispatch(updateFacultyStart());
-        const updatedFaculty = await apiService.patch<Faculty>(routes.faculties.update, faculty);
-        dispatch(updateFacultySuccess(updatedFaculty));
-    } catch (error) {
-        dispatch(updateFacultyFailure(error.message));
+export const updateFaculty = (faculty: Faculty): AppThunk => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            dispatch(updateFacultyStart());
+            const updatedFaculty = await apiService.patch<Faculty>(routes.faculties.update, faculty);
+            dispatch(updateFacultySuccess(updatedFaculty));
+        } catch (error) {
+            dispatch(updateFacultyFailure(error.message));
+        }
     }
 };

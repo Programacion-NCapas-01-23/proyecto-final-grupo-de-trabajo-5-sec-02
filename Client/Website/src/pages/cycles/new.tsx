@@ -3,7 +3,9 @@ import {useAppDispatch} from '@/hooks/reduxHooks';
 import {CyclePreview} from "@/interfaces/Cycle";
 import {createCycle} from "@/state/thunks/cycleThunk";
 import {Button, Form, Input, Select, SelectProps, Typography} from 'antd';
-import {pensums} from "@/api/data/dummy";
+import {useRouter} from "next/navigation";
+import {useSelector} from "react-redux";
+import {RootState} from "@/state/store";
 
 enum cycleTypes {
     IMPAR,
@@ -21,19 +23,21 @@ keys.forEach((key, index) => {
     });
 });
 
-const pensumSelect: SelectProps['options'] = [];
-pensums.map(pensum => {
-    pensumSelect.push({
-        value: pensum.id,
-        label: pensum.plan,
-    });
-})
-
 const {Title} = Typography;
 
 const CycleForm = () => {
+    const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
+    const pensums = useSelector((state: RootState) => state.pensum.data);
+
+    const pensumSelect: SelectProps['options'] = [];
+    pensums.map(pensum => {
+        pensumSelect.push({
+            value: pensum.id,
+            label: pensum.plan,
+        });
+    })
 
     const handleSubmit = async (values: CyclePreview) => {
         const {type, name, pensumId} = values;
@@ -43,7 +47,12 @@ const CycleForm = () => {
             name,
             pensumId
         };
-        dispatch(createCycle(newCycle));
+        try {
+            await dispatch(createCycle(newCycle));
+            router.push('/pensums');
+        } catch (error) {
+            console.log('Creation error:', error);
+        }
     };
 
     return (

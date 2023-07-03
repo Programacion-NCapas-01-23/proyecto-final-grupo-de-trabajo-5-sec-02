@@ -1,8 +1,8 @@
 import InitialState from "@/interfaces/InitialState";
-import {Schedule} from "@/interfaces/Schedule";
+import {SchedulePreview} from "@/interfaces/Schedule";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-const initialState: InitialState<Schedule> = {
+const initialState: InitialState<SchedulePreview> = {
     data: [],
     loading: false,
     error: null,
@@ -16,7 +16,7 @@ const scheduleSlice = createSlice({
             state.loading = true;
             state.error = null;
         },
-        createScheduleSuccess(state, action: PayloadAction<Schedule>) {
+        createScheduleSuccess(state, action: PayloadAction<SchedulePreview>) {
             state.data.push(action.payload);
             state.loading = false;
             state.error = null;

@@ -6,7 +6,7 @@ export interface Admin {
     name: string;
 }
 
-export type Login = Omit<Admin, 'email' | 'name'> & {token: string}
+export type Login = Omit<Admin, 'email' | 'name'>
 
 export type LoginResponse = {
     message: string,
