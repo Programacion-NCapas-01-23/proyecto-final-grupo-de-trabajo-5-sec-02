@@ -2,13 +2,16 @@
 
 package com.code_of_duty.u_tracker.ui.components.ui
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.code_of_duty.u_tracker.ui.models.Provisional
 import com.code_of_duty.u_tracker.ui.models.careers
@@ -32,36 +36,37 @@ import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 
 @Composable
 fun <T: Any> CenteredExposedDropdown (
+    individualCentered: Boolean = true,
     label: String,
     options: MutableList<T>,
     enableState: MutableState<Boolean> = mutableStateOf(true),
     selectedIdValue: MutableState<String>,
     selectedNameValue: MutableState<String>,
     optionNameProvider: (T) -> String,
-    optionIdProvider: (T) -> String
+    optionIdProvider: (T) -> String = {""},
+    width: Dp = 200.dp,
 ) {
     //VARIABLES
     val expandedState = remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState() /*TODO: cuando se actualice Material3 añadir ScrollState*/
 
-    Column (
-        modifier = Modifier
-            .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    val dropDownContent = @Composable {
         ExposedDropdownMenuBox(
             expanded = expandedState.value,
             onExpandedChange = {
                 if(enableState.value) expandedState.value = !expandedState.value},
-            modifier = Modifier.let {
-                if (!enableState.value) {
-                    it.clickable(enabled = enableState.value, onClick = {})
-                } else {
-                    it
+            modifier = Modifier
+                .let {
+                    if (!enableState.value) {
+                        it.clickable(enabled = enableState.value, onClick = {})
+                    } else {
+                        it
+                    }
                 }
-            }
                 .fillMaxWidth()
                 .padding(8.dp)
-                .wrapContentSize(Alignment.Center),
+                .wrapContentSize(Alignment.Center)
+                .size(width = width, height = 55.dp)
         ) {
             TextField(
                 // The `menuAnchor` modifier must be passed to the text field for correctness.
@@ -98,6 +103,18 @@ fun <T: Any> CenteredExposedDropdown (
             }
         }
     }
+
+    if(!individualCentered) {
+        dropDownContent()
+    } else {
+        Column (
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            dropDownContent()
+        }
+    }
 }
 
 @Preview
@@ -124,6 +141,6 @@ fun ExposedDropdownPreview() {
 
     val label = "Carrera"
     UTrackerTheme() {
-        CenteredExposedDropdown(label, careersList, enableState, selectedIdValue, selectedNameValue,{option -> option.name}, {option -> option.id})
+        CenteredExposedDropdown( individualCentered = true , label, careersList, enableState, selectedIdValue, selectedNameValue,{option -> option.name}, {option -> option.id})
     }
 }

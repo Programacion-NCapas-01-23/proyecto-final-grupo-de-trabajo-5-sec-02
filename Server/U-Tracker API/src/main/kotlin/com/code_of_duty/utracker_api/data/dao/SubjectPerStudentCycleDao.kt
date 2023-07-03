@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import java.util.UUID
 
-interface SubjectPerStudentCycleDao : JpaRepository<SubjectPerStudentCycle, Long> {
+interface SubjectPerStudentCycleDao : JpaRepository<SubjectPerStudentCycle, UUID> {
     fun findByStudentCycleAndSubjectCode(studentCycleId: UUID, subjectCode: String): SubjectPerStudentCycle?
 
     fun findBySubjectCodeAndStudentCycle(subjectCode: String, studentCycleId: UUID): SubjectPerStudentCycle?

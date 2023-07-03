@@ -33,10 +33,10 @@ import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 
 @Composable
 fun CustomELevatedCard(
-    title: String,
-    buttonText: String,
+    title: String = "",
+    buttonText: String = "Ver",
     editFields: List<@Composable () -> Unit>,
-    onButtonClick: () -> Unit,
+    onButtonClick: () -> Unit = {},
     ) {
     Column(modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.Center).padding(vertical = 16.dp)) {
         ElevatedCard(
@@ -58,7 +58,7 @@ fun CustomELevatedCard(
                     Row(horizontalArrangement = Arrangement.Center,modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)) {
-                        Text(text = title, style = TextStyle(
+                        Text(text = "CICLO ${title}", style = TextStyle(
                             fontSize = Typography.headlineSmall.fontSize,
                             lineHeight = Typography.headlineSmall.lineHeight,
                             fontWeight = Typography.headlineSmall.fontWeight,
@@ -96,7 +96,7 @@ fun CustomELevatedCardPreview() {
         CustomELevatedCard(
             title = "CICLO I",
             buttonText = "Ver",
-            editFields = listOf { ListItemTerm(subjectsTerm, { it.subject }, { it.grade }) },
+            editFields = listOf { ListItemTerm(subjectsTerm) { it.subject } },
             onButtonClick = {}
         )
     }

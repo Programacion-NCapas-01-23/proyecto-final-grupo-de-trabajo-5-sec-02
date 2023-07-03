@@ -1,6 +1,6 @@
-package com.code_of_duty.u_tracker.ui.models
+package com.code_of_duty.u_tracker.data.network.response
 
-data class Subject(
+data class SubjectsFromTermResponse(
     val code: String,
     val name: String,
     val uv: Int,

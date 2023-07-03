@@ -24,7 +24,7 @@ object NetworkModule {
     //REAL API
     private const val BASE_URL = "http://20.127.25.48:8080/api/"
     //TESTING API
-    private const val TESTING_URL = "http://192.168.1.25:8080/api/"
+    private const val TESTING_URL = "http://192.168.1.2:8080/api/"
 
     @Provides
     @Singleton
