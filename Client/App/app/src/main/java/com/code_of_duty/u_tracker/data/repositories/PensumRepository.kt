@@ -2,8 +2,12 @@ package com.code_of_duty.u_tracker.data.repositories
 
 import android.util.Log
 import com.code_of_duty.u_tracker.data.database.dao.CycleDao
+import com.code_of_duty.u_tracker.data.database.dao.PrerequisiteDao
+import com.code_of_duty.u_tracker.data.database.dao.SubjectDao
 import com.code_of_duty.u_tracker.data.database.dao.TokenDao
 import com.code_of_duty.u_tracker.data.database.dao.UserDao
+import com.code_of_duty.u_tracker.data.database.entities.Prerequisite
+import com.code_of_duty.u_tracker.data.database.entities.Subject
 import com.code_of_duty.u_tracker.data.database.entities.Cycle as CycleEntities
 import com.code_of_duty.u_tracker.data.database.entities.UserToken
 import com.code_of_duty.u_tracker.data.network.SafeApiRequest
@@ -16,7 +20,9 @@ class PensumRepository @Inject constructor(
     private val apiClient: UtrackerApiClient,
     private val tokenDao: TokenDao,
     private val userDao: UserDao,
-    private val cycleDao: CycleDao
+    private val cycleDao: CycleDao,
+    private val subjectDao: SubjectDao,
+    private val prerequisiteDao: PrerequisiteDao
 ): SafeApiRequest(){
 
     suspend fun getPensum(token: String): List<IdealTermResponse>{
@@ -77,5 +83,25 @@ class PensumRepository @Inject constructor(
 
     suspend fun saveCycles(cycles: List<CycleEntities>) {
         cycleDao.insertCycle(cycles)
+    }
+
+    suspend fun saveSubjects(subjects: List<Subject>) {
+        subjectDao.insertSubjects(subjects)
+    }
+
+    suspend fun getCycles(): List<CycleEntities> {
+        return cycleDao.getCycles()
+    }
+
+    suspend fun getSubjects(cycle: Int): List<Subject> {
+        return subjectDao.getSubjectsByCycle(cycle)
+    }
+
+    suspend fun savePrerequisites(prerequisites: List<Prerequisite>) {
+        prerequisiteDao.insertPrerequisites(prerequisites)
+    }
+
+    suspend fun getPrerequisites(subject: String): List<Prerequisite> {
+        return prerequisiteDao.getPrerequisitesBySubject(subject)
     }
 }

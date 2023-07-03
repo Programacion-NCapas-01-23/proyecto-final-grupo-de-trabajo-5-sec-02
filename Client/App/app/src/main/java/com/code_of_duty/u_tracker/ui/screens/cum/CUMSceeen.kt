@@ -26,7 +26,7 @@ import com.code_of_duty.u_tracker.ui.theme.Typography
 fun CUMScreen (
     viewModel: CumViewModel = hiltViewModel()
 ) {
-    val percent = remember { mutableStateOf((50f / 100f ) * 100f) }
+    val percent = remember { mutableStateOf((14f / 44f ) * 100f) }
 
     Column(
         modifier = Modifier
@@ -35,8 +35,8 @@ fun CUMScreen (
         verticalArrangement = Arrangement.Center
     ) {
         PartialCircle(
-            completed = 50f,
-            total = 100f,
+            completed = 14f,
+            total = 44f,
             cum = 6.9f,
             scale = 1.5f
         )
@@ -51,7 +51,7 @@ fun CUMScreen (
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CUMScreenPreview() {
     CUMScreen()
