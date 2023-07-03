@@ -28,5 +28,9 @@ object RoomModule {
     @Singleton
     fun providesTokenDao(database: UtrackerDatabase) = database.userTokenDao()
 
+    @Provides
+    @Singleton
+    fun providesCycleDao(database: UtrackerDatabase) = database.cycleDao()
+
     //if you have more DAOs, you can provide them here as well
 }

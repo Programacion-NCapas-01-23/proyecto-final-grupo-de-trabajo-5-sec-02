@@ -4,6 +4,7 @@ data class Subject(
     val code: String,
     val name: String,
     val uv: Int,
+    val correlative: Int,
     val estimateGrade: Float,
     val prerequisiteID: List<Int>? = emptyList(),
 )
