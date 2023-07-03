@@ -26,5 +26,9 @@ data class Cycle(
         inverseJoinColumns = [JoinColumn(name = "subject_fk", referencedColumnName = "code")]
     )
     val subjects: List<Subject> = emptyList()
-)
+){
+    override fun toString(): String {
+        return "Cycle(id=$id, cycleType=$cycleType, name='$name', orderValue=$orderValue, subjects=$subjects)"
+    }
+}
 

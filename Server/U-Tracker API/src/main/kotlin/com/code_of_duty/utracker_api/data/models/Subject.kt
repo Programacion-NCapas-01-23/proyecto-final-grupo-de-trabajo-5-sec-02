@@ -10,8 +10,8 @@ import lombok.ToString
 data class Subject(
     @Id
     val code: String,
-    val name: String,
-    val uv: Int,
+    var name: String,
+    var uv: Int,
     var estimateGrade: Int = 6,
     @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
     val assessments: MutableList<Assessment> = mutableListOf(),

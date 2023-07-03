@@ -11,6 +11,7 @@ import com.code_of_duty.utracker_api.data.dtos.SubjectXPrerequisiteDto
 import com.code_of_duty.utracker_api.data.models.*
 import com.code_of_duty.utracker_api.utils.ExceptionNotFound
 import jakarta.persistence.EntityNotFoundException
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -97,10 +98,20 @@ class AdminSubjectServiceImpl(
     }
 
     override fun deleteAllListedSubjects(subjects: List<String>) {
-        subjects.forEach {
-            val subject = subjectDao.findById(it).orElse(null)
+        subjects.forEach { subjectCode ->
+            val subject = subjectDao.findById(subjectCode).orElse(null)
             if (subject != null) {
-                subjectPerCycleDao.deleteAll(subjectPerCycleDao.findAllBySubject(subject))
+                // Retrieve the prerequisite entries for the subject
+                val prerequisites = prerequisitesDao.findBySubjectCode(subjectCode)
+
+                prerequisites.forEach { prerequisite ->
+                    prerequisitesDao.delete(prerequisite)
+                }
+
+                // Clear the subject_x_cycle entries from the subject
+                subject.subjectPerCycles.clear()
+                subjectDao.save(subject)
+
                 subjectDao.delete(subject)
             }
         }
@@ -110,13 +121,12 @@ class AdminSubjectServiceImpl(
         val subjectToUpdate = subjectDao.findById(subject.code).orElseThrow {
             ExceptionNotFound("Subject with code ${subject.code} not found")
         }
-        val newSubject = subjectToUpdate.copy(
-            name = subject.name,
-            uv = subject.uv,
-            estimateGrade = subject.estimateGrade?: subjectToUpdate.estimateGrade
-        )
-        subjectDao.save(newSubject)
 
+        subjectToUpdate.name = subject.name
+        subjectToUpdate.uv = subject.uv
+        subjectToUpdate.estimateGrade = subject.estimateGrade ?: subjectToUpdate.estimateGrade
+
+        // Update subjectPerCycles if needed
         subject.cycleRelation?.forEach {
             val cycle = cycleDao.findById(UUID.fromString(it.id)).orElse(null)
             val subPerCycle = subjectPerCycleDao.findByCorrelativeAndCycleAndSubject(
@@ -124,14 +134,15 @@ class AdminSubjectServiceImpl(
                 cycle,
                 subjectToUpdate
             )
-            if (subPerCycle == null) {
-                subjectPerCycleDao.save(SubjectPerCycle(
-                    subject = subjectToUpdate,
-                    cycle = cycle,
-                    correlative = it.correlative
-                ))
+            if (subPerCycle != null) {
+                subPerCycle.correlative = it.correlative
+                subjectPerCycleDao.flush()
+                subjectPerCycleDao.save(subPerCycle)
             }
         }
+
+        subjectDao.flush()
+        subjectDao.save(subjectToUpdate)
     }
 
     override fun deleteAllSubjects() {

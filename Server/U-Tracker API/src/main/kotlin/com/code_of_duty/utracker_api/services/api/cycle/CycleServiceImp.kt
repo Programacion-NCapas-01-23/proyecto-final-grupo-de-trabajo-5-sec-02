@@ -10,6 +10,7 @@ import com.google.ortools.sat.CpModel
 import com.google.ortools.sat.CpSolver
 import com.google.ortools.sat.CpSolverStatus
 import org.springframework.stereotype.Component
+import java.lang.IllegalArgumentException
 import java.util.*
 
 @Component
@@ -69,15 +70,19 @@ class CycleServiceImp(
         val subject = subjectDao.findByCode(subjectCode)
             ?: throw ExceptionNotFound("Subject not found")
 
-        val prerequisites = prerequisitesDao.getPrerequisitesForSubjects(listOf(subjectCode))
+        // Check if the prerequisites are approved
+        val prerequisites = prerequisitesDao.findBySubjectCode(subjectCode)
+        val prerequisiteStatuses = prerequisites.map { prerequisite ->
+            subjectPerStudentCycleDao.findByStudentCycleAndSubject(studentCycle, prerequisite.prerequisite.prerequisiteCode.subject)
+                ?.status ?: SubjectStatus.APPROVED
+        }
 
-        val prerequisitesSatisfied = arePrerequisitesSatisfied(prerequisites.map { it.prerequisite.subjectCode.code }, studentCycle.student.code)
-        if (!prerequisitesSatisfied) {
-            throw Exception("Prerequisites for the subject are not satisfied")
+        if (!prerequisiteStatuses.all { it == SubjectStatus.REJECTED }) {
+            throw IllegalArgumentException("Prerequisites are not approved")
         }
 
         val subjectPerStudentCycle = SubjectPerStudentCycle(
-            status = SubjectStatus.APPROVED,
+            status = SubjectStatus.IN_PROGRESS,
             grade = 0.0f,
             studentCycle = studentCycle,
             subject = subject
@@ -87,13 +92,11 @@ class CycleServiceImp(
         subjectPerStudentCycleDao.save(subjectPerStudentCycle)
     }
 
-    override fun removeSubjectFromStudentPerCycle(studentCycleId: UUID, subjectCode: String) {
-        val subjectPerStudentCycle = subjectPerStudentCycleDao.findBySubjectCodeAndStudentCycle(
-            subjectCode = subjectCode,
-            studentCycleId = studentCycleId
-        ) ?: throw ExceptionNotFound("Subject not found in student cycle")
 
-        // Remove the subjectPerStudentCycle entity from the database
+    override fun removeSubjectFromStudentPerCycle(studentCycleId: UUID, subjectCode: String) {
+        val subjectPerStudentCycle = subjectPerStudentCycleDao.findByStudentCycleAndSubjectCode(studentCycleId, subjectCode)
+            ?: throw ExceptionNotFound("Subject not found in student cycle")
+
         subjectPerStudentCycleDao.delete(subjectPerStudentCycle)
     }
 

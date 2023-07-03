@@ -11,13 +11,12 @@ data class SubjectPerCycle(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id : UUID = UUID.randomUUID(),
-    @Column(unique = true)
-    val correlative : Int,
-    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var correlative : Int,
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "cycle_fk", referencedColumnName = "id")
     val cycle: Cycle,
-    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JsonIgnore
     @JoinColumn(name = "subject_fk", referencedColumnName = "code")
     val subject: Subject

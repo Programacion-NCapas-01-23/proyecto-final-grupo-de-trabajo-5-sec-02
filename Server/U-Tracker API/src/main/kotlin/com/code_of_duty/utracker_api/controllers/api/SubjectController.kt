@@ -1,8 +1,13 @@
 package com.code_of_duty.utracker_api.controllers.api
 
+import com.code_of_duty.utracker_api.data.dtos.MessageDto
 import com.code_of_duty.utracker_api.data.dtos.SubjectDto
 import com.code_of_duty.utracker_api.services.api.subject.SubjectService
 import com.code_of_duty.utracker_api.utils.GeneralUtils
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
@@ -21,6 +26,33 @@ class SubjectController {
     @Autowired
     lateinit var generalUtils: GeneralUtils
 
+    @Operation(
+        summary = "Get all subjects",
+        description = "Get all subjects",
+        security = [SecurityRequirement(name = "APIAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Subjects found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = SubjectDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            )
+        ]
+    )
     @GetMapping("/getAllSubjects")
     fun getAllSubjects(
         @RequestParam(name = "nameFilter", required = false) nameFilter: String?,
