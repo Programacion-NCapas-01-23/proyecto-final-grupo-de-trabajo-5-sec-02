@@ -263,4 +263,26 @@ class CycleController(
         }
     }
 
+    @DeleteMapping("/deleteSubject")
+    @SecurityRequirement(name = "APIAuth")
+    fun deleteSubjectFromStudentCycle(
+        request: HttpServletRequest,
+        @RequestBody body: SubjectInStudentCycleDto
+    ): ResponseEntity<Any> {
+        return try {
+            cycleService.removeSubjectFromStudentPerCycle(
+                studentCycleId = UUID.fromString(body.studentCycleId),
+                subjectCode = body.subjectCode
+            )
+            ResponseEntity(
+                MessageDto("Subject deleted successfully"),
+                HttpStatus.OK
+            )
+        } catch (e: UnauthorizedException) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        } catch (e: ExceptionNotFound) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+        }
+    }
+
 }

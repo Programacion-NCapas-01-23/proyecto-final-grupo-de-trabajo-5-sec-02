@@ -141,8 +141,44 @@ class StudentController(private val studentService: StudentService) {
         )
     }
 
+    @Operation(
+        summary = "Change student password",
+        description = "Change student password",
+        security = [SecurityRequirement(name = "APIAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Password changed successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Student not found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            )
+        ]
+    )
     @PatchMapping("/changePassword")
-    @Operation(summary = "Change student password")
     @SecurityRequirement(name = "APIAuth")
     fun changePassword(
         request: HttpServletRequest,

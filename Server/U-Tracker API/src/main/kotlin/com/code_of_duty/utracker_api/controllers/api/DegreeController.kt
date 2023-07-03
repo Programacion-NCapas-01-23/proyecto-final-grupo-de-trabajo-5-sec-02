@@ -1,6 +1,12 @@
 package com.code_of_duty.utracker_api.controllers.api
 
+import com.code_of_duty.utracker_api.data.dtos.MessageDto
+import com.code_of_duty.utracker_api.data.dtos.StudentDegreeDto
 import com.code_of_duty.utracker_api.services.api.degree.DegreeService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
@@ -16,6 +22,49 @@ import java.util.*
 class DegreeController(
     private val degreeService: DegreeService
 ) {
+    @Operation(
+        summary = "Get all degrees",
+        description = "Get all degrees",
+
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Degrees retrieved successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = StudentDegreeDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
     @GetMapping("/")
     fun getAllDegrees(
         @RequestParam(required = true) id: UUID,
