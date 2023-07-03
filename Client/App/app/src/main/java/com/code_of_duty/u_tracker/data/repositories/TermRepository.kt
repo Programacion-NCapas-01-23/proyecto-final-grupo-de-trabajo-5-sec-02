@@ -6,20 +6,34 @@ import com.code_of_duty.u_tracker.data.database.dao.UserDao
 import com.code_of_duty.u_tracker.data.database.entities.UserToken
 import com.code_of_duty.u_tracker.data.network.SafeApiRequest
 import com.code_of_duty.u_tracker.data.network.UtrackerApiClient
+import com.code_of_duty.u_tracker.data.network.request.CreatePersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.LoginRequest
 import com.code_of_duty.u_tracker.data.network.response.IdealTermResponse
+import com.code_of_duty.u_tracker.data.network.response.MessageResponse
+import com.code_of_duty.u_tracker.data.network.response.PersonalTermResponse
 import javax.inject.Inject
-//TODO: Implement DataBase for this model
-class PensumRepository @Inject constructor(
+
+class TermRepository @Inject constructor(
     private val apiClient: UtrackerApiClient,
     private val tokenDao: TokenDao,
     private val userDao: UserDao
-): SafeApiRequest(){
+    ): SafeApiRequest() {
 
-    suspend fun getPensum(token: String): List<IdealTermResponse>{
+    suspend fun getIdealTerms(token: String): List<IdealTermResponse> {
         return apiRequest {
-            Log.d("PensumRepository", "Getting pensum")
             apiClient.getPensum(token)
+        }
+    }
+
+    suspend fun getPersonalTerms(token:String): List<PersonalTermResponse> {
+        return apiRequest {
+            apiClient.getPersonalTerms(token)
+        }
+    }
+
+    suspend fun addPersonalTerm(token:String, cycleType: Int, year: Int): MessageResponse {
+        return apiRequest {
+            apiClient.createPersonalTerm(token, CreatePersonalTermRequest(cycleType, year))
         }
     }
 
@@ -51,24 +65,24 @@ class PensumRepository @Inject constructor(
         }
     }
 
-    private suspend fun testToken(token: String): String{
-        apiRequest {
-            apiClient.verifyToken(token)
+        private suspend fun testToken(token: String): String{
+            apiRequest {
+                apiClient.verifyToken(token)
+            }
+            return token
         }
-        return token
-    }
 
-    private suspend fun tryLogin(oldToken: String, code: String, password: String): String{
-        val res = apiRequest {
-            apiClient.login(
-                LoginRequest(
-                    code,
-                    password
+        private suspend fun tryLogin(oldToken: String, code: String, password: String): String{
+            val res = apiRequest {
+                apiClient.login(
+                    LoginRequest(
+                        code,
+                        password
+                    )
                 )
-            )
+            }
+            tokenDao.deleteToken(UserToken(oldToken))
+            tokenDao.insertToken(UserToken(res.token))
+            return res.token
         }
-        tokenDao.deleteToken(UserToken(oldToken))
-        tokenDao.insertToken(UserToken(res.token))
-        return res.token
-    }
 }

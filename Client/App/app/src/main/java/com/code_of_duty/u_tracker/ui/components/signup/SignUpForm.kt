@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.code_of_duty.u_tracker.R
 import com.code_of_duty.u_tracker.enums.DegreeStatus
 import com.code_of_duty.u_tracker.enums.SignUpStatus
@@ -225,6 +226,7 @@ fun SignUpForm (
                                     selectedNameValue = selectedNameFaculty,
                                     optionNameProvider = {option -> option.name},
                                     optionIdProvider = {option -> option.id},
+                                    width = 280.dp,
                                 )
                             },
 
@@ -237,7 +239,8 @@ fun SignUpForm (
                                     optionNameProvider = {option -> option.name},
                                     optionIdProvider = {option -> option.id},
                                     enableState = enableStateCareer,
-                                )
+                                    width = 280.dp,
+                                    )
                             }
                         ),
                         openBottomSheet = openBottomSheet

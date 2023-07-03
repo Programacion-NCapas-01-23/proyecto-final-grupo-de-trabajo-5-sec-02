@@ -31,7 +31,7 @@ object NetworkModule {
     fun providesUtracker(moshi: Moshi, okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .baseUrl(TESTING_URL)
+        .baseUrl(EMULATOR_URL)
         .build()
 
     @Provides

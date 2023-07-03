@@ -17,11 +17,11 @@ data class Student(
     var image: String? = null,
     @Column(name = "cum", nullable = false, columnDefinition = "float default 0.0")
     var cum: Float = 0.0f,
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "degree_fk", referencedColumnName = "id", nullable = true)
     var degree: Degree? = null,
 
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     @JsonIgnore
     val studentCycles: List<StudentCycle>? = null
 ){

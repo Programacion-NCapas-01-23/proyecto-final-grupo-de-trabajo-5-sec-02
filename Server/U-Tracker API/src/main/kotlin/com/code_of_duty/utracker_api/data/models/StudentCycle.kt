@@ -17,7 +17,7 @@ data class StudentCycle(
     @JoinColumn(name = "student_fk", referencedColumnName = "code")
     val student: Student,
 
-    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinTable(
         name = "subject_x_student_cycle",
@@ -25,4 +25,8 @@ data class StudentCycle(
         inverseJoinColumns = [JoinColumn(name = "subject_fk", referencedColumnName = "code")]
     )
     var subjects: List<Subject> = emptyList()
-)
+){
+override fun toString(): String {
+    return "StudentCycle(studentCycleId=$studentCycleId, cycleType=$cycleType, year=$year, subjects=$subjects)"
+}
+}

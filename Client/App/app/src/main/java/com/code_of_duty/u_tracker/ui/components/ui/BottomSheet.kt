@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -38,15 +39,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.code_of_duty.u_tracker.ui.theme.Typography
 import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun BottomSheet(
-    openButtonLabel: String,
+    openButtonLabel: String = "",
     closeButtonLabel: String,
     edgeToEdgeEnabled: MutableState<Boolean> = mutableStateOf(false),
     skipPartiallyExpanded: MutableState<Boolean> = mutableStateOf(false),
@@ -54,15 +57,21 @@ fun BottomSheet(
     scope: CoroutineScope,
     editFields: List<@Composable () -> Unit>,
     openBottomSheet: MutableState<Boolean>,
+    customButton: Boolean = false,
+    customButtonAction: () -> Unit = {},
+    title: String = "",
     ) {
 // App content
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
-            .wrapContentSize(Alignment.Center),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
+    if (customButton) {
+        customButtonAction()
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .wrapContentSize(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
 //        Row(
 //            Modifier.toggleable(
 //                value = skipPartiallyExpanded?.value ?: false,
@@ -85,10 +94,12 @@ fun BottomSheet(
 //            Spacer(Modifier.width(16.dp))
 //            Text("Toggle edge to edge enabled.")
 //        }
-        Button(onClick = { openBottomSheet.value = !openBottomSheet.value }) {
-            Text(text = openButtonLabel)
+            Button(onClick = { openBottomSheet.value = !openBottomSheet.value }) {
+                Text(text = openButtonLabel)
+            }
         }
     }
+
 
 // Sheet content
     if (openBottomSheet.value) {
@@ -100,6 +111,20 @@ fun BottomSheet(
             sheetState = bottomSheetState,
             windowInsets = windowInsets
         ) {
+            if (title.isNullOrEmpty()) {} else {
+                Row(horizontalArrangement = Arrangement.Center,modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)) {
+                    Text(text = title, style = TextStyle(
+                        fontSize = Typography.titleLarge.fontSize,
+                        lineHeight = Typography.titleLarge.lineHeight,
+                        fontWeight = Typography.titleLarge.fontWeight,
+                        letterSpacing = Typography.titleLarge.letterSpacing,
+                        color = MaterialTheme.colorScheme.primary,
+                        )
+                    )
+                }
+            }
             editFields.forEach { editField ->
                 editField()
             }
