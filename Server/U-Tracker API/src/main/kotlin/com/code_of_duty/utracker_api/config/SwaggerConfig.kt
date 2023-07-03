@@ -11,6 +11,12 @@ import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.info.License
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.boot.web.servlet.FilterRegistrationBean
+import org.springframework.context.annotation.Bean
+import org.springframework.core.Ordered
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
 
 @Configuration
 @SecuritySchemes(
@@ -50,4 +56,17 @@ import io.swagger.v3.oas.annotations.tags.Tag
         )
     ]
 )
-class SwaggerConfig
+class SwaggerConfig{
+    @Bean
+    fun corsFilter(): FilterRegistrationBean<CorsFilter> {
+        val source = UrlBasedCorsConfigurationSource()
+        val config = CorsConfiguration()
+        config.addAllowedOrigin("*")
+        config.addAllowedMethod("*")
+        config.addAllowedHeader("*")
+        source.registerCorsConfiguration("/**", config)
+        val bean = FilterRegistrationBean(CorsFilter(source))
+        bean.order = Ordered.HIGHEST_PRECEDENCE
+        return bean
+    }
+}
