@@ -4,8 +4,9 @@ import {Button, Form, Input, Typography} from 'antd';
 import {Login} from "@/interfaces/Admin";
 import {loginAdmin} from "@/state/thunks/authThunk";
 import {useRouter} from "next/navigation";
+import Link from "next/link";
 
-const {Title} = Typography;
+const {Title, Text} = Typography;
 
 const LoginForm = () => {
     const dispatch = useAppDispatch();
@@ -24,30 +25,47 @@ const LoginForm = () => {
             await dispatch(loginAdmin(login));
             router.push('/');
         } catch (error) {
-            console.log('Registration error:', error);
+            console.log('Login error:', error);
         }
     };
 
     return (
-        <div className="">
-            <div className="form-container">
-                <Title>Login</Title>
+        <div style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            background: '#000000',
+            alignItems: "center",
+            justifyContent: "center",
+            width: '100%',
+            height: '100%',
+        }}>
+            <div style={{
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                minWidth: '360px',
+                background: '#FFFFFF',
+                padding: '32px',
+
+            }}>
+                <Title style={{color: '#275DAD', alignSelf: "center"}}>Inicio de Sesion</Title>
                 <Form
                     name="login"
                     form={form}
                     labelCol={{span: 8}}
                     wrapperCol={{span: 16}}
-                    style={{maxWidth: 600}}
+                    style={{minWidth: 300}}
                     initialValues={{remember: true}}
                     onFinish={handleSubmit}
                     autoComplete="off"
+                    layout="vertical"
                 >
                     <Form.Item
-                        label="Nombre de Usuario"
+                        label="Usuario"
                         name="username"
                         rules={[{required: true, message: 'Ingresa el nombre de usuario!'}]}
+                        style={{margin: '1rem'}}
                     >
-                        <Input style={{width: 300}}/>
+                        <Input style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Form.Item
                         label="Contrasena"
@@ -57,12 +75,18 @@ const LoginForm = () => {
                             message: 'Ingresa una contrasena valida!',
                             pattern: new RegExp(`^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%^&+=_*])(?=\\S+$).{8,}$`)
                         }]}
+                        style={{margin: '1rem'}}
                     >
-                        <Input.Password/>
+                        <Input.Password style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Submit
+                    <Button type="primary" htmlType="submit" style={{
+                        borderRadius: '0',
+                        backgroundColor: '#275DAD',
+                        margin: '1rem 0',
+                    }}>
+                        Iniciar Sesion
                     </Button>
+                    <Text>No tienes cuenta? <Link href='/register' style={{color: '#275DAD'}}>Registrate</Link></Text>
                 </Form>
             </div>
         </div>
