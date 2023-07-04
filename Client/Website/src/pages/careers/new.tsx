@@ -80,7 +80,7 @@ const CareerForm = ({career}: CareerFormProps) => {
                 minWidth: '360px',
                 background: '#FFFFFF',
                 padding: '32px',
-                borderRadius: 10,
+                borderRadius: 20,
 
             }}>
                 {

@@ -69,6 +69,7 @@ const ScheduleForm = () => {
                 minWidth: '360px',
                 background: '#FFFFFF',
                 padding: '32px',
+                borderRadius: 20,
 
             }}>
                 <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Horario</Title>

@@ -78,6 +78,7 @@ const PensumForm = ({pensum}: PensumFormProps) => {
                 minWidth: '360px',
                 background: '#FFFFFF',
                 padding: '32px',
+                borderRadius: 20,
 
             }}>
                 {

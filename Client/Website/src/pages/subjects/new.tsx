@@ -68,6 +68,7 @@ const SubjectForm = ({subject}: SubjectFormProps) => {
                 minWidth: '360px',
                 background: '#FFFFFF',
                 padding: '32px',
+                borderRadius: 20,
 
             }}>
                 {

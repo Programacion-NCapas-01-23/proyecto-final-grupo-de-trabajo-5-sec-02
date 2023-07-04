@@ -34,7 +34,6 @@ const RegisterForm = () => {
         <div style={{
             display: 'flex',
             flexFlow: 'column wrap',
-            background: '#000000',
             alignItems: "center",
             justifyContent: "center",
             width: '100%',
@@ -46,6 +45,7 @@ const RegisterForm = () => {
                 minWidth: '360px',
                 background: '#FFFFFF',
                 padding: '32px',
+                borderRadius: 20,
 
             }}>
                 <Title style={{color: '#275DAD', alignSelf: "center"}}>Crea una cuenta</Title>

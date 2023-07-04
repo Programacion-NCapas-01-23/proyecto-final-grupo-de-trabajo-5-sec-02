@@ -72,6 +72,7 @@ const FacultyForm = ({faculty}: FacultyFormProps) => {
                 minWidth: '360px',
                 background: '#FFFFFF',
                 padding: '32px',
+                borderRadius: 20,
 
             }}>
                 {
