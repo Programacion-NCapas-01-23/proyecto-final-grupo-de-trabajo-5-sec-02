@@ -2,10 +2,12 @@ package com.code_of_duty.u_tracker.data.repositories
 
 import android.util.Log
 import com.code_of_duty.u_tracker.data.database.dao.CycleDao
+import com.code_of_duty.u_tracker.data.database.dao.GradeDao
 import com.code_of_duty.u_tracker.data.database.dao.PrerequisiteDao
 import com.code_of_duty.u_tracker.data.database.dao.SubjectDao
 import com.code_of_duty.u_tracker.data.database.dao.TokenDao
 import com.code_of_duty.u_tracker.data.database.dao.UserDao
+import com.code_of_duty.u_tracker.data.database.entities.Grade
 import com.code_of_duty.u_tracker.data.database.entities.Prerequisite
 import com.code_of_duty.u_tracker.data.database.entities.Subject
 import com.code_of_duty.u_tracker.data.database.entities.Cycle as CycleEntities
@@ -22,7 +24,8 @@ class PensumRepository @Inject constructor(
     private val userDao: UserDao,
     private val cycleDao: CycleDao,
     private val subjectDao: SubjectDao,
-    private val prerequisiteDao: PrerequisiteDao
+    private val prerequisiteDao: PrerequisiteDao,
+    private val gradeDao: GradeDao
 ): SafeApiRequest(){
 
     suspend fun getPensum(token: String): List<IdealTermResponse>{
@@ -103,5 +106,10 @@ class PensumRepository @Inject constructor(
 
     suspend fun getPrerequisites(subject: String): List<Prerequisite> {
         return prerequisiteDao.getPrerequisitesBySubject(subject)
+    }
+
+    suspend fun updateSubject(subject: String, grade: Float) {
+        val grade = Grade(subject, grade, grade >= 6.0)
+        gradeDao.insertOrUpdate(grade)
     }
 }

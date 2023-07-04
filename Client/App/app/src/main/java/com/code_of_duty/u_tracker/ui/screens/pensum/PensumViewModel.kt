@@ -28,10 +28,6 @@ class PensumViewModel @Inject constructor(
 
     fun getPensum(){
         viewModelScope.launch {
-            if (_pensum.isNotEmpty()){
-                pensumStatus.value = PensumState.DONE
-                return@launch
-            }
             val cycles = repository.getCycles()
             if (cycles.isEmpty()) {
                 getPensumFromServer()
@@ -91,6 +87,12 @@ class PensumViewModel @Inject constructor(
             }
         } catch (e: Exception){
             pensumStatus.value = PensumState.ERROR
+        }
+    }
+
+    fun updateSubject(currSubject: Subject, grade: Float) {
+        viewModelScope.launch {
+            repository.updateSubject(currSubject.code, grade)
         }
     }
 }
