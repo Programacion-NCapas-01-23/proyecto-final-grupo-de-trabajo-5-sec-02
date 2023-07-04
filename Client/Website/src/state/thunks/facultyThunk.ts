@@ -21,7 +21,8 @@ export const fetchFaculties = (): AppThunk => {
             dispatch(fetchFacultiesStart());
             const faculties = await apiService.get<Faculty[]>(routes.faculties.all);
             dispatch(fetchFacultiesSuccess(faculties));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
@@ -40,7 +41,8 @@ export const createFaculty = (faculty: Faculty): AppThunk => {
             dispatch(createFacultyStart());
             const createdFaculty = await apiService.post<Faculty>(routes.faculties.add, [faculty]);
             dispatch(createFacultySuccess(createdFaculty));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
@@ -60,7 +62,8 @@ export const updateFaculty = (faculty: Faculty): AppThunk => {
             dispatch(updateFacultyStart());
             const updatedFaculty = await apiService.patch<Faculty>(routes.faculties.update, faculty);
             dispatch(updateFacultySuccess(updatedFaculty));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
@@ -84,7 +87,8 @@ export const deleteFaculty = (faculty: string): AppThunk => {
                     }
             });
             dispatch(updateFacultySuccess(updatedFaculty));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {

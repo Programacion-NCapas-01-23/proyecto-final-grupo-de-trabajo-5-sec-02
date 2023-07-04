@@ -1,9 +1,9 @@
-import Faculty from "@/interfaces/Faculty";
+import {Faculty} from "@/interfaces/Faculty";
 import {CareerPreview} from "@/interfaces/Career";
 import ClassTime from "@/interfaces/ClassTime";
 import {CyclePreview} from "@/interfaces/Cycle";
 import {PensumPreview} from "@/interfaces/Pensum";
-import {SubjectPreview} from "@/interfaces/Subject";
+import {Subject} from "@/interfaces/Subject";
 import {SchedulePreview} from "@/interfaces/Schedule";
 
 export const faculties: Faculty[] = [
@@ -38,12 +38,12 @@ export const pensums: PensumPreview[] = [
     {
         id: '9871bdee-3c27-4d84-89a4-eeffcd2973c6',
         plan: '2018',
-        careerId: '5b85d947-d840-4d4a-bb7d-c49a3638f237',
+        degreeId: '5b85d947-d840-4d4a-bb7d-c49a3638f237',
     },
     {
         id: 'c9cfe06b-36e7-47b5-b54a-bb3349dc3a2e',
         plan: '2019',
-        careerId: 'af10faa7-5e0b-4df0-98fd-855f36fa62e0',
+        degreeId: 'af10faa7-5e0b-4df0-98fd-855f36fa62e0',
     },
 ];
 
@@ -51,36 +51,36 @@ export const cycles: CyclePreview[] = [
     {
         id: '86079fb4-e912-4466-962b-ea8fb7f53af0',
         name: 'Ciclo I',
-        cycleType: 0,
+        type: 0,
         pensumId: '9871bdee-3c27-4d84-89a4-eeffcd2973c6',
     },
     {
         id: 'c9a7af1e-5fdf-4d25-bf46-286b42cc4e52',
         name: 'Ciclo II',
-        cycleType: 1,
+        type: 1,
         pensumId: '9871bdee-3c27-4d84-89a4-eeffcd2973c6',
     },
     {
         id: '6781851f-e2cf-4ea9-86dd-5274cb82a84c',
         name: 'Ciclo III',
-        cycleType: 0,
+        type: 0,
         pensumId: '9871bdee-3c27-4d84-89a4-eeffcd2973c6',
     },
     {
         id: '3dbd5df7-17e3-4052-a1bd-26c407d061d2',
         name: 'Ciclo IV',
-        cycleType: 1,
+        type: 1,
         pensumId: '9871bdee-3c27-4d84-89a4-eeffcd2973c6',
     },
     {
         id: '49919360-94b5-4adc-87ca-8281fccf268c',
         name: 'Ciclo V',
-        cycleType: 0,
+        type: 0,
         pensumId: '9871bdee-3c27-4d84-89a4-eeffcd2973c6',
     },
 ];
 
-export const subjects: SubjectPreview[] = [
+export const subjects: Subject[] = [
     {
         name: 'Precalculo',
         code: '010180',

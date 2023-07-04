@@ -18,7 +18,8 @@ export const fetchSubjects = (): AppThunk => {
             dispatch(fetchSubjectsStart());
             const subjects = await apiService.get<Subject[]>(routes.subject.all);
             dispatch(fetchSubjectsSuccess(subjects));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
@@ -37,7 +38,8 @@ export const createSubject = (subject: Subject): AppThunk => {
             dispatch(createSubjectStart());
             const createdSubject = await apiService.post<Subject>(routes.subject.add, [subject]);
             dispatch(createSubjectSuccess(createdSubject));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {

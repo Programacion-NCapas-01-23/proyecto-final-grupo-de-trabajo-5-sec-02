@@ -11,7 +11,8 @@ export const createSchedule = (schedule: SchedulePreview): AppThunk => {
             dispatch(createScheduleStart());
             const createdSchedule = await apiService.post<SchedulePreview>(routes.schedule.add, [schedule]);
             dispatch(createScheduleSuccess(createdSchedule));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
