@@ -11,7 +11,8 @@ export const createClassTime = (classTime: ClassTime): AppThunk => {
             dispatch(createClassTimeStart());
             const createdClassTime = await apiService.post<ClassTime>(routes.classTime.add, [classTime]);
             dispatch(createClassTimeSuccess(createdClassTime));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {

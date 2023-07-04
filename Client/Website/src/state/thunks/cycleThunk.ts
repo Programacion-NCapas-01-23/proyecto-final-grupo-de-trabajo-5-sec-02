@@ -18,7 +18,8 @@ export const fetchCycles = (): AppThunk => {
             dispatch(fetchCyclesStart());
             const careers = await apiService.get<Cycle[]>(routes.cycle.all);
             dispatch(fetchCyclesSuccess(careers));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
@@ -37,7 +38,8 @@ export const createCycle = (cycle: CyclePreview): AppThunk => {
             dispatch(createCycleStart());
             const createdCycle = await apiService.post<Cycle>(routes.cycle.add, [cycle]);
             dispatch(createCycleSuccess(createdCycle));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {

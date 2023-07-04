@@ -7,10 +7,9 @@ import {fetchCareers} from "@/state/thunks/careerThunk";
 import {useSelector} from "react-redux";
 import {RootState} from "@/state/store";
 import {useRouter} from "next/navigation";
-import {CareerPreview} from "@/interfaces/Career";
 
 interface PensumFormProps {
-    pensum?: CareerPreview;
+    pensum?: PensumPreview;
 }
 
 const {Title} = Typography;

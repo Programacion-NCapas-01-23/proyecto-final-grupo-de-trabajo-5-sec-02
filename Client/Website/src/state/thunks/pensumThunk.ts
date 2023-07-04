@@ -18,7 +18,8 @@ export const fetchPensums = (): AppThunk => {
             dispatch(fetchPensumsStart());
             const careers = await apiService.get<PensumPreview[]>(routes.pensum.all);
             dispatch(fetchPensumsSuccess(careers));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
@@ -35,9 +36,10 @@ export const createPensum = (pensum: PensumPreview): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(createPensumStart());
-            const createdPensum = await apiService.post(routes.pensum.add, [pensum]);
+            const createdPensum = await apiService.post<PensumPreview>(routes.pensum.add, [pensum]);
             dispatch(createPensumSuccess(createdPensum));
-        } catch (error) {
+        } catch (error: any) {
+            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
