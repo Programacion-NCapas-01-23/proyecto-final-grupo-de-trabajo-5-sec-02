@@ -1,5 +1,6 @@
 package com.code_of_duty.utracker_api.services.api.subject
 
+import com.code_of_duty.utracker_api.data.dtos.CumDto
 import com.code_of_duty.utracker_api.data.dtos.RemainingAssessmentDto
 import com.code_of_duty.utracker_api.data.dtos.SubjectDto
 import com.code_of_duty.utracker_api.data.enums.SubjectStatus
@@ -18,4 +19,6 @@ interface SubjectService {
     fun calculateEstimateGrades(subjectCode: String): List<RemainingAssessmentDto>
 
     fun updateSubjectCompletion(studentCode: String, subjectCode: String, state: SubjectStatus, grade: BigDecimal?): Subject
+
+    fun calculateCum(studentCode: String): CumDto
 }
