@@ -25,7 +25,7 @@ const columns: ColumnsType<CareerPreview> = [
         render: (_, record) => (
             <Space size="middle">
                 <Link href={`/${record.id}`}>Modificar</Link>
-                <Link href={''}>Eliminar</Link>
+                <Link href={''} style={{color: '#DF2935'}}>Eliminar</Link>
             </Space>
         ),
     },
@@ -45,26 +45,61 @@ const Page = (): JSX.Element => {
     }, [dispatch]);
 
     return (
-        <>
-            <Title>Carreras</Title>
-            <Button type="primary" onClick={() => router.push('/careers/new')}>Agregar Carrera</Button>
+        <div style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            width: '100%',
+        }}
+        >
+            <Title style={{color: '#FFFFFF', alignSelf: "center"}}>Carreras</Title>
+            <Button type="primary"
+                    onClick={() => router.push('/careers/new')}
+                    style={{
+                        borderRadius: '0',
+                        backgroundColor: '#275DAD',
+                        margin: '1rem 0',
+                        alignSelf: 'center',
+                        padding: '0.5rem 1rem',
+                        height: 'auto',
+                    }}
+            >
+                Agregar Carrera
+            </Button>
+            <div style={{
+                    padding: 24,
+                    display: 'flex',
+                    flexFlow: 'row wrap',
+                    justifyContent: 'space-around',
+                    alignItems: 'flex-start',
+                    width: '100%',
+                }}
+            >
             {loading ? (
-                <div>Loading careers...</div>
+                <Title style={{color: '#FFFFFF', alignSelf: "center"}}>Loading careers...</Title>
             ) : (
                 faculties.map(faculty => {
                     const careersByFaculty = careers.filter(career => career.facultyId === faculty.id)
                     return (
-                        <>
-                            <Title level={2} key={faculty.id}>{faculty.name}</Title>
+                        <div key={faculty.id}
+                             style={{
+                                 display: 'flex',
+                                 flexFlow: 'column wrap',
+                                 width: '550px'
+                             }}
+                        >
+                            <Title level={2} key={faculty.id}  style={{color: '#FFFFFF', alignSelf: "center"}}>{faculty.name}</Title>
                             {
                                 <Table columns={columns} dataSource={careersByFaculty} pagination={false}/>
                             }
-                        </>
+                        </div>
                     )
                 })
             )
             }
-        </>
+            </div>
+        </div>
     )
 };
 

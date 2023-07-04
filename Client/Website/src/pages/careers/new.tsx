@@ -20,6 +20,7 @@ const CareerForm = ({career}: CareerFormProps) => {
     const [form] = Form.useForm();
     const [facultyId, setFacultyId] = useState('');
     const faculties = useSelector((state: RootState) => state.faculty.data);
+    const error = useSelector((state: RootState) => state.pensum.error);
 
     const options: SelectProps['options'] = [];
     faculties.map(faculty => {
@@ -48,22 +49,20 @@ const CareerForm = ({career}: CareerFormProps) => {
         };
 
         if (career) {
-            try {
-                await dispatch(updateCareer({...career, ...careerData}));
+            await dispatch(updateCareer({...career, ...careerData}));
+            if (error!.response.status === 401) {
+                router.push('/login')
+            } else {
                 router.push('/careers');
-            } catch (error) {
-                console.log('Updating error:', error);
             }
         } else {
-            try {
-                await dispatch(createCareer(careerData));
+            await dispatch(createCareer(careerData));
+            if (error!.response.status === 401) {
+                router.push('/login')
+            } else {
                 router.push('/careers');
-            } catch (error) {
-                console.log('Creation error:', error);
             }
-
         }
-
     };
 
     return (
@@ -102,7 +101,8 @@ const CareerForm = ({career}: CareerFormProps) => {
                         name="name"
                         rules={[{required: true, message: 'Ingresa el nombre de la carrera!'}]}
                     >
-                        <Input style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
+                        <Input
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Form.Item
                         label="Facultad"

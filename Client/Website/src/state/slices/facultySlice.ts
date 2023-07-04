@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import  {Faculty} from "@/interfaces/Faculty";
-import InitialState from "@/interfaces/InitialState";
+import InitialState, {ErrorResponse} from "@/interfaces/InitialState";
 
 const initialState: InitialState<Faculty> = {
     data: [],
@@ -21,7 +21,7 @@ const facultySlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        fetchFacultiesFailure(state, action: PayloadAction<string>) {
+        fetchFacultiesFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -34,7 +34,7 @@ const facultySlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        createFacultyFailure(state, action: PayloadAction<string>) {
+        createFacultyFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -51,7 +51,7 @@ const facultySlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        updateFacultyFailure(state, action: PayloadAction<string>) {
+        updateFacultyFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -68,7 +68,7 @@ const facultySlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        deleteFacultyFailure(state, action: PayloadAction<string>) {
+        deleteFacultyFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },

@@ -30,6 +30,7 @@ const CycleForm = () => {
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
     const pensums = useSelector((state: RootState) => state.pensum.data);
+    const error = useSelector((state: RootState) => state.pensum.error);
 
     const pensumSelect: SelectProps['options'] = [];
     pensums.map(pensum => {
@@ -47,11 +48,11 @@ const CycleForm = () => {
             name,
             pensumId
         };
-        try {
-            await dispatch(createCycle(newCycle));
+        await dispatch(createCycle(newCycle));
+        if (error!.response.status === 401) {
+            router.push('/login')
+        } else {
             router.push('/pensums');
-        } catch (error) {
-            console.log('Creation error:', error);
         }
     };
 
@@ -90,7 +91,9 @@ const CycleForm = () => {
                         name="name"
                         rules={[{required: true, message: 'Ingresa el nombre del ciclo!'}]}
                     >
-                        <Input style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}} placeholder="Ciclo X"/>
+                        <Input
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
+                            placeholder="Ciclo X"/>
                     </Form.Item>
                     <Form.Item
                         label="Tipo"

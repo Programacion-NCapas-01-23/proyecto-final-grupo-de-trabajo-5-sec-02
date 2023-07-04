@@ -1,4 +1,4 @@
-import InitialState from "@/interfaces/InitialState";
+import InitialState, {ErrorResponse} from "@/interfaces/InitialState";
 import {Subject} from "@/interfaces/Subject";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
@@ -21,7 +21,7 @@ const subjectSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        fetchSubjectsFailure(state, action: PayloadAction<string>) {
+        fetchSubjectsFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -34,7 +34,7 @@ const subjectSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        createSubjectFailure(state, action: PayloadAction<string>) {
+        createSubjectFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -51,7 +51,7 @@ const subjectSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        updateSubjectFailure(state, action: PayloadAction<string>) {
+        updateSubjectFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -68,7 +68,7 @@ const subjectSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        deleteSubjectFailure(state, action: PayloadAction<string>) {
+        deleteSubjectFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },

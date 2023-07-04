@@ -1,4 +1,4 @@
-import InitialState from "@/interfaces/InitialState";
+import InitialState, {ErrorResponse} from "@/interfaces/InitialState";
 import {Cycle} from "@/interfaces/Cycle";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
@@ -21,7 +21,7 @@ const cycleSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        fetchCyclesFailure(state, action: PayloadAction<string>) {
+        fetchCyclesFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -34,7 +34,7 @@ const cycleSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        createCycleFailure(state, action: PayloadAction<string>) {
+        createCycleFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -51,7 +51,7 @@ const cycleSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        updateCycleFailure(state, action: PayloadAction<string>) {
+        updateCycleFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -68,7 +68,7 @@ const cycleSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        deleteCycleFailure(state, action: PayloadAction<string>) {
+        deleteCycleFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },

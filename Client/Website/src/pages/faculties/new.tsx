@@ -4,8 +4,9 @@ import {Faculty} from "@/interfaces/Faculty";
 import {createFaculty, updateFaculty} from "@/state/thunks/facultyThunk";
 import {Button, Form, Input, Typography, Upload} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
-import {createCareer, updateCareer} from "@/state/thunks/careerThunk";
 import {useRouter} from "next/navigation";
+import {useSelector} from "react-redux";
+import {RootState} from "@/state/store";
 
 const {TextArea} = Input;
 const {Title} = Typography;
@@ -20,10 +21,11 @@ interface FacultyFormProps {
     faculty?: Faculty;
 }
 
-const FacultyForm = ({ faculty }: FacultyFormProps) => {
+const FacultyForm = ({faculty}: FacultyFormProps) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
+    const error = useSelector((state: RootState) => state.pensum.error);
 
     useEffect(() => {
         if (faculty) {
@@ -39,18 +41,18 @@ const FacultyForm = ({ faculty }: FacultyFormProps) => {
             logo,
         };
         if (faculty) {
-            try {
-                await dispatch(updateFaculty({ ...faculty, ...facultyData }));
+            await dispatch(updateFaculty({...faculty, ...facultyData}));
+            if (error!.response.status === 401) {
+                router.push('/login')
+            } else {
                 router.push('/faculties');
-            } catch (error) {
-                console.log('Updating error:', error);
             }
         } else {
-            try {
-                await dispatch(createFaculty(facultyData));
+            await dispatch(createFaculty(facultyData));
+            if (error!.response.status === 401) {
+                router.push('/login')
+            } else {
                 router.push('/faculties');
-            } catch (error) {
-                console.log('Creation error:', error);
             }
         }
     };
@@ -74,7 +76,8 @@ const FacultyForm = ({ faculty }: FacultyFormProps) => {
 
             }}>
                 {
-                    faculty ? <Title style={{color: '#275DAD', alignSelf: "center"}}>Editar Facultad</Title> : <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Facultad</Title>
+                    faculty ? <Title style={{color: '#275DAD', alignSelf: "center"}}>Editar Facultad</Title> :
+                        <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Facultad</Title>
                 }
                 <Form
                     name="newFaculty"
@@ -92,14 +95,21 @@ const FacultyForm = ({ faculty }: FacultyFormProps) => {
                         name="name"
                         rules={[{required: true, message: 'Ingresa el nombre de la facultad!'}]}
                     >
-                        <Input style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
+                        <Input
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Form.Item
                         label="Descripcion"
                         name="description"
                         rules={[{required: true, message: 'Ingresa la descripción de la facultad!'}]}
                     >
-                        <TextArea rows={3} style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0', resize: 'none'}}/>
+                        <TextArea rows={3} style={{
+                            width: 360,
+                            border: 'none',
+                            borderBottom: '2px solid #2B4162',
+                            borderRadius: '0',
+                            resize: 'none'
+                        }}/>
                     </Form.Item>
                     <Form.Item label="Logo"
                                name="logo"

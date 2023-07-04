@@ -48,16 +48,45 @@ const Page = (): JSX.Element => {
     }, [dispatch]);
 
     return (
-        <>
-            <Title>Materias</Title>
-            <Button type="primary" onClick={() => router.push('/subjects/new')}>Agregar Materia</Button>
-            {loading ? (
-                    <div>Loading subjects...</div>
-                ) :
-                <Table columns={columns} dataSource={subjects} pagination={false}/>
+        <div style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            width: '100%',
+            height: 'inherit',
+        }}
+        >
+            <Title style={{color: '#FFFFFF', alignSelf: "center"}}>Materias</Title>
+            <Button type="primary"
+                    onClick={() => router.push('/subjects/new')}
+                    style={{
+                        borderRadius: '0',
+                        backgroundColor: '#275DAD',
+                        margin: '1rem 0',
+                        alignSelf: 'center',
+                        padding: '0.5rem 1rem',
+                        height: 'auto',
+                    }}
+            >
+                Agregar Materia
+            </Button>
+            <div style={{
+                padding: 24,
+                display: 'flex',
+                flexFlow: 'row wrap',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                width: '100%',
+            }}>
+                {loading ? (
+                        <div>Loading subjects...</div>
+                    ) :
+                    <Table columns={columns} dataSource={subjects} pagination={false}/>
 
-            }
-        </>
+                }
+            </div>
+        </div>
     )
 };
 

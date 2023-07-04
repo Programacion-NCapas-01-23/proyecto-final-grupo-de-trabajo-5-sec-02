@@ -1,7 +1,6 @@
 import React, {ReactNode, useState} from "react";
 import type {MenuProps} from 'antd';
 import {Layout, Menu, theme} from 'antd';
-import {AppstoreOutlined, MailOutlined, SettingOutlined} from '@ant-design/icons';
 import Link from 'next/link'
 
 const {Header, Content} = Layout;
@@ -96,9 +95,7 @@ export const NavigationBar = ({children}: { children: ReactNode }) => {
                 <Content
                     style={{
                         margin: 0,
-                        padding: 24,
-                        minHeight: 280,
-                        background: colorBgContainer,
+                        background: '#000000',
                         display: 'flex',
                         flexFlow: 'column wrap',
                         alignItems: 'flex-start',

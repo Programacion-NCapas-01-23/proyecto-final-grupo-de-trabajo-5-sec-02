@@ -63,7 +63,6 @@ const LoginForm = () => {
                         label="Usuario"
                         name="username"
                         rules={[{required: true, message: 'Ingresa el nombre de usuario!'}]}
-                        style={{margin: '1rem'}}
                     >
                         <Input style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
@@ -75,14 +74,13 @@ const LoginForm = () => {
                             message: 'Ingresa una contrasena valida!',
                             pattern: new RegExp(`^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%^&+=_*])(?=\\S+$).{8,}$`)
                         }]}
-                        style={{margin: '1rem'}}
                     >
                         <Input.Password style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Button type="primary" htmlType="submit" style={{
                         borderRadius: '0',
                         backgroundColor: '#275DAD',
-                        margin: '1rem 0',
+                        margin: '1rem 1em 1em 0',
                     }}>
                         Iniciar Sesion
                     </Button>

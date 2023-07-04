@@ -1,12 +1,13 @@
 import {NextApiResponse} from 'next';
-import {AxiosResponse, AxiosError} from 'axios';
+import {AxiosError, AxiosResponse} from 'axios';
 import apiService from "@/api/appService";
-import {api, routes} from "@/api/routes";
+import {api} from "@/api/routes";
 import {useRouter} from "next/navigation";
 
 // Response interceptor
 api.interceptors.response.use(
     (response: AxiosResponse) => {
+        console.log(response)
         // You can handle successful responses here if needed
         return response;
     },
@@ -15,6 +16,7 @@ api.interceptors.response.use(
             // The request was made, but the server responded with a non-success status code
             // You can handle specific error status codes here
             const {status, data} = error.response;
+
             console.error(`HTTP Error ${status}:`, data);
 
             if (status === 401) {

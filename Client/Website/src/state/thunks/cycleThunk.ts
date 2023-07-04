@@ -10,6 +10,7 @@ import {
 } from "@/state/slices/cycleSlice";
 import apiService from "@/api/appService";
 import {routes} from "@/api/routes";
+import {ErrorResponse} from "@/interfaces/InitialState";
 
 export const fetchCycles = (): AppThunk => {
     return async (dispatch: AppDispatch) => {
@@ -18,7 +19,14 @@ export const fetchCycles = (): AppThunk => {
             const careers = await apiService.get<Cycle[]>(routes.cycle.all);
             dispatch(fetchCyclesSuccess(careers));
         } catch (error) {
-            dispatch(fetchCyclesFailure(error.message));
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(fetchCyclesFailure(receivedError));
         }
     };
 };
@@ -30,7 +38,14 @@ export const createCycle = (cycle: CyclePreview): AppThunk => {
             const createdCycle = await apiService.post<Cycle>(routes.cycle.add, [cycle]);
             dispatch(createCycleSuccess(createdCycle));
         } catch (error) {
-            dispatch(createCycleFailure(error.message));
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(createCycleFailure(receivedError));
         }
     };
 };

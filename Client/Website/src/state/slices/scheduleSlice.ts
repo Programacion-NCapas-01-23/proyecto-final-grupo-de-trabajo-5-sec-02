@@ -1,4 +1,4 @@
-import InitialState from "@/interfaces/InitialState";
+import InitialState, {ErrorResponse} from "@/interfaces/InitialState";
 import {SchedulePreview} from "@/interfaces/Schedule";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
@@ -21,7 +21,7 @@ const scheduleSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        createScheduleFailure(state, action: PayloadAction<string>) {
+        createScheduleFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },

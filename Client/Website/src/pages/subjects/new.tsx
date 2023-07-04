@@ -4,6 +4,8 @@ import {Subject} from "@/interfaces/Subject";
 import {createSubject} from "@/state/thunks/subjectThunk";
 import {Button, Form, Input, InputNumber, Typography} from 'antd';
 import {useRouter} from "next/navigation";
+import {useSelector} from "react-redux";
+import {RootState} from "@/state/store";
 
 const {Title} = Typography;
 
@@ -11,6 +13,7 @@ const SubjectForm = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
+    const error = useSelector((state: RootState) => state.pensum.error);
 
     const handleSubmit = async (values: Subject) => {
         const {code, name, uv} = values;
@@ -22,11 +25,11 @@ const SubjectForm = () => {
         };
         console.log(newSubject);
 
-        try {
-            await dispatch(createSubject(newSubject));
+        await dispatch(createSubject(newSubject));
+        if (error!.response.status === 401) {
+            router.push('/login')
+        } else {
             router.push('/subjects');
-        } catch (error) {
-            console.log('Creation error:', error);
         }
     };
 
@@ -65,21 +68,28 @@ const SubjectForm = () => {
                         name="code"
                         rules={[{required: true, message: 'Ingresa el codigo de la materia'}]}
                     >
-                        <Input style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
+                        <Input
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Form.Item
                         label="Nombre"
                         name="name"
                         rules={[{required: true, message: 'Ingresa el nombre de la materia!'}]}
                     >
-                        <Input style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
+                        <Input
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Form.Item
                         label="Unidades Valorativas"
                         name="uv"
                         rules={[{required: true, message: 'Ingresa las Unidades Valorativas!'}]}
                     >
-                        <InputNumber min={0} max={10} style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
+                        <InputNumber min={0} max={10} style={{
+                            width: 360,
+                            border: 'none',
+                            borderBottom: '2px solid #2B4162',
+                            borderRadius: '0'
+                        }}/>
                     </Form.Item>
                     <Button type="primary" htmlType="submit" style={{
                         borderRadius: '0',

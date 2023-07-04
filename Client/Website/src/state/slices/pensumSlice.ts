@@ -1,4 +1,4 @@
-import InitialState from "@/interfaces/InitialState";
+import InitialState, {ErrorResponse} from "@/interfaces/InitialState";
 import {Pensum, PensumPreview} from "@/interfaces/Pensum";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
@@ -21,7 +21,7 @@ const pensumSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        fetchPensumsFailure(state, action: PayloadAction<string>) {
+        fetchPensumsFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -34,7 +34,7 @@ const pensumSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        createPensumFailure(state, action: PayloadAction<string>) {
+        createPensumFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -51,7 +51,7 @@ const pensumSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        updatePensumFailure(state, action: PayloadAction<string>) {
+        updatePensumFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -68,7 +68,7 @@ const pensumSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        deletePensumFailure(state, action: PayloadAction<string>) {
+        deletePensumFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },

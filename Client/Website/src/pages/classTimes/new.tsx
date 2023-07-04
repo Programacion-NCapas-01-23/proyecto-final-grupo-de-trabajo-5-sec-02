@@ -4,6 +4,8 @@ import ClassTime from "@/interfaces/ClassTime";
 import {createClassTime} from "@/state/thunks/classTimeThunk";
 import {Button, Form, InputNumber, Select, SelectProps, TimePicker, Typography} from 'antd';
 import {useRouter} from "next/navigation";
+import {useSelector} from "react-redux";
+import {RootState} from "@/state/store";
 
 enum Days {
     Lunes,
@@ -33,6 +35,7 @@ const ClassTimeForm = () => {
     const [form] = Form.useForm();
     const [days, setDays] = useState(0);
     const [hour, setHour] = useState("");
+    const error = useSelector((state: RootState) => state.pensum.error);
 
     const handleSubmit = async (values: ClassTime) => {
         const {day, start, end} = values;
@@ -43,11 +46,11 @@ const ClassTimeForm = () => {
             end,
         };
 
-        try {
-            await dispatch(createClassTime(newClassTime));
+        await dispatch(createClassTime(newClassTime));
+        if (error!.response.status === 401) {
+            router.push('/login')
+        } else {
             router.push('/schedules');
-        } catch (error) {
-            console.log('Creation error:', error);
         }
     };
 
@@ -109,7 +112,12 @@ const ClassTimeForm = () => {
                         name="end"
                         rules={[{required: true, message: 'Ingresa la cantidad de horas!'}]}
                     >
-                        <InputNumber min={0} max={10} style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
+                        <InputNumber min={0} max={10} style={{
+                            width: 360,
+                            border: 'none',
+                            borderBottom: '2px solid #2B4162',
+                            borderRadius: '0'
+                        }}/>
                     </Form.Item>
                     <Button type="primary" htmlType="submit" style={{
                         borderRadius: '0',

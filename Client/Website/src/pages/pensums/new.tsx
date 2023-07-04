@@ -15,6 +15,7 @@ const PensumForm = () => {
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
     const careers = useSelector((state: RootState) => state.career.data);
+    const error = useSelector((state: RootState) => state.pensum.error);
 
     const options: SelectProps['options'] = [];
     careers.map(career => {
@@ -30,17 +31,15 @@ const PensumForm = () => {
 
     const handleSubmit = async (values: PensumPreview) => {
         const {plan, degreeId} = values;
-        console.log(values);
         const newPensum: PensumPreview = {
             plan,
             degreeId,
         };
-
-        try {
-            await dispatch(createPensum(newPensum));
+        await dispatch(createPensum(newPensum));
+        if (error!.response.status === 401) {
+            router.push('/login')
+        } else {
             router.push('/pensums');
-        } catch (error) {
-            console.log('Creation error:', error);
         }
     };
 
@@ -79,7 +78,8 @@ const PensumForm = () => {
                         name="plan"
                         rules={[{required: true, message: 'Ingresa el plan del pensum!'}]}
                     >
-                        <Input style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
+                        <Input
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Form.Item
                         label="Carrera"

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useAppDispatch} from '@/hooks/reduxHooks';
-import {Button, Form, Input, Select, SelectProps, Typography} from 'antd';
+import {Button, Form, Select, SelectProps, Typography} from 'antd';
 import {classTimes} from "@/api/data/dummy";
 import {useRouter} from "next/navigation";
 import {useSelector} from "react-redux";
@@ -24,6 +24,7 @@ const ScheduleForm = () => {
     const dispatch = useAppDispatch();
     const subjects = useSelector((state: RootState) => state.subject.data);
     const [form] = Form.useForm();
+    const error = useSelector((state: RootState) => state.pensum.error);
 
     const subjectsSelect: SelectProps['options'] = [];
     subjects.map(subject => {
@@ -45,11 +46,11 @@ const ScheduleForm = () => {
             subjectId,
             classTimeId,
         };
-        try {
-            await dispatch(createSchedule(scheduleData));
+        await dispatch(createSchedule(scheduleData));
+        if (error!.response.status === 401) {
+            router.push('/login')
+        } else {
             router.push('/schedules');
-        } catch (error) {
-            console.log('Creation error:', error);
         }
     };
 
