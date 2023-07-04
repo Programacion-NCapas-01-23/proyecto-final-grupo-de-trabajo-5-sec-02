@@ -46,9 +46,9 @@ const SubjectForm = ({subject}: SubjectFormProps) => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (error && error.response.status === 401) {
+        if (error && error.response.status === 401 || error?.status === 401) {
             router.push('/login')
-        } if(error && error.response.status === 500) {
+        } if(error && error.response.status === 500 || error?.status === 500) {
         openNotificationWithIcon('error', error)
     }
     }, [error, ])

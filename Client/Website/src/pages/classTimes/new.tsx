@@ -38,7 +38,7 @@ const ClassTimeForm = () => {
     const error = useSelector((state: RootState) => state.classTime.error);
 
     useEffect(() => {
-        if (error && error.response.status === 401) {
+        if (error && error.response.status === 401 || error?.status === 401) {
             router.push('/login')
         }
     }, [error])
@@ -53,7 +53,7 @@ const ClassTimeForm = () => {
         };
 
         await dispatch(createClassTime(newClassTime));
-        if (error && error.response.status === 401) {
+        if (error && error.response.status === 401 || error?.status === 401) {
             router.push('/login')
         } else {
             router.push('/schedules');

@@ -35,7 +35,7 @@ const ScheduleForm = () => {
     })
 
     useEffect(() => {
-        if (error && error.response.status === 401) {
+        if (error && error.response.status === 401 || error?.status === 401) {
             router.push('/login')
         }
     }, [error])
@@ -53,7 +53,7 @@ const ScheduleForm = () => {
             classTimeId,
         };
         await dispatch(createSchedule(scheduleData));
-        if (error && error.response.status === 401) {
+        if (error && error.response.status === 401 || error?.status === 401) {
             router.push('/login')
         } else {
             router.push('/schedules');
