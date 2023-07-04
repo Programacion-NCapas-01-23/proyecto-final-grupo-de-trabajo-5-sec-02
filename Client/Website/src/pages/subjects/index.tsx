@@ -7,6 +7,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "@/state/store";
 import {fetchSubjects} from "@/state/thunks/subjectThunk";
 import {useRouter} from "next/navigation";
+import Link from "next/link";
 
 const {Title} = Typography;
 const columns: ColumnsType<Subject> = [
@@ -30,8 +31,8 @@ const columns: ColumnsType<Subject> = [
         key: 'action',
         render: (_, record) => (
             <Space size="middle">
-                <a>Modificar</a>
-                <a>Eliminar</a>
+                <Link href={`/subjects/${record.code}`}>Modificar</Link>
+                <Link href={''} style={{color: '#DF2935'}}>Eliminar</Link>
             </Space>
         ),
     },

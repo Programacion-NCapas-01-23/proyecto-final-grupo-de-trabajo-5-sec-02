@@ -4,7 +4,6 @@ import {RootState} from "@/state/store";
 import {useAppDispatch} from "@/hooks/reduxHooks";
 import {useRouter} from "next/router";
 import {fetchCareers} from "@/state/thunks/careerThunk";
-import CareerForm from "@/pages/careers/new";
 import SubjectForm from "@/pages/subjects/new";
 
 const Page = () => {
@@ -17,11 +16,10 @@ const Page = () => {
     useEffect(() => {
         if (slug && !Array.isArray(slug)) {
             setIdentity(slug);
-            console.log(identity)
         }
     }, [slug])
 
-    const subject = useSelector((state: RootState) => state.subject.data.find(subject => subject.id === identity));
+    const subject = useSelector((state: RootState) => state.subject.data.find(subject => subject.code === identity));
 
     useEffect(() => {
         dispatch(fetchCareers())

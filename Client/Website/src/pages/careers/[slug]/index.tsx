@@ -16,7 +16,6 @@ const Page = () => {
     useEffect(() => {
         if (slug && !Array.isArray(slug)) {
             setIdentity(slug);
-            console.log(identity)
         }
     }, [slug])
 
