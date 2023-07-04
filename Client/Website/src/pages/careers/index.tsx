@@ -24,7 +24,7 @@ const columns: ColumnsType<CareerPreview> = [
         key: 'action',
         render: (_, record) => (
             <Space size="middle">
-                <Link href={`/${record.id}`}>Modificar</Link>
+                <Link href={`/careers/${record.id}`}>Modificar</Link>
                 <Link href={''} style={{color: '#DF2935'}}>Eliminar</Link>
             </Space>
         ),

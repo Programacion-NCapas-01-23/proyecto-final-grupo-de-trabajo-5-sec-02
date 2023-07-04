@@ -27,9 +27,9 @@ const Page = () => {
     }, [dispatch]);
 
     return (
-        <div>
+        <>
             <CareerForm career={career}/>
-        </div>
+        </>
     );
 };
 

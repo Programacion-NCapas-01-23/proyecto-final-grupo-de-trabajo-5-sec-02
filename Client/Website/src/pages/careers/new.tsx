@@ -84,7 +84,11 @@ const CareerForm = ({career}: CareerFormProps) => {
                 borderRadius: 10,
 
             }}>
-                <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Carrera</Title>
+
+                {
+                    career ? <Title style={{color: '#275DAD', alignSelf: "center"}}>Editar Carrera</Title> :
+                        <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Carrera</Title>
+                }
                 <Form
                     name="newCareer"
                     form={form}
