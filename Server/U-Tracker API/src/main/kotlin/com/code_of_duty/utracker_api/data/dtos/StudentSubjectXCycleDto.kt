@@ -4,6 +4,5 @@ data class StudentSubjectXCycleDto (
     val code: String,
     val name: String,
     val uv: Int,
-    val estimateGrade: Int?,
     val prerequisiteID: List<Int>?
 )

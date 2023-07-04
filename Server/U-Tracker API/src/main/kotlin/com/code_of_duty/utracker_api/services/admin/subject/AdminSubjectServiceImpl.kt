@@ -68,7 +68,6 @@ class AdminSubjectServiceImpl(
                 code = subject.code,
                 name = subject.name,
                 uv = subject.uv,
-                estimateGrade = subject.estimateGrade,
                 cycleRelation = cycleRelation
             )
         }
@@ -80,9 +79,6 @@ class AdminSubjectServiceImpl(
                 name = it.name,
                 uv = it.uv
             )
-            if (it.estimateGrade != null) {
-                newSubject.estimateGrade = it.estimateGrade
-            }
             subjectDao.save(newSubject)
             it.cycleRelation?.forEach {cycleRelationDto ->
                 val cycle = cycleDao.findById(UUID.fromString(cycleRelationDto.id)).orElse(null)
@@ -124,7 +120,6 @@ class AdminSubjectServiceImpl(
 
         subjectToUpdate.name = subject.name
         subjectToUpdate.uv = subject.uv
-        subjectToUpdate.estimateGrade = subject.estimateGrade ?: subjectToUpdate.estimateGrade
 
         // Update subjectPerCycles if needed
         subject.cycleRelation?.forEach {

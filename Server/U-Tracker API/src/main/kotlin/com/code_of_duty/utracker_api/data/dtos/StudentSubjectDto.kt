@@ -6,6 +6,5 @@ data class StudentSubjectDto (
     val correlative: Int,
     val name: String,
     val uv: Int,
-    val estimateGrade: Int?,
     val prerequisiteID: List<Int>?
 )

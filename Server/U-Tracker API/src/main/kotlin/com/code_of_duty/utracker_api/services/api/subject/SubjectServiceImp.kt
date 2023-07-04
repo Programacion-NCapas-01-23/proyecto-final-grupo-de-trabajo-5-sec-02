@@ -1,9 +1,9 @@
 package com.code_of_duty.utracker_api.services.api.subject
 
 import com.code_of_duty.utracker_api.data.dao.*
-import com.code_of_duty.utracker_api.data.dtos.AssesmentDto
 import com.code_of_duty.utracker_api.data.dtos.CycleDto
 import com.code_of_duty.utracker_api.data.dtos.CycleRelationDto
+import com.code_of_duty.utracker_api.data.dtos.RemainingAssessmentDto
 import com.code_of_duty.utracker_api.data.dtos.SubjectDto
 import com.code_of_duty.utracker_api.data.enums.SubjectStatus
 import com.code_of_duty.utracker_api.data.models.Assessment
@@ -11,11 +11,13 @@ import com.code_of_duty.utracker_api.data.models.Subject
 import com.code_of_duty.utracker_api.data.models.SubjectPerStudentCycle
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Component
+import java.math.BigDecimal
+import java.time.LocalDate
 
 @Component
 class SubjectServiceImp(
     private val subjectDao: SubjectDao,
-    private val assesmentDao: AssesmentDao,
+    private val assessmentDao: AssesmentDao,
     private val subjectPerStudentCycleDao: SubjectPerStudentCycleDao,
     private val cycleDao: CycleDao,
     private val studentCycleDao: StudentCycleDao
@@ -51,13 +53,12 @@ class SubjectServiceImp(
                 code = subject.code,
                 name = subject.name,
                 uv = subject.uv,
-                estimateGrade = subject.estimateGrade,
                 cycleRelation = cycleRelation
             )
         }
     }
 
-    override fun updateSubjectCompletion(studentCode: String, subjectCode: String, completed: Boolean, grade: Float?): Subject {
+    override fun updateSubjectCompletion(studentCode: String, subjectCode: String, state: SubjectStatus, grade: BigDecimal?): Subject {
         val studentCycles = studentCycleDao.findByStudentCode(studentCode)
 
         var matchingSubjectPerStudentCycle: SubjectPerStudentCycle? = null
@@ -73,7 +74,7 @@ class SubjectServiceImp(
             throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode and student code: $studentCode")
         }
 
-        matchingSubjectPerStudentCycle.status = if (completed) SubjectStatus.APPROVED else SubjectStatus.IN_PROGRESS
+        matchingSubjectPerStudentCycle.status = state
 
         if (grade != null) {
             matchingSubjectPerStudentCycle.grade = grade
@@ -85,62 +86,52 @@ class SubjectServiceImp(
         return matchingSubjectPerStudentCycle.subject
     }
 
-    override fun setAssessment(subjectCode: String, assessmentDto: AssesmentDto): Subject {
+    override fun setAssessment(subjectCode: String, name: String, percentage: Int, date: LocalDate, grade: BigDecimal?): Subject {
+        val subjectPerStudentCycleList = subjectPerStudentCycleDao.findBySubjectCode(subjectCode)
+        val subjectPerStudentCycle = subjectPerStudentCycleList.firstOrNull()
+            ?: throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode")
 
-        val subject = subjectDao.findById(subjectCode)
-            .orElseThrow { EntityNotFoundException("Subject not found with id: $subjectCode") }
         val assessment = Assessment(
-            name = assessmentDto.name,
-            percentage = assessmentDto.percentage,
-            date = assessmentDto.date,
-            grade = assessmentDto.grade,
-            subject = subject
+            name = name,
+            percentage = percentage,
+            date = date,
+            grade = grade,
+            subjectPerStudentCycle = subjectPerStudentCycle
         )
-        assesmentDao.save(assessment)
-        return subject
+        assessmentDao.save(assessment)
+
+        return subjectPerStudentCycle.subject
     }
 
+    override fun calculateEstimateGrades(subjectCode: String): List<RemainingAssessmentDto> {
+        val subjectPerStudentCycle = subjectPerStudentCycleDao.findBySubjectCode(subjectCode)
+            .firstOrNull() ?: throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode")
 
-    override fun calculateEstimateGrades(code: String, assessment: List<Assessment>): List<Double> {
-        val subject = subjectDao.findByCode(code)
+        val assessments = assessmentDao.findBySubjectPerStudentCycle(subjectPerStudentCycle)
+        val estimateGrade = subjectPerStudentCycleDao.getEstimateGradeBySubjectCode(subjectCode)
 
-        var total = 0.0
-        var totalPercentage = 0
-        var totalAssessments = 0
-
-        for (assessment in assessment) {
-            total += assessment.grade * assessment.percentage
-            totalAssessments++
+        val totalPercentageAchieved = assessments.fold(BigDecimal.ZERO) { acc, assessment ->
+            acc + (assessment.grade?.multiply(assessment.percentage.toBigDecimal()) ?: BigDecimal.ZERO)
         }
 
-        val estimateGrade = if (totalPercentage != 0) {
-            // Calculate the estimate grade if there are assessments without grades
-            total / totalPercentage
-        } else {
-            // If all assessments have grades, use the total as the estimate grade
-            total
+        val remainingPercentageNeeded = estimateGrade?.minus(totalPercentageAchieved.toDouble()) ?: BigDecimal.ZERO
+
+
+        if (estimateGrade != null && totalPercentageAchieved >= estimateGrade.toBigDecimal()) {
+            // Already passed the subject
+            return listOf(RemainingAssessmentDto("You already passed the subject", null))
         }
 
-        val passingGrade = 6.0
-        val remainingGrade = passingGrade - estimateGrade
+        val remainingAssessments = assessments.filter { it.grade == null }
+        val remainingTotalPercentage = remainingAssessments.sumOf { it.percentage }
 
-        val gradeNeededPerAssessment = mutableListOf<Double>()
-
-        if (remainingGrade > 0) {
-            // Calculate the grade needed in the remaining assessments
-            val remainingAssessments = assessment.filter { false }
-            val totalAssessments = remainingAssessments.size
-
-            if (totalAssessments > 0) {
-                val gradeNeeded = remainingGrade * totalAssessments
-                val remainingGradeNeeded = gradeNeeded / totalAssessments
-
-                for (i in 1..totalAssessments) {
-                    gradeNeededPerAssessment.add(remainingGradeNeeded)
-                }
-            }
+        val estimateGrades = remainingAssessments.map { assessment ->
+            val percentageNeeded = (assessment.percentage.toDouble() / remainingTotalPercentage) * remainingPercentageNeeded.toDouble()
+            val gradeNeeded = (percentageNeeded / assessment.percentage.toDouble()) * 100.0
+            RemainingAssessmentDto(assessment.name, gradeNeeded.toBigDecimal())
         }
-        return gradeNeededPerAssessment
+
+        return estimateGrades
     }
 
 }

@@ -283,6 +283,43 @@ class AdminSubjectController(
         )
     }
 
+    @Operation(
+        summary = "Add prerequisites",
+        description = "Add prerequisites to the database",
+        security = [SecurityRequirement(name = "AdminAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Prerequisites added successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorsDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            )
+        ]
+    )
     @PostMapping("/addPrerequisite")
     @SecurityRequirement(name = "AdminAuth")
     fun addPrerequisite(
