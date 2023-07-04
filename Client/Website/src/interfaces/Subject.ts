@@ -1,7 +1,7 @@
-type cycleRelation = [{
+type cycleRelation = {
     id: string,
     correlative: number,
-}]
+}
 
 export interface Subject {
     id?: string;
@@ -9,6 +9,6 @@ export interface Subject {
     estimatedGrade?: number;
     name: string;
     uv: number;
-    cycleRelation?: cycleRelation;
+    cycleRelation?: cycleRelation[];
 }
 

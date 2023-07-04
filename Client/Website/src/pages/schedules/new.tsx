@@ -53,7 +53,7 @@ const ScheduleForm = () => {
             classTimeId,
         };
         await dispatch(createSchedule(scheduleData));
-        if (error!.response.status === 401) {
+        if (error && error.response.status === 401) {
             router.push('/login')
         } else {
             router.push('/schedules');

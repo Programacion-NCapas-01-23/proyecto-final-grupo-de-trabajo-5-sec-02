@@ -55,7 +55,7 @@ const CycleForm = () => {
             pensumId
         };
         await dispatch(createCycle(newCycle));
-        if (error!.response.status === 401) {
+        if (error && error.response.status === 401) {
             router.push('/login')
         } else {
             router.push('/pensums');
