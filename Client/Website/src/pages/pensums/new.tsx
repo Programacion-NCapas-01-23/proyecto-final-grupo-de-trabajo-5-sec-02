@@ -30,7 +30,7 @@ const PensumForm = ({pensum}: PensumFormProps) => {
     })
 
     useEffect(() => {
-        if (error && error.response.status === 401) {
+        if (error && error.response.status === 401 || error?.status === 401) {
             router.push('/login')
         }
     }, [error])
@@ -53,14 +53,14 @@ const PensumForm = ({pensum}: PensumFormProps) => {
         };
         if (pensum) {
             await dispatch(createPensum(newPensum));
-            if (error!.response.status === 401) {
+            if (error && error.response.status === 401 || error?.status === 401) {
                 router.push('/login')
             } else {
                 router.push('/pensums');
             }
         } else {
             await dispatch(createPensum(newPensum));
-            if (error!.response.status === 401) {
+            if (error && error.response.status === 401 || error?.status === 401) {
                 router.push('/login')
             } else {
                 router.push('/pensums');

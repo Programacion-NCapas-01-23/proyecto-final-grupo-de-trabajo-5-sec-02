@@ -1,4 +1,4 @@
-import {Cycle, CyclePreview} from "@/interfaces/Cycle";
+import {Cycle, CyclePreview, CycleResponse} from "@/interfaces/Cycle";
 import {AppDispatch, AppThunk} from "@/state/store";
 import {
     createCycleFailure,
@@ -16,10 +16,9 @@ export const fetchCycles = (): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(fetchCyclesStart());
-            const careers = await apiService.get<Cycle[]>(routes.cycle.all);
-            dispatch(fetchCyclesSuccess(careers));
+            const cycles = await apiService.get<CycleResponse[]>(routes.cycle.all);
+            dispatch(fetchCyclesSuccess(cycles));
         } catch (error: any) {
-            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
@@ -36,10 +35,9 @@ export const createCycle = (cycle: CyclePreview): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(createCycleStart());
-            const createdCycle = await apiService.post<Cycle>(routes.cycle.add, [cycle]);
+            const createdCycle = await apiService.post<CyclePreview>(routes.cycle.add, [cycle]);
             dispatch(createCycleSuccess(createdCycle));
         } catch (error: any) {
-            // @ts-ignore
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {

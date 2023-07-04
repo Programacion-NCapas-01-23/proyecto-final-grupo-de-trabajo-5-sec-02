@@ -28,7 +28,7 @@ const FacultyForm = ({faculty}: FacultyFormProps) => {
     const error = useSelector((state: RootState) => state.faculty.error);
 
     useEffect(() => {
-        if (error && error.response.status === 401) {
+        if (error && error.response.status === 401 || error?.status === 401) {
             router.push('/login')
         }
     }, [error])
@@ -48,14 +48,14 @@ const FacultyForm = ({faculty}: FacultyFormProps) => {
         };
         if (faculty) {
             await dispatch(updateFaculty({...faculty, ...facultyData}));
-            if (error!.response.status === 401) {
+            if (error!.response.status === 401 || error?.status === 401) {
                 router.push('/login')
             } else {
                 router.push('/faculties');
             }
         } else {
             await dispatch(createFaculty(facultyData));
-            if (error!.response.status === 401) {
+            if (error!.response.status === 401 || error?.status === 401) {
                 router.push('/login')
             } else {
                 router.push('/faculties');

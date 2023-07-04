@@ -1,8 +1,10 @@
 import InitialState, {ErrorResponse} from "@/interfaces/InitialState";
-import {Cycle} from "@/interfaces/Cycle";
+import {Cycle, CyclePreview, CycleResponse} from "@/interfaces/Cycle";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-const initialState: InitialState<Cycle> = {
+type CycleType = CyclePreview | CycleResponse;
+
+const initialState: InitialState<CycleType> = {
     data: [],
     loading: false,
     error: null,
@@ -16,7 +18,7 @@ const cycleSlice = createSlice({
             state.loading = true;
             state.error = null;
         },
-        fetchCyclesSuccess(state, action: PayloadAction<Cycle[]>) {
+        fetchCyclesSuccess(state, action: PayloadAction<CycleResponse[]>) {
             state.data = action.payload;
             state.loading = false;
             state.error = null;
@@ -29,7 +31,7 @@ const cycleSlice = createSlice({
             state.loading = true;
             state.error = null;
         },
-        createCycleSuccess(state, action: PayloadAction<Cycle>) {
+        createCycleSuccess(state, action: PayloadAction<CyclePreview>) {
             state.data.push(action.payload);
             state.loading = false;
             state.error = null;
@@ -42,7 +44,7 @@ const cycleSlice = createSlice({
             state.loading = true;
             state.error = null;
         },
-        updateCycleSuccess(state, action: PayloadAction<Cycle>) {
+        updateCycleSuccess(state, action: PayloadAction<CyclePreview>) {
             const updatedCycle = action.payload;
             const index = state.data.findIndex((faculty) => faculty.id === updatedCycle.id);
             if (index !== -1) {
@@ -59,7 +61,7 @@ const cycleSlice = createSlice({
             state.loading = true;
             state.error = null;
         },
-        deleteCycleSuccess(state, action: PayloadAction<Cycle>) {
+        deleteCycleSuccess(state, action: PayloadAction<CyclePreview>) {
             const deletedCycle = action.payload;
             const index = state.data.findIndex((faculty) => faculty.id === deletedCycle.id);
             if (index !== -1) {
