@@ -6,11 +6,10 @@ import com.code_of_duty.utracker_api.data.enums.CycleType
 import com.code_of_duty.utracker_api.data.enums.SubjectStatus
 import com.code_of_duty.utracker_api.data.models.*
 import com.code_of_duty.utracker_api.utils.ExceptionNotFound
-import com.google.ortools.sat.CpModel
-import com.google.ortools.sat.CpSolver
-import com.google.ortools.sat.CpSolverStatus
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 import java.lang.IllegalArgumentException
+import java.math.BigDecimal
 import java.util.*
 
 @Component
@@ -44,7 +43,6 @@ class CycleServiceImp(
                             name = subject.name,
                             correlative = correlativeList[0],
                             uv = subject.uv,
-                            estimateGrade = subject.estimateGrade,
                             prerequisiteID = prerequisiteIDs
                         )
                     }
@@ -63,7 +61,7 @@ class CycleServiceImp(
         studentCycleDao.save(newStudentCycle)
     }
 
-    override fun addSubjectToStudentPerCycle(studentCycleId: UUID, subjectCode: String) {
+    override fun addSubjectToStudentPerCycle(studentCycleId: UUID, subjectCode: String, estimateGrade: BigDecimal?) {
         val studentCycle = studentCycleDao.findById(studentCycleId)
             .orElseThrow { ExceptionNotFound("Student cycle not found") }
 
@@ -83,7 +81,8 @@ class CycleServiceImp(
 
         val subjectPerStudentCycle = SubjectPerStudentCycle(
             status = SubjectStatus.IN_PROGRESS,
-            grade = 0.0f,
+            grade = 0.0.toBigDecimal(),
+            estimateGrade = estimateGrade,
             studentCycle = studentCycle,
             subject = subject
         )
@@ -92,11 +91,10 @@ class CycleServiceImp(
         subjectPerStudentCycleDao.save(subjectPerStudentCycle)
     }
 
-
+    @Transactional
     override fun removeSubjectFromStudentPerCycle(studentCycleId: UUID, subjectCode: String) {
         val subjectPerStudentCycle = subjectPerStudentCycleDao.findByStudentCycleAndSubjectCode(studentCycleId, subjectCode)
             ?: throw ExceptionNotFound("Subject not found in student cycle")
-
         subjectPerStudentCycleDao.delete(subjectPerStudentCycle)
     }
 
@@ -111,7 +109,6 @@ class CycleServiceImp(
                     code = subject.code,
                     name = subject.name,
                     uv = subject.uv,
-                    estimateGrade = subject.estimateGrade,
                     prerequisiteID = prerequisiteID // Set prerequisites if needed
                 )
             }
@@ -125,7 +122,6 @@ class CycleServiceImp(
             )
         }
     }
-
 
     override fun deleteStudentCycle(studentCode: String, studentCycleId: UUID) {
         val student = studentDao.findByCode(studentCode) ?: throw ExceptionNotFound("Student not found")

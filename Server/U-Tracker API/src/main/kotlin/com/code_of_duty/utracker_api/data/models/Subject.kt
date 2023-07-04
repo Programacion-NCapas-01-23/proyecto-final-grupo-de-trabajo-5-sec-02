@@ -12,15 +12,11 @@ data class Subject(
     val code: String,
     var name: String,
     var uv: Int,
-    var estimateGrade: Int = 6,
-    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
-    val assessments: MutableList<Assessment> = mutableListOf(),
-
     @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
     @JsonIgnore
     val subjectPerCycles: MutableList<SubjectPerCycle> = mutableListOf()
 ) {
     override fun toString(): String {
-        return "Subject(code='$code', name='$name', uv=$uv, estimateGrade=$estimateGrade, assessments=$assessments)"
+        return "Subject(code='$code', name='$name', uv=$uv)"
     }
 }

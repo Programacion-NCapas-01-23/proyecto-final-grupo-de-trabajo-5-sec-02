@@ -15,14 +15,11 @@ interface SubjectPerStudentCycleDao : JpaRepository<SubjectPerStudentCycle, UUID
         @Param("studentCycleId") studentCycleId: UUID,
         @Param("subjectCode") subjectCode: String
     ): SubjectPerStudentCycle?
-
-    fun findBySubjectCodeAndStudentCycle(subjectCode: String, studentCycleId: UUID): SubjectPerStudentCycle?
-
     @Query("SELECT s FROM SubjectPerStudentCycle s JOIN FETCH s.subject WHERE s.studentCycle.studentCycleId = :studentId")
     fun getSubjectStatusesForStudent(studentId: String): List<SubjectPerStudentCycle>
-
     fun findBySubjectCodeAndStudentCycle(subjectCode: String, studentCycle: StudentCycle): SubjectPerStudentCycle?
     fun findByStudentCycleAndSubject(studentCycle: StudentCycle, subject: Subject): SubjectPerStudentCycle?
-
     fun findBySubjectCode(subjectCode: String): List<SubjectPerStudentCycle>
+    fun getEstimateGradeBySubjectCode(subjectCode: String): Double?
+
 }

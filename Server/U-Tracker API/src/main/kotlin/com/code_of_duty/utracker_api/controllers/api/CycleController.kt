@@ -80,7 +80,7 @@ class CycleController(
     @Operation(
         summary = "Get all cycles created by the student",
         description = "Get all student cycles",
-        security = [SecurityRequirement(name = "ApiAuth")],
+        security = [SecurityRequirement(name = "APIAuth")],
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -137,7 +137,7 @@ class CycleController(
     @Operation(
         summary = "Create a new cycle",
         description = "Create a new cycle",
-        security = [SecurityRequirement(name = "ApiAuth")],
+        security = [SecurityRequirement(name = "APIAuth")],
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -250,7 +250,8 @@ class CycleController(
         return try {
             cycleService.addSubjectToStudentPerCycle(
                 studentCycleId = UUID.fromString(body.studentCycleId),
-                subjectCode = body.subjectCode
+                subjectCode = body.subjectCode,
+                estimateGrade = body.estimateGrade
             )
             ResponseEntity(
                 MessageDto("Subject added successfully"),
@@ -263,6 +264,49 @@ class CycleController(
         }
     }
 
+    @Operation(
+        summary = "Delete a subject from cycle",
+        description = "Delete a subject from a student cycle",
+        security = [SecurityRequirement(name = "APIAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Subject deleted successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Not Found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
     @DeleteMapping("/deleteSubject")
     @SecurityRequirement(name = "APIAuth")
     fun deleteSubjectFromStudentCycle(
@@ -278,6 +322,70 @@ class CycleController(
                 MessageDto("Subject deleted successfully"),
                 HttpStatus.OK
             )
+        } catch (e: UnauthorizedException) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        } catch (e: ExceptionNotFound) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+        }
+    }
+
+    @Operation
+    (
+        summary = "Delete a cycle",
+        description = "Delete a cycle",
+        security = [SecurityRequirement(name = "APIAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Cycle deleted successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Not Found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = MessageDto::class
+                        )
+                    )
+                ]
+            )
+        ]
+    )
+    @DeleteMapping("/deleteCycle")
+    @SecurityRequirement(name = "APIAuth")
+    fun deleteStudentCycle(
+        request: HttpServletRequest,
+        @RequestBody body: StudentCycleDeleteDto
+    ): ResponseEntity<Any> {
+        val studentCode = generalUtils.extractJWT(request)
+        return try {
+            cycleService.deleteStudentCycle(
+                studentCode = studentCode,
+                studentCycleId = body.studentCycleId
+            )
+            ResponseEntity.ok(MessageDto("Cycle deleted successfully"))
         } catch (e: UnauthorizedException) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         } catch (e: ExceptionNotFound) {

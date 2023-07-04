@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.ListCrudRepository
 
 interface SubjectDao : JpaRepository<Subject, String> {
-    @EntityGraph(attributePaths = ["assessments"])
+    @EntityGraph(attributePaths = ["subjectPerCycles"])
     fun findByCode(code: String): Subject?
     fun findByName(name: String): Subject?
 
