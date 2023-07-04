@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useAppDispatch} from '@/hooks/reduxHooks';
 import {Subject} from "@/interfaces/Subject";
 import {createSubject} from "@/state/thunks/subjectThunk";
@@ -7,13 +7,23 @@ import {useRouter} from "next/navigation";
 import {useSelector} from "react-redux";
 import {RootState} from "@/state/store";
 
+interface SubjectFormProps {
+    subject?: Subject;
+}
+
 const {Title} = Typography;
 
-const SubjectForm = () => {
+const SubjectForm = ({subject}: SubjectFormProps) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
     const error = useSelector((state: RootState) => state.pensum.error);
+
+    useEffect(() => {
+        if (subject) {
+            form.setFieldsValue(subject);
+        }
+    }, [subject, form]);
 
     const handleSubmit = async (values: Subject) => {
         const {code, name, uv} = values;
@@ -23,13 +33,23 @@ const SubjectForm = () => {
             name,
             uv,
         };
-        console.log(newSubject);
 
-        await dispatch(createSubject(newSubject));
-        if (error!.response.status === 401) {
-            router.push('/login')
+        if (subject) {
+            await dispatch(createSubject(newSubject));
+            if (error!.response.status === 401) {
+                router.push('/login')
+            } else {
+                router.push('/subjects');
+            }
+
         } else {
-            router.push('/subjects');
+            await dispatch(createSubject(newSubject));
+            if (error!.response.status === 401) {
+                router.push('/login')
+            } else {
+                router.push('/subjects');
+            }
+
         }
     };
 
@@ -51,7 +71,10 @@ const SubjectForm = () => {
                 padding: '32px',
 
             }}>
-                <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Materia</Title>
+                {
+                    subject ? <Title style={{color: '#275DAD', alignSelf: "center"}}>Editar Materia</Title> :
+                        <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Materia</Title>
+                }
                 <Form
                     name="newSubject"
                     form={form}
