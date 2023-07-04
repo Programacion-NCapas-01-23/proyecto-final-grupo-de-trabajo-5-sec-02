@@ -264,4 +264,67 @@ class SubjectController {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(MessageDto("Internal server error"))
         }
     }
+
+    @Operation(
+        summary = "Calculate cum",
+        description = "Calculate cum for student",
+        security = [SecurityRequirement(name = "APIAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Cum calculated",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = CumDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Student not found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Internal server error",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            )
+        ]
+    )
+    @GetMapping("/calculateCum")
+    @SecurityRequirement(name = "APIAuth")
+    fun calculateCum(
+        request: HttpServletRequest
+    ): ResponseEntity<Any> {
+        val studentCode = generalUtils.extractJWT(request)
+        return try {
+            val cum = subjectService.calculateCum(studentCode)
+            ResponseEntity.ok(cum)
+        } catch (e: EntityNotFoundException) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageDto("Student not found"))
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(MessageDto("Internal server error"))
+        }
+    }
 }

@@ -22,4 +22,7 @@ interface SubjectPerStudentCycleDao : JpaRepository<SubjectPerStudentCycle, UUID
     fun findBySubjectCode(subjectCode: String): List<SubjectPerStudentCycle>
     fun getEstimateGradeBySubjectCode(subjectCode: String): Double?
 
+    @Query("SELECT s FROM SubjectPerStudentCycle s WHERE s.studentCycle.student.code = :studentCode")
+    fun findByStudentCode(studentCode: String): List<SubjectPerStudentCycle>
+
 }

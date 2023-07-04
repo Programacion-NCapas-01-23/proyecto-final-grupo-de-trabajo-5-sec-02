@@ -1,10 +1,7 @@
 package com.code_of_duty.utracker_api.services.api.subject
 
 import com.code_of_duty.utracker_api.data.dao.*
-import com.code_of_duty.utracker_api.data.dtos.CycleDto
-import com.code_of_duty.utracker_api.data.dtos.CycleRelationDto
-import com.code_of_duty.utracker_api.data.dtos.RemainingAssessmentDto
-import com.code_of_duty.utracker_api.data.dtos.SubjectDto
+import com.code_of_duty.utracker_api.data.dtos.*
 import com.code_of_duty.utracker_api.data.enums.SubjectStatus
 import com.code_of_duty.utracker_api.data.models.Assessment
 import com.code_of_duty.utracker_api.data.models.Subject
@@ -20,7 +17,8 @@ class SubjectServiceImp(
     private val assessmentDao: AssesmentDao,
     private val subjectPerStudentCycleDao: SubjectPerStudentCycleDao,
     private val cycleDao: CycleDao,
-    private val studentCycleDao: StudentCycleDao
+    private val studentCycleDao: StudentCycleDao,
+    private val studentDao: StudentDao
 ) : SubjectService {
 
     override fun getAllSubjects(
@@ -133,5 +131,29 @@ class SubjectServiceImp(
 
         return estimateGrades
     }
+
+    override fun calculateCum(studentCode: String): CumDto {
+        val subjectPerStudentCycles = subjectPerStudentCycleDao.findByStudentCode(studentCode)
+        var totalMeritUnits = BigDecimal.ZERO
+        var totalValueUnits = BigDecimal.ZERO
+
+        for (subjectPerStudentCycle in subjectPerStudentCycles) {
+            val grade = subjectPerStudentCycle.grade ?: BigDecimal.ZERO
+            val valueUnits = subjectPerStudentCycle.subject.uv
+
+            val meritUnits = grade * valueUnits.toBigDecimal()
+            totalMeritUnits += meritUnits
+            totalValueUnits += valueUnits.toBigDecimal()
+        }
+
+        val cum = if (totalValueUnits != BigDecimal.ZERO) {
+            totalMeritUnits / totalValueUnits
+        } else {
+            BigDecimal.ZERO
+        }
+
+        return CumDto(cum)
+    }
+
 
 }
