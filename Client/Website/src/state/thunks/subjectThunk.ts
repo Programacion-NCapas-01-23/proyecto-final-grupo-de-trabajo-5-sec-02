@@ -10,6 +10,7 @@ import {
 } from "@/state/slices/subjectSlice";
 import apiService from "@/api/appService";
 import {routes} from "@/api/routes";
+import {ErrorResponse} from "@/interfaces/InitialState";
 
 export const fetchSubjects = (): AppThunk => {
     return async (dispatch: AppDispatch) => {
@@ -18,7 +19,14 @@ export const fetchSubjects = (): AppThunk => {
             const subjects = await apiService.get<Subject[]>(routes.subject.all);
             dispatch(fetchSubjectsSuccess(subjects));
         } catch (error) {
-            dispatch(fetchSubjectsFailure(error.message));
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(fetchSubjectsFailure(receivedError));
         }
     };
 };
@@ -30,7 +38,14 @@ export const createSubject = (subject: Subject): AppThunk => {
             const createdSubject = await apiService.post<Subject>(routes.subject.add, [subject]);
             dispatch(createSubjectSuccess(createdSubject));
         } catch (error) {
-            dispatch(createSubjectFailure(error.message));
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(createSubjectFailure(receivedError));
         }
     };
 };

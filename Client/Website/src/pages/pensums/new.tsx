@@ -7,14 +7,20 @@ import {fetchCareers} from "@/state/thunks/careerThunk";
 import {useSelector} from "react-redux";
 import {RootState} from "@/state/store";
 import {useRouter} from "next/navigation";
+import {CareerPreview} from "@/interfaces/Career";
+
+interface PensumFormProps {
+    pensum?: CareerPreview;
+}
 
 const {Title} = Typography;
 
-const PensumForm = () => {
+const PensumForm = ({pensum}: PensumFormProps) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
     const careers = useSelector((state: RootState) => state.career.data);
+    const error = useSelector((state: RootState) => state.pensum.error);
 
     const options: SelectProps['options'] = [];
     careers.map(career => {
@@ -25,29 +31,66 @@ const PensumForm = () => {
     })
 
     useEffect(() => {
+        if (error && error.response.status === 401) {
+            router.push('/login')
+        }
+    }, [error])
+
+    useEffect(() => {
+        if (pensum) {
+            form.setFieldsValue(pensum);
+        }
+    }, [pensum, form]);
+
+    useEffect(() => {
         dispatch(fetchCareers());
     }, [dispatch]);
 
     const handleSubmit = async (values: PensumPreview) => {
         const {plan, degreeId} = values;
-        console.log(values);
         const newPensum: PensumPreview = {
             plan,
             degreeId,
         };
-
-        try {
+        if (pensum) {
             await dispatch(createPensum(newPensum));
-            router.push('/pensums');
-        } catch (error) {
-            console.log('Creation error:', error);
+            if (error!.response.status === 401) {
+                router.push('/login')
+            } else {
+                router.push('/pensums');
+            }
+        } else {
+            await dispatch(createPensum(newPensum));
+            if (error!.response.status === 401) {
+                router.push('/login')
+            } else {
+                router.push('/pensums');
+            }
         }
     };
 
     return (
-        <div className="">
-            <div className="form-container">
-                <Title>Crear Pensum</Title>
+        <div style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            alignItems: "center",
+            justifyContent: "center",
+            width: '100%',
+            height: '100%',
+        }}>
+            <div style={{
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                minWidth: '360px',
+                background: '#FFFFFF',
+                padding: '32px',
+                borderRadius: 20,
+
+            }}>
+                {
+                    pensum ? <Title style={{color: '#275DAD', alignSelf: "center"}}>Editar Pensum</Title> :
+                        <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Pensum</Title>
+                }
                 <Form
                     name="newPensum"
                     form={form}
@@ -57,13 +100,15 @@ const PensumForm = () => {
                     initialValues={{remember: true}}
                     onFinish={handleSubmit}
                     autoComplete="off"
+                    layout="vertical"
                 >
                     <Form.Item
                         label="Plan"
                         name="plan"
                         rules={[{required: true, message: 'Ingresa el plan del pensum!'}]}
                     >
-                        <Input style={{width: 300}}/>
+                        <Input
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Form.Item
                         label="Carrera"
@@ -71,11 +116,16 @@ const PensumForm = () => {
                         rules={[{required: true, message: 'Selecciona una carrera!'}]}
                     >
                         <Select
-                            style={{width: 300}}
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
                             options={options}
+                            bordered={false}
                         />
                     </Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit" style={{
+                        borderRadius: '0',
+                        backgroundColor: '#275DAD',
+                        margin: '1rem 0',
+                    }}>
                         Submit
                     </Button>
                 </Form>

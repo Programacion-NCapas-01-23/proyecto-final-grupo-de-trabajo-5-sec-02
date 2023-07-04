@@ -1,4 +1,4 @@
-import InitialState from "@/interfaces/InitialState";
+import InitialState, {ErrorResponse} from "@/interfaces/InitialState";
 import {CareerPreview} from "@/interfaces/Career";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
@@ -21,7 +21,7 @@ const careerSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        fetchCareersFailure(state, action: PayloadAction<string>) {
+        fetchCareersFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -34,7 +34,7 @@ const careerSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        createCareerFailure(state, action: PayloadAction<string>) {
+        createCareerFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -52,7 +52,7 @@ const careerSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        updateCareerFailure(state, action: PayloadAction<string>) {
+        updateCareerFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -69,7 +69,7 @@ const careerSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        deleteCareerFailure(state, action: PayloadAction<string>) {
+        deleteCareerFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },

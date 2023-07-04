@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useAppDispatch} from '@/hooks/reduxHooks';
 import {CyclePreview} from "@/interfaces/Cycle";
 import {createCycle} from "@/state/thunks/cycleThunk";
@@ -30,6 +30,7 @@ const CycleForm = () => {
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
     const pensums = useSelector((state: RootState) => state.pensum.data);
+    const error = useSelector((state: RootState) => state.cycle.error);
 
     const pensumSelect: SelectProps['options'] = [];
     pensums.map(pensum => {
@@ -39,6 +40,12 @@ const CycleForm = () => {
         });
     })
 
+    useEffect(() => {
+        if (error && error.response.status === 401) {
+            router.push('/login')
+        }
+    }, [error])
+
     const handleSubmit = async (values: CyclePreview) => {
         const {type, name, pensumId} = values;
         console.log(values);
@@ -47,18 +54,33 @@ const CycleForm = () => {
             name,
             pensumId
         };
-        try {
-            await dispatch(createCycle(newCycle));
+        await dispatch(createCycle(newCycle));
+        if (error!.response.status === 401) {
+            router.push('/login')
+        } else {
             router.push('/pensums');
-        } catch (error) {
-            console.log('Creation error:', error);
         }
     };
 
     return (
-        <div className="">
-            <div className="form-container">
-                <Title>Crear Ciclo</Title>
+        <div style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            alignItems: "center",
+            justifyContent: "center",
+            width: '100%',
+            height: '100%',
+        }}>
+            <div style={{
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                minWidth: '360px',
+                background: '#FFFFFF',
+                padding: '32px',
+                borderRadius: 20,
+
+            }}>
+                <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Ciclo</Title>
                 <Form
                     name="newCycle"
                     form={form}
@@ -68,13 +90,16 @@ const CycleForm = () => {
                     initialValues={{remember: true}}
                     onFinish={handleSubmit}
                     autoComplete="off"
+                    layout="vertical"
                 >
                     <Form.Item
                         label="Nombre"
                         name="name"
                         rules={[{required: true, message: 'Ingresa el nombre del ciclo!'}]}
                     >
-                        <Input style={{width: 300}} placeholder="Ciclo X"/>
+                        <Input
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
+                            placeholder="Ciclo X"/>
                     </Form.Item>
                     <Form.Item
                         label="Tipo"
@@ -82,8 +107,9 @@ const CycleForm = () => {
                         rules={[{required: true, message: 'Selecciona el tipo de ciclo!'}]}
                     >
                         <Select
-                            style={{width: 300}}
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
                             options={cycleTypeSelect}
+                            bordered={false}
                         />
                     </Form.Item>
                     <Form.Item
@@ -92,11 +118,16 @@ const CycleForm = () => {
                         rules={[{required: true, message: 'Selecciona el pensum al que pertenece!'}]}
                     >
                         <Select
-                            style={{width: 300}}
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
                             options={pensumSelect}
+                            bordered={false}
                         />
                     </Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit" style={{
+                        borderRadius: '0',
+                        backgroundColor: '#275DAD',
+                        margin: '1rem 0',
+                    }}>
                         Submit
                     </Button>
                 </Form>

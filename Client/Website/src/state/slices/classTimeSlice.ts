@@ -1,4 +1,4 @@
-import InitialState from "@/interfaces/InitialState";
+import InitialState, {ErrorResponse} from "@/interfaces/InitialState";
 import ClassTime from "@/interfaces/ClassTime";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
@@ -21,7 +21,7 @@ const classTimeSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        createClassTimeFailure(state, action: PayloadAction<string>) {
+        createClassTimeFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },

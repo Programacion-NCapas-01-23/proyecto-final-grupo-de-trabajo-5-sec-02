@@ -1,6 +1,6 @@
 import axios, {AxiosInstance} from "axios";
 
-export const baseURL: string = 'http://localhost:8080/admin';
+export const baseURL: string = 'http://20.127.25.48:8080/admin';
 
 const getAuthToken = () => {
     if (typeof window !== 'undefined') {

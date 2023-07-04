@@ -1,7 +1,6 @@
 import {AxiosRequestConfig, AxiosResponse} from "axios/index";
 import {api} from "@/api/routes";
 import {AxiosError} from "axios";
-import {useRouter} from "next/navigation";
 
 // Helper functions for different HTTP methods
 const apiService = {
@@ -9,11 +8,7 @@ const apiService = {
         return api.get(url, config)
             .then((response: AxiosResponse<T>) => response.data)
             .catch((error: AxiosError) => {
-                if (error.response?.status === 401) {
-                    const router = useRouter();
-                    router.push('/login');
-                }
-                throw error;
+                throw error
             });
     },
 
@@ -21,11 +16,7 @@ const apiService = {
         return api.post(url, data, config)
             .then((response: AxiosResponse<T>) => response.data)
             .catch((error: AxiosError) => {
-                if (error.response?.status === 401) {
-                    const router = useRouter();
-                    router.push('/login');
-                }
-                throw error;
+                throw error
             });
     },
 
@@ -33,11 +24,7 @@ const apiService = {
         return api.put(url, data, config)
             .then((response: AxiosResponse<T>) => response.data)
             .catch((error: AxiosError) => {
-                if (error.response?.status === 401) {
-                    const router = useRouter();
-                    router.push('/login');
-                }
-                throw error;
+                throw error
             });
     },
 
@@ -45,11 +32,7 @@ const apiService = {
         return api.patch(url, data, config)
             .then((response: AxiosResponse<T>) => response.data)
             .catch((error: AxiosError) => {
-                if (error.response?.status === 401) {
-                    const router = useRouter();
-                    router.push('/login');
-                }
-                throw error;
+                throw error
             });
     },
 
@@ -57,11 +40,7 @@ const apiService = {
         return api.delete(url, config)
             .then((response: AxiosResponse<T>) => response.data)
             .catch((error: AxiosError) => {
-                if (error.response?.status === 401) {
-                    const router = useRouter();
-                    router.push('/login');
-                }
-                throw error;
+                throw error
             });
     },
 };
