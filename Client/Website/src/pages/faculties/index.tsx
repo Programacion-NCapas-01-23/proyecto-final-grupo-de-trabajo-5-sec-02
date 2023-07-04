@@ -72,7 +72,7 @@ const Page = (): JSX.Element => {
                         >
                             <Meta title={faculty.name} description={faculty.description}/>
                             {/*<Button type="primary" onClick={() => router.push(`/faculties/${faculty.id}`)}>Modificar</Button>*/}
-                            <Button
+                            {/*<Button
                                 type="primary"
                                 onClick={() => router.push(`/faculties/${faculty.id}`)}
                                 style={{
@@ -82,7 +82,7 @@ const Page = (): JSX.Element => {
                                 }}
                             >
                                 Eliminar
-                            </Button>
+                            </Button>*/}
                         </Card>
                     ))
                 )}

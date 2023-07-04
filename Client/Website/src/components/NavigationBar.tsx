@@ -40,14 +40,6 @@ const items: MenuProps['items'] = [
     },
     {
         label: (
-            <Link href="/schedules">
-                Horarios
-            </Link>
-        ),
-        key: 'schedule',
-    },
-    {
-        label: (
             <Link href="/subjects">
                 Materias
             </Link>
@@ -95,7 +87,7 @@ export const NavigationBar = ({children}: { children: ReactNode }) => {
                 <Content
                     style={{
                         margin: 0,
-                        background: '#000000',
+                        background: '#0D1321',
                         display: 'flex',
                         flexFlow: 'column wrap',
                         alignItems: 'flex-start',

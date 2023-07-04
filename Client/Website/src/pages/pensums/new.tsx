@@ -7,10 +7,15 @@ import {fetchCareers} from "@/state/thunks/careerThunk";
 import {useSelector} from "react-redux";
 import {RootState} from "@/state/store";
 import {useRouter} from "next/navigation";
+import {CareerPreview} from "@/interfaces/Career";
+
+interface PensumFormProps {
+    career?: CareerPreview;
+}
 
 const {Title} = Typography;
 
-const PensumForm = () => {
+const PensumForm = ({pensum}: PensumFormProps) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
@@ -26,6 +31,12 @@ const PensumForm = () => {
     })
 
     useEffect(() => {
+        if (pensum) {
+            form.setFieldsValue(pensum);
+        }
+    }, [pensum, form]);
+
+    useEffect(() => {
         dispatch(fetchCareers());
     }, [dispatch]);
 
@@ -35,11 +46,20 @@ const PensumForm = () => {
             plan,
             degreeId,
         };
-        await dispatch(createPensum(newPensum));
-        if (error!.response.status === 401) {
-            router.push('/login')
+        if (pensum) {
+            await dispatch(createPensum(newPensum));
+            if (error!.response.status === 401) {
+                router.push('/login')
+            } else {
+                router.push('/pensums');
+            }
         } else {
-            router.push('/pensums');
+            await dispatch(createPensum(newPensum));
+            if (error!.response.status === 401) {
+                router.push('/login')
+            } else {
+                router.push('/pensums');
+            }
         }
     };
 
@@ -47,7 +67,6 @@ const PensumForm = () => {
         <div style={{
             display: 'flex',
             flexFlow: 'column wrap',
-            background: '#000000',
             alignItems: "center",
             justifyContent: "center",
             width: '100%',
@@ -61,7 +80,10 @@ const PensumForm = () => {
                 padding: '32px',
 
             }}>
-                <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Pensum</Title>
+                {
+                    pensum ? <Title style={{color: '#275DAD', alignSelf: "center"}}>Editar Pensum</Title> :
+                        <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Pensum</Title>
+                }
                 <Form
                     name="newPensum"
                     form={form}

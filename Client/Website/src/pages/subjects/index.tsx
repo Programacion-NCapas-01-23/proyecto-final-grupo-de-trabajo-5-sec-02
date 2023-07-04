@@ -32,7 +32,7 @@ const columns: ColumnsType<Subject> = [
         render: (_, record) => (
             <Space size="middle">
                 <Link href={`/subjects/${record.code}`}>Modificar</Link>
-                <Link href={''} style={{color: '#DF2935'}}>Eliminar</Link>
+                {/*<Link href={''} style={{color: '#DF2935'}}>Eliminar</Link>*/}
             </Space>
         ),
     },

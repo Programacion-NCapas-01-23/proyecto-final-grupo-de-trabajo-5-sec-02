@@ -69,7 +69,6 @@ const CareerForm = ({career}: CareerFormProps) => {
         <div style={{
             display: 'flex',
             flexFlow: 'column wrap',
-            background: '#000000',
             alignItems: "center",
             justifyContent: "center",
             width: '100%',

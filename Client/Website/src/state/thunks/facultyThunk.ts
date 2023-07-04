@@ -72,3 +72,27 @@ export const updateFaculty = (faculty: Faculty): AppThunk => {
         }
     }
 };
+
+/*
+export const deleteFaculty = (faculty: string): AppThunk => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            dispatch(updateFacultyStart());
+            const updatedFaculty = await apiService.delete(routes.faculties.delete, {
+                data: {
+                        [faculty],
+                    }
+            });
+            dispatch(updateFacultySuccess(updatedFaculty));
+        } catch (error) {
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(updateFacultyFailure(receivedError));
+        }
+    }
+};*/

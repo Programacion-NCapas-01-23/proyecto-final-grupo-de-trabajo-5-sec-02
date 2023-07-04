@@ -8,6 +8,7 @@ import {RootState} from "@/state/store";
 import {PensumPreview} from "@/interfaces/Pensum";
 import {fetchPensums} from "@/state/thunks/pensumThunk";
 import {fetchCareers} from "@/state/thunks/careerThunk";
+import Link from "next/link";
 
 const {Title} = Typography;
 
@@ -27,8 +28,8 @@ const columns: ColumnsType<PensumPreview> = [
         key: 'action',
         render: (_, record) => (
             <Space size="middle">
-                <a>Modificar</a>
-                <a>Eliminar</a>
+                <Link href={`/pensums/${record.id}`}>Modificar</Link>
+                {/*<Link href={''} style={{color: '#DF2935'}}>Eliminar</Link>*/}
             </Space>
         ),
     },
@@ -84,6 +85,30 @@ const Page = (): JSX.Element => {
                         }}
                 >
                     Agregar Ciclo
+                </Button>
+                <Button type="primary"
+                        onClick={() => router.push('/schedules/new')}
+                        style={{
+                            borderRadius: 0,
+                            backgroundColor: '#275DAD',
+                            margin: '1rem',
+                            padding: '0.5rem 1rem',
+                            height: 'auto',
+                        }}
+                >
+                    Agregar Horario
+                </Button>
+                <Button type="primary"
+                        onClick={() => router.push('/classTimes/new')}
+                        style={{
+                            borderRadius: 0,
+                            backgroundColor: '#275DAD',
+                            margin: '1rem',
+                            padding: '0.5rem 1rem',
+                            height: 'auto',
+                        }}
+                >
+                    Agregar Tiempo de Clase
                 </Button>
             </div>
             {loading ? (
