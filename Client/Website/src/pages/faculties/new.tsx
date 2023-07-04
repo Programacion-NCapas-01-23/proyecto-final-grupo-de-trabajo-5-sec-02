@@ -25,7 +25,13 @@ const FacultyForm = ({faculty}: FacultyFormProps) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
-    const error = useSelector((state: RootState) => state.pensum.error);
+    const error = useSelector((state: RootState) => state.faculty.error);
+
+    useEffect(() => {
+        if (error && error.response.status === 401) {
+            router.push('/login')
+        }
+    }, [error])
 
     useEffect(() => {
         if (faculty) {

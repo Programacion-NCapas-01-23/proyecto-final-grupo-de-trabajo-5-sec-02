@@ -20,7 +20,13 @@ const CareerForm = ({career}: CareerFormProps) => {
     const [form] = Form.useForm();
     const [facultyId, setFacultyId] = useState('');
     const faculties = useSelector((state: RootState) => state.faculty.data);
-    const error = useSelector((state: RootState) => state.pensum.error);
+    const error = useSelector((state: RootState) => state.career.error);
+
+    useEffect(() => {
+        if (error && error.response.status === 401) {
+            router.push('/login')
+        }
+    }, [error])
 
     const options: SelectProps['options'] = [];
     faculties.map(faculty => {
@@ -50,14 +56,15 @@ const CareerForm = ({career}: CareerFormProps) => {
 
         if (career) {
             await dispatch(updateCareer({...career, ...careerData}));
-            if (error!.response.status === 401) {
+            if (error && error.response.status === 401) {
                 router.push('/login')
             } else {
                 router.push('/careers');
             }
         } else {
             await dispatch(createCareer(careerData));
-            if (error!.response.status === 401) {
+            console.log(error)
+            if (error && error.response.status === 401) {
                 router.push('/login')
             } else {
                 router.push('/careers');

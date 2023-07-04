@@ -1,7 +1,7 @@
 interface InitialState<T> {
     data: T[];
     loading: boolean;
-    error: string | null | ErrorResponse;
+    error: null | ErrorResponse;
 }
 
 export default InitialState;

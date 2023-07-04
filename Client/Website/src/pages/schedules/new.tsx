@@ -35,6 +35,12 @@ const ScheduleForm = () => {
     })
 
     useEffect(() => {
+        if (error && error.response.status === 401) {
+            router.push('/login')
+        }
+    }, [error])
+
+    useEffect(() => {
         dispatch(fetchSubjects());
     }, [dispatch]);
 

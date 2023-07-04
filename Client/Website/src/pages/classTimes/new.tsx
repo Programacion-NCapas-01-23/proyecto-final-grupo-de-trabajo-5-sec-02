@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAppDispatch} from '@/hooks/reduxHooks';
 import ClassTime from "@/interfaces/ClassTime";
 import {createClassTime} from "@/state/thunks/classTimeThunk";
@@ -35,7 +35,13 @@ const ClassTimeForm = () => {
     const [form] = Form.useForm();
     const [days, setDays] = useState(0);
     const [hour, setHour] = useState("");
-    const error = useSelector((state: RootState) => state.pensum.error);
+    const error = useSelector((state: RootState) => state.classTime.error);
+
+    useEffect(() => {
+        if (error && error.response.status === 401) {
+            router.push('/login')
+        }
+    }, [error])
 
     const handleSubmit = async (values: ClassTime) => {
         const {day, start, end} = values;

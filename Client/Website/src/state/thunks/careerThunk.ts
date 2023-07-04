@@ -47,6 +47,7 @@ export const createCareer = (career: CareerPreview): AppThunk => {
                     status: error.response.status,
                 }
             }
+            console.log(receivedError)
             dispatch(createCareerFailure(receivedError));
         }
     };

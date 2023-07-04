@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useAppDispatch} from '@/hooks/reduxHooks';
 import {CyclePreview} from "@/interfaces/Cycle";
 import {createCycle} from "@/state/thunks/cycleThunk";
@@ -30,7 +30,7 @@ const CycleForm = () => {
     const dispatch = useAppDispatch();
     const [form] = Form.useForm();
     const pensums = useSelector((state: RootState) => state.pensum.data);
-    const error = useSelector((state: RootState) => state.pensum.error);
+    const error = useSelector((state: RootState) => state.cycle.error);
 
     const pensumSelect: SelectProps['options'] = [];
     pensums.map(pensum => {
@@ -39,6 +39,12 @@ const CycleForm = () => {
             label: pensum.plan,
         });
     })
+
+    useEffect(() => {
+        if (error && error.response.status === 401) {
+            router.push('/login')
+        }
+    }, [error])
 
     const handleSubmit = async (values: CyclePreview) => {
         const {type, name, pensumId} = values;

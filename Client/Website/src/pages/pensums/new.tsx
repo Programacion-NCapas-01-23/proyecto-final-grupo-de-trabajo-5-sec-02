@@ -10,7 +10,7 @@ import {useRouter} from "next/navigation";
 import {CareerPreview} from "@/interfaces/Career";
 
 interface PensumFormProps {
-    career?: CareerPreview;
+    pensum?: CareerPreview;
 }
 
 const {Title} = Typography;
@@ -29,6 +29,12 @@ const PensumForm = ({pensum}: PensumFormProps) => {
             label: career.name,
         });
     })
+
+    useEffect(() => {
+        if (error && error.response.status === 401) {
+            router.push('/login')
+        }
+    }, [error])
 
     useEffect(() => {
         if (pensum) {
