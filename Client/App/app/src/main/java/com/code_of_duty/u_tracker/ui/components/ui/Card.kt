@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults.cardColors
@@ -30,19 +31,23 @@ fun FormsCard(
     onClick: () -> Unit,
     verticalScroll: Boolean = false,
 ) {
-    var modifier = Modifier
-        .padding(16.dp)
+    val modifier = Modifier
         .fillMaxWidth()
-        .clickable(
-            interactionSource = MutableInteractionSource(),
-            indication = null,
-            onClick = onClick
-        )
+        .padding(horizontal = 8.dp)
+        .padding(top = 16.dp)
+        .wrapContentSize(Alignment.Center)
     if (verticalScroll)
         modifier.verticalScroll(rememberScrollState())
     UTrackerTheme {
         Card(
-            modifier = modifier,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = null,
+                    onClick = onClick
+                ),
             colors = cardColors(
                 containerColor = MaterialTheme3.colorScheme.onSurfaceVariant
             ),
@@ -69,10 +74,7 @@ fun FormsCard(
                 }
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .wrapContentSize(Alignment.Center)
+                    modifier = modifier
                 ) {
                     editFields.forEach { editField ->
                         editField()

@@ -17,6 +17,8 @@ class ClassTimeServiceImpl : ClassTimeService{
     lateinit var classTimeDao: ClassTimeDao
     @Autowired
     lateinit var generalUtils: GeneralUtils
+
+    override fun getAllClassTimes(): List<ClassTime> = classTimeDao.findAll()
     override fun addClassTime(classesTimes: List<ClassTimeDTO>) {
         classesTimes.forEach {
             val day = Days.fromInt(it.day)

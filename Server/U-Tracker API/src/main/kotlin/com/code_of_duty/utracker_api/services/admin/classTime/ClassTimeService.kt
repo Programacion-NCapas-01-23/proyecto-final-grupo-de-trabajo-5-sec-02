@@ -8,6 +8,8 @@ import java.util.*
 
 @Service
 interface ClassTimeService {
+
+    fun getAllClassTimes(): List<ClassTime>
     fun addClassTime(classesTimes: List<ClassTimeDTO>)
     fun deleteClassTime(classesTimes: List<UUID>)
     fun updateClassTime(classTime: ClassTimeUpdateDto)

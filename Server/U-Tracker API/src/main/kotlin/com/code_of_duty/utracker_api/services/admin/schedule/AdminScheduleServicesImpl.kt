@@ -15,6 +15,17 @@ class AdminScheduleServicesImpl(
     private val subjectDao: SubjectDao,
     private val classTimeDao: ClassTimeDao
 ) : AdminScheduleService{
+
+    override fun getAllSchedules(): List<SchedulesDto> {
+        return scheduleDao.findAll().map {
+            SchedulesDto(
+                id = it.id.toString(),
+                subject = it.subject.code,
+                classTime = UUID.fromString(it.classTime.id.toString()),
+                collection = it.collection
+            )
+        }
+    }
     override fun addAllSchedules(schedules: List<SchedulesDto>) {
         schedules.forEach {
             val subject = subjectDao.findById(it.subject).orElseThrow {

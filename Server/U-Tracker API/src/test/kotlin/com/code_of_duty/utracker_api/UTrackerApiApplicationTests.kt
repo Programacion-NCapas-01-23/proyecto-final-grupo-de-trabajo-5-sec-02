@@ -7,16 +7,4 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class UTrackerApiApplicationTests {
-
-    @Autowired
-    lateinit var classTimeDao: ClassTimeDao
-
-    @Test
-    fun contextLoads() {
-    }
-
-    @Test
-    fun testClassTimeDao(){
-        println(classTimeDao.findAll())
-    }
 }

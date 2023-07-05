@@ -1,21 +1,22 @@
 package com.code_of_duty.utracker_api.data.models
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.OneToMany
-import jakarta.persistence.Table
+import com.fasterxml.jackson.annotation.JsonIgnore
+import jakarta.persistence.*
+import lombok.ToString
+
 
 @Entity
 @Table(name = "subject")
 data class Subject(
     @Id
     val code: String,
-    val name: String,
-    val uv: Int,
-    var estimateGrade: Int = 6,
-    @OneToMany(mappedBy = "subject")
-    val assessments: MutableList<Assessment> = mutableListOf(),
-
-    @OneToMany(mappedBy = "subject")
+    var name: String,
+    var uv: Int,
+    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
+    @JsonIgnore
     val subjectPerCycles: MutableList<SubjectPerCycle> = mutableListOf()
-)
+) {
+    override fun toString(): String {
+        return "Subject(code='$code', name='$name', uv=$uv)"
+    }
+}

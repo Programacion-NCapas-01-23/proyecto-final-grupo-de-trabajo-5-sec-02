@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun CustomButton(
+    isEnabled: Boolean = true,
     text: String,
     loading: Boolean = false,
     onClick: () -> Unit
@@ -32,6 +33,7 @@ fun CustomButton(
         modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth(),
+        enabled = isEnabled,
         colors = buttonColors(
             contentColor = buttonColors,
         )
