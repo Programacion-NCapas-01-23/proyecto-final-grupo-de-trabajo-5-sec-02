@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.code_of_duty.u_tracker.data.database.entities.Cycle
 
 @Dao
@@ -14,4 +15,9 @@ interface CycleDao {
 
     @Query("SELECT * FROM cycle_table")
     suspend fun getCycles(): List<Cycle>
+
+    @Update
+    suspend fun updateCycle(existingCycle: Cycle)
+    @Insert
+    suspend fun insertOneCycle(cycle: Cycle)
 }

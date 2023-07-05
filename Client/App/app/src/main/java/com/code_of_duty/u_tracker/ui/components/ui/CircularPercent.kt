@@ -67,7 +67,7 @@ fun PartialCircle(
                 paintValue.color = fontColor.toArgb()
                 paintValue.textAlign = android.graphics.Paint.Align.CENTER
                 canvas.nativeCanvas.drawText(
-                    cum.toString(),
+                    "%.2f".format(cum),
                     size.width / 2,
                     size.height / 2 + 10,
                     paintValue

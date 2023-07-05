@@ -1,10 +1,12 @@
 package com.code_of_duty.u_tracker.ui.screens.pensum
 
+import android.util.Log
 import com.code_of_duty.u_tracker.data.database.entities.Cycle as CycleEntity
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.code_of_duty.u_tracker.data.database.entities.Grade
 import com.code_of_duty.u_tracker.data.database.entities.Prerequisite
 import com.code_of_duty.u_tracker.data.database.entities.Subject
 import com.code_of_duty.u_tracker.data.repositories.PensumRepository
@@ -26,17 +28,14 @@ class PensumViewModel @Inject constructor(
     fun pensum() = _pensum
     fun pensumStatus() = pensumStatus
 
-    fun getPensum(){
+    private fun getForDB(){
         viewModelScope.launch {
-            if (_pensum.isNotEmpty()){
-                pensumStatus.value = PensumState.DONE
-                return@launch
-            }
             val cycles = repository.getCycles()
-            if (cycles.isEmpty()) {
-                getPensumFromServer()
+            if (cycles.isEmpty()){
+                pensumStatus.value = PensumState.ERROR
                 return@launch
             }
+
             cycles.forEach{ cycle ->
                 val subjects = repository.getSubjects(cycle.orderValue)
                 val subjectsResponse = mutableListOf<SubjectsFromTermResponse>()
@@ -48,7 +47,6 @@ class PensumViewModel @Inject constructor(
                             subject.name,
                             subject.uv,
                             subject.order,
-                            subject.estimateGrade,
                             prerequisites.map { it.prerequisiteCode }
                         )
                     )
@@ -67,30 +65,74 @@ class PensumViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getPensumFromServer(){
-        try {
-            val token =  repository.getToken()
-            if (token.isNotEmpty()){
-                _pensum = repository.getPensum(token).toMutableList()
-                pensumStatus.value = PensumState.DONE
-                val cycles = mutableListOf<CycleEntity>()
-                _pensum.forEach {
-                    cycles.add(CycleEntity(it.orderValue, it.name, it.orderValue, it.cycleType))
-                    val subjects = mutableListOf<Subject>()
-                    it.subjects.forEach { subject ->
-                        subjects.add(Subject(subject.code, subject.name, subject.correlative, subject.uv, subject.estimateGrade, it.orderValue))
-                        val prerequisite = mutableListOf<Prerequisite>()
-                        subject.prerequisiteID?.forEach { pre ->
-                            prerequisite.add(Prerequisite(subjectCode =  subject.code, prerequisiteCode =  pre))
+    fun getPensum() {
+        viewModelScope.launch {
+            try {
+                val token = repository.getToken()
+                if (token.isNotEmpty()) {
+                    _pensum = repository.getPensum(token).toMutableList()
+                    val existingCycles = repository.getCycles() // Obtener todos los ciclos existentes de la base de datos
+
+                    _pensum.forEach { newCycle ->
+                        val existingCycle = existingCycles.find { it.orderValue == newCycle.orderValue }
+                        if (existingCycle != null) {
+                            // El ciclo ya existe, actualizar sus datos
+                            existingCycle.name = newCycle.name
+                            existingCycle.cycleType = newCycle.cycleType
+                            repository.updateCycle(existingCycle)
+                        } else {
+                            // El ciclo no existe, insertarlo en la base de datos
+                            repository.insertCycle(newCycle)
                         }
-                        repository.savePrerequisites(prerequisite)
+
+                        newCycle.subjects.forEach { newSubject ->
+                            val existingSubject = repository.getSubjectByCode(newSubject.code)
+                            if (existingSubject != null) {
+                                // El tema ya existe, actualizar sus datos
+                                existingSubject.name = newSubject.name
+                                existingSubject.order = newSubject.correlative
+                                existingSubject.uv = newSubject.uv
+                                existingSubject.cycle = newCycle.orderValue
+                                repository.updateSubject(existingSubject)
+                            } else {
+                                // El tema no existe, insertarlo en la base de datos
+                                repository.insertSubject(newSubject, newCycle.orderValue)
+                            }
+
+                            repository.deletePrerequisite(newSubject.code)
+                            val newPrequesites = mutableListOf<Prerequisite>()
+                            newSubject.prerequisiteID?.forEach { newPrerequisiteCode ->
+                                newPrequesites.add(Prerequisite(subjectCode = newSubject.code, prerequisiteCode =  newPrerequisiteCode))
+                            }
+                        }
                     }
-                    repository.saveSubjects(subjects)
+
+                    pensumStatus.value = PensumState.DONE
                 }
-                repository.saveCycles(cycles)
+            } catch (e: Exception) {
+                Log.e("PensumViewModel", e.toString())
+                getForDB()
             }
-        } catch (e: Exception){
-            pensumStatus.value = PensumState.ERROR
         }
+    }
+
+
+    fun updateSubject(currSubject: Subject, grade: Float) {
+        viewModelScope.launch {
+            //TODO: Update subject grade in server
+            repository.updateSubjectgrade(currSubject.code, grade)
+        }
+    }
+
+    fun isPassed(code: String): Boolean {
+        var grade = Grade("",0f,false)
+        viewModelScope.launch {
+            try {
+                grade = repository.getGrade(code)
+            } catch (e: Exception) {
+                Log.e("PensumViewModel", e.toString())
+            }
+        }
+        return grade.passed
     }
 }

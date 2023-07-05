@@ -40,5 +40,9 @@ object RoomModule {
     @Singleton
     fun providesPrerequisiteDao(database: UtrackerDatabase) = database.prerequisiteDao()
 
+    @Provides
+    @Singleton
+    fun providesGradeDao(database: UtrackerDatabase) = database.gradeDao()
+
     //if you have more DAOs, you can provide them here as well
 }

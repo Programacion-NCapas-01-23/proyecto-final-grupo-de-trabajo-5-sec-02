@@ -3,8 +3,10 @@ package com.code_of_duty.u_tracker.ui.screens.login
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.code_of_duty.u_tracker.UtrackerApp
 import com.code_of_duty.u_tracker.data.repositories.LoginRepository
 import com.code_of_duty.u_tracker.enums.LoginStatus
 import com.code_of_duty.u_tracker.ui.graphs.Graph
@@ -19,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository
-) : ViewModel() {
+) : AndroidViewModel(UtrackerApp()) {
     private var code: MutableState<String> = mutableStateOf("")
     private var password: MutableState<String> = mutableStateOf("")
     private var login: MutableState<LoginStatus> = mutableStateOf(LoginStatus.NONE)
