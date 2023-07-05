@@ -14,4 +14,6 @@ interface PrerequisiteDao {
 
     @Query("SELECT * FROM prerequisite WHERE subjectCode = :subjectCode")
     suspend fun getPrerequisitesBySubject(subjectCode: String): List<Prerequisite>
+    @Query("DELETE FROM prerequisite WHERE subjectCode = :code")
+    suspend fun deletePrerequisite(code: String)
 }

@@ -34,7 +34,7 @@ fun SubjectCard(
     subjectName: String = "Subject Name",
     prerequisites: List<Int>? = List(0) { 0 },
     uv: Int = 0,
-    passed: Boolean = false,
+    passed: MutableState<Boolean> = mutableStateOf(false),
 ) {
     val prerequisitesString = remember { if(prerequisites.isNullOrEmpty()){ "bachillerato" } else {
         prerequisites.joinToString(", ")
@@ -65,7 +65,7 @@ fun SubjectCard(
                 },
                     color = MaterialTheme3.colorScheme.onSurface
                 )
-                Checkbox(checked = passed, onCheckedChange = {}, enabled = false)
+                Checkbox(checked = passed.value, onCheckedChange = {}, enabled = false)
             }
             Text(
                 text = subjectName,
@@ -101,6 +101,7 @@ fun SubjectCard(
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview
 @Composable
 fun SubjectCardPreview() {
@@ -109,7 +110,7 @@ fun SubjectCardPreview() {
             sort = 1,
             subjectName = "Precalculo",
             uv = 4,
-            passed = false,
+            //passed = mutableStateOf(true),
         )
     }
 }

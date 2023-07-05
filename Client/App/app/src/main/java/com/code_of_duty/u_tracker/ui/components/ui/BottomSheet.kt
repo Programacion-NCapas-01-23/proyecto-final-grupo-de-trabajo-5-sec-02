@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
@@ -33,6 +34,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -116,6 +118,7 @@ fun BottomSheet(
         ModalBottomSheet(
             onDismissRequest = { openBottomSheet.value = false },
             sheetState = bottomSheetState,
+            modifier = Modifier.imePadding(),
             windowInsets = windowInsets
         ) {
             if (title.isNullOrEmpty()) {} else {

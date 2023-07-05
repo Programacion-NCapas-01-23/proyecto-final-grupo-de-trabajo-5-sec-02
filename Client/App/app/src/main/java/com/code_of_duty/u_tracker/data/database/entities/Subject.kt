@@ -7,9 +7,8 @@ import androidx.room.PrimaryKey
 data class Subject(
     @PrimaryKey
     val code: String,
-    val name: String,
-    val order: Int,
-    val uv: Int,
-    val estimateGrade: Float,
-    val cycle: Int,
+    var name: String,
+    var order: Int,
+    var uv: Int,
+    var cycle: Int,
 )
