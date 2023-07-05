@@ -11,5 +11,7 @@ export type ErrorResponse = {
     response: {
         data: any,
         status: number,
-    }
+    },
+    status?: number,
+    error?: string,
 }

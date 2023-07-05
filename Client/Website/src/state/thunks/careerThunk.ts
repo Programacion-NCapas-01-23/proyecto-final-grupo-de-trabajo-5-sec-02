@@ -18,9 +18,9 @@ export const fetchCareers = (): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(fetchCareersStart());
-            const careers = await apiService.get<Career[]>(routes.career.all);
+            const careers = await apiService.get<CareerPreview[]>(routes.career.all);
             dispatch(fetchCareersSuccess(careers));
-        } catch (error) {
+        } catch (error: any) {
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
@@ -37,9 +37,9 @@ export const createCareer = (career: CareerPreview): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(createCareerStart());
-            const createdCareer = await apiService.post<Career>(routes.career.add, [career]);
+            const createdCareer = await apiService.post<CareerPreview>(routes.career.add, [career]);
             dispatch(createCareerSuccess(createdCareer));
-        } catch (error) {
+        } catch (error: any) {
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {
@@ -59,7 +59,7 @@ export const updateCareer = (career: CareerPreview): AppThunk => {
             dispatch(updateCareerStart());
             const updatedCareer = await apiService.patch<CareerPreview>(routes.career.update, career);
             dispatch(updateCareerSuccess(updatedCareer));
-        } catch (error) {
+        } catch (error: any) {
             const receivedError: ErrorResponse = {
                 message: error.message,
                 response: {

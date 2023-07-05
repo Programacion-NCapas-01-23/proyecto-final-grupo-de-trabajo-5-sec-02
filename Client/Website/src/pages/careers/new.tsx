@@ -23,7 +23,7 @@ const CareerForm = ({career}: CareerFormProps) => {
     const error = useSelector((state: RootState) => state.career.error);
 
     useEffect(() => {
-        if (error && error.response.status === 401) {
+        if (error && error.response.status === 401 || error?.status === 401) {
             router.push('/login')
         }
     }, [error])
@@ -56,7 +56,7 @@ const CareerForm = ({career}: CareerFormProps) => {
 
         if (career) {
             await dispatch(updateCareer({...career, ...careerData}));
-            if (error && error.response.status === 401) {
+            if (error && error.response.status === 401 || error?.status === 401) {
                 router.push('/login')
             } else {
                 router.push('/careers');
@@ -64,7 +64,7 @@ const CareerForm = ({career}: CareerFormProps) => {
         } else {
             await dispatch(createCareer(careerData));
             console.log(error)
-            if (error && error.response.status === 401) {
+            if (error && error.response.status === 401 || error?.status === 401) {
                 router.push('/login')
             } else {
                 router.push('/careers');

@@ -44,16 +44,3 @@ export interface ApiRequest {
     data?: any;
 }
 
-export default async function handler(req: ApiRequest, res: NextApiResponse) {
-    const {url, method, data} = req;
-
-    try {
-        const response = await apiService[method](url, data);
-        res.status(200).json(response);
-    } catch (error) {
-        console.error('API Error:', error);
-        const status = error.status || 500;
-        const message = error.message || 'An error occurred.';
-        res.status(status).json({message});
-    }
-}
