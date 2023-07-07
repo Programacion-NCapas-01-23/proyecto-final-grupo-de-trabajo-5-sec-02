@@ -56,17 +56,4 @@ import org.springframework.web.filter.CorsFilter
         )
     ]
 )
-class SwaggerConfig{
-    @Bean
-    fun corsFilter(): FilterRegistrationBean<CorsFilter> {
-        val source = UrlBasedCorsConfigurationSource()
-        val config = CorsConfiguration()
-        config.addAllowedOrigin("*")
-        config.addAllowedMethod("*")
-        config.addAllowedHeader("*")
-        source.registerCorsConfiguration("/**", config)
-        val bean = FilterRegistrationBean(CorsFilter(source))
-        bean.order = Ordered.HIGHEST_PRECEDENCE
-        return bean
-    }
-}
+class SwaggerConfig
