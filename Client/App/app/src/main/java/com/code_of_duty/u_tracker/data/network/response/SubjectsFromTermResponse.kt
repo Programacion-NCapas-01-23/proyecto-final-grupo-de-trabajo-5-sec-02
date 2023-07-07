@@ -5,6 +5,5 @@ data class SubjectsFromTermResponse(
     val name: String,
     val uv: Int,
     val correlative: Int,
-    val estimateGrade: Float,
     val prerequisiteID: List<Int>? = emptyList(),
 )

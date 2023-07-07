@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,12 +34,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +55,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun BottomSheet(
     openButtonLabel: String = "",
+    hideOpenButton: Boolean = false,
+    aditionalActionOnClose : () -> Unit = {},
     closeButtonLabel: String,
     edgeToEdgeEnabled: MutableState<Boolean> = mutableStateOf(false),
     skipPartiallyExpanded: MutableState<Boolean> = mutableStateOf(false),
@@ -94,8 +101,10 @@ fun BottomSheet(
 //            Spacer(Modifier.width(16.dp))
 //            Text("Toggle edge to edge enabled.")
 //        }
-            Button(onClick = { openBottomSheet.value = !openBottomSheet.value }) {
-                Text(text = openButtonLabel)
+            if (!hideOpenButton){
+                Button(onClick = { openBottomSheet.value = !openBottomSheet.value }) {
+                    Text(text = openButtonLabel)
+                }
             }
         }
     }
@@ -109,6 +118,7 @@ fun BottomSheet(
         ModalBottomSheet(
             onDismissRequest = { openBottomSheet.value = false },
             sheetState = bottomSheetState,
+            modifier = Modifier.imePadding(),
             windowInsets = windowInsets
         ) {
             if (title.isNullOrEmpty()) {} else {
@@ -137,6 +147,7 @@ fun BottomSheet(
                     // you must additionally handle intended state cleanup, if any.
                     onClick = {
                         scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                            aditionalActionOnClose()
                             if (!bottomSheetState.isVisible) {
                                 openBottomSheet.value = false
                             }
@@ -166,6 +177,7 @@ fun BottomSheet(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Preview
 @Composable
 fun BottomSheetPreview() {

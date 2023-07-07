@@ -1,6 +1,6 @@
 import {Admin} from "@/interfaces/Admin";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import InitialState from "@/interfaces/InitialState";
+import InitialState, {ErrorResponse} from "@/interfaces/InitialState";
 
 const initialState: InitialState<Admin> = {
     data: [],
@@ -21,7 +21,7 @@ const authSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        registerFailure(state, action: PayloadAction<string>) {
+        registerFailure(state, action: PayloadAction<ErrorResponse>) {
             state.loading = false;
             state.error = action.payload;
         },

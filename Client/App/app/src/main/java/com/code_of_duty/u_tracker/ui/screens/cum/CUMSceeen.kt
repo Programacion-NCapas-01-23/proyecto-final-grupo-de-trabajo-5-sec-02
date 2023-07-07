@@ -26,7 +26,17 @@ import com.code_of_duty.u_tracker.ui.theme.Typography
 fun CUMScreen (
     viewModel: CumViewModel = hiltViewModel()
 ) {
-    val percent = remember { mutableStateOf((50f / 100f ) * 100f) }
+    val total = remember { mutableStateOf(0f) }
+    val completed = remember { mutableStateOf(1f) }
+    val cum = remember { mutableStateOf(0f) }
+    val percent = remember { mutableStateOf(0f) }
+
+    LaunchedEffect(key1 = viewModel.total.value, key2 = viewModel.completed.value, key3 = viewModel.cum.value) {
+        total.value = viewModel.getTotal()
+        completed.value = viewModel.getCompleted()
+        percent.value = (completed.value / total.value) * 100f
+        cum.value = viewModel.getCum()
+    }
 
     Column(
         modifier = Modifier
@@ -35,9 +45,9 @@ fun CUMScreen (
         verticalArrangement = Arrangement.Center
     ) {
         PartialCircle(
-            completed = 50f,
-            total = 100f,
-            cum = 6.9f,
+            completed = completed.value,
+            total = total.value,
+            cum = cum.value,
             scale = 1.5f
         )
         Text(
@@ -51,7 +61,7 @@ fun CUMScreen (
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CUMScreenPreview() {
     CUMScreen()
