@@ -1,7 +1,6 @@
 import React, {ReactNode, useState} from "react";
 import type {MenuProps} from 'antd';
 import {Layout, Menu, theme} from 'antd';
-import {AppstoreOutlined, MailOutlined, SettingOutlined} from '@ant-design/icons';
 import Link from 'next/link'
 
 const {Header, Content} = Layout;
@@ -38,14 +37,6 @@ const items: MenuProps['items'] = [
             </Link>
         ),
         key: 'pensum',
-    },
-    {
-        label: (
-            <Link href="/schedules">
-                Horarios
-            </Link>
-        ),
-        key: 'schedule',
     },
     {
         label: (
@@ -96,9 +87,7 @@ export const NavigationBar = ({children}: { children: ReactNode }) => {
                 <Content
                     style={{
                         margin: 0,
-                        padding: 24,
-                        minHeight: 280,
-                        background: colorBgContainer,
+                        background: '#0D1321',
                         display: 'flex',
                         flexFlow: 'column wrap',
                         alignItems: 'flex-start',

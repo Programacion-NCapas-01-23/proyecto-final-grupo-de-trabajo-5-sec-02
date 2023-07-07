@@ -15,12 +15,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-    /*para test emulador*/
     private const val EMULATOR_URL = "http://10.0.2.2:8080/api/"
 
     //REAL API
-    private const val BASE_URL = "http://20.127.25.48:8080/api/"
+    private const val BASE_URL = "https://www.utracker.me/api/"
 
     @Provides
     @Singleton

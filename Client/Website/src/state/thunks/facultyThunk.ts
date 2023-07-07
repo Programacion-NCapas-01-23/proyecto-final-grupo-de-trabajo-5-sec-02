@@ -13,6 +13,7 @@ import {
 } from "@/state/slices/facultySlice";
 import {Faculty} from "@/interfaces/Faculty";
 import {routes} from "@/api/routes";
+import {ErrorResponse} from "@/interfaces/InitialState";
 
 export const fetchFaculties = (): AppThunk => {
     return async (dispatch: AppDispatch) => {
@@ -20,8 +21,16 @@ export const fetchFaculties = (): AppThunk => {
             dispatch(fetchFacultiesStart());
             const faculties = await apiService.get<Faculty[]>(routes.faculties.all);
             dispatch(fetchFacultiesSuccess(faculties));
-        } catch (error) {
-            dispatch(fetchFacultiesFailure(error.message));
+        } catch (error: any) {
+            // @ts-ignore
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(fetchFacultiesFailure(receivedError));
         }
     };
 };
@@ -32,8 +41,16 @@ export const createFaculty = (faculty: Faculty): AppThunk => {
             dispatch(createFacultyStart());
             const createdFaculty = await apiService.post<Faculty>(routes.faculties.add, [faculty]);
             dispatch(createFacultySuccess(createdFaculty));
-        } catch (error) {
-            dispatch(createFacultyFailure(error.message));
+        } catch (error: any) {
+            // @ts-ignore
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(createFacultyFailure(receivedError));
         }
     };
 };
@@ -45,8 +62,41 @@ export const updateFaculty = (faculty: Faculty): AppThunk => {
             dispatch(updateFacultyStart());
             const updatedFaculty = await apiService.patch<Faculty>(routes.faculties.update, faculty);
             dispatch(updateFacultySuccess(updatedFaculty));
-        } catch (error) {
-            dispatch(updateFacultyFailure(error.message));
+        } catch (error: any) {
+            // @ts-ignore
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(updateFacultyFailure(receivedError));
         }
     }
 };
+
+/*
+export const deleteFaculty = (faculty: string): AppThunk => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            dispatch(updateFacultyStart());
+            const updatedFaculty = await apiService.delete(routes.faculties.delete, {
+                data: {
+                        [faculty],
+                    }
+            });
+            dispatch(updateFacultySuccess(updatedFaculty));
+        } catch (error: any) {
+            // @ts-ignore
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(updateFacultyFailure(receivedError));
+        }
+    }
+};*/

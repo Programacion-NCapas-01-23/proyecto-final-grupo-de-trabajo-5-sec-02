@@ -4,7 +4,7 @@ import {RootState} from "@/state/store";
 import {useAppDispatch} from "@/hooks/reduxHooks";
 import {useRouter} from "next/router";
 import {fetchCareers} from "@/state/thunks/careerThunk";
-import CareerForm from "@/pages/careers/new";
+import PensumForm from "@/pages/pensums/new";
 
 const Page = () => {
     const router = useRouter();
@@ -19,7 +19,7 @@ const Page = () => {
         }
     }, [slug])
 
-    const career = useSelector((state: RootState) => state.career.data.find(career => career.id === identity));
+    const pensum = useSelector((state: RootState) => state.pensum.data.find(pensum => pensum.id === identity));
 
     useEffect(() => {
         dispatch(fetchCareers())
@@ -27,7 +27,7 @@ const Page = () => {
 
     return (
         <>
-            <CareerForm career={career}/>
+            <PensumForm pensum={pensum}/>
         </>
     );
 };

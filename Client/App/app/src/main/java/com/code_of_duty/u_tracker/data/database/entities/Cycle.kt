@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class Cycle(
     @PrimaryKey
     val id: Int,
-    val name: String,
+    var name: String,
     val orderValue: Int,
-    val cycleType: Int,
+    var cycleType: Int,
 )

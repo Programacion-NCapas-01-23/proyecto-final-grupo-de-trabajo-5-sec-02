@@ -20,6 +20,13 @@ const CareerForm = ({career}: CareerFormProps) => {
     const [form] = Form.useForm();
     const [facultyId, setFacultyId] = useState('');
     const faculties = useSelector((state: RootState) => state.faculty.data);
+    const error = useSelector((state: RootState) => state.career.error);
+
+    useEffect(() => {
+        if (error && error.response.status === 401 || error?.status === 401) {
+            router.push('/login')
+        }
+    }, [error])
 
     const options: SelectProps['options'] = [];
     faculties.map(faculty => {
@@ -48,44 +55,63 @@ const CareerForm = ({career}: CareerFormProps) => {
         };
 
         if (career) {
-            try {
-                await dispatch(updateCareer({...career, ...careerData}));
+            await dispatch(updateCareer({...career, ...careerData}));
+            if (error && error.response.status === 401 || error?.status === 401) {
+                router.push('/login')
+            } else {
                 router.push('/careers');
-            } catch (error) {
-                console.log('Updating error:', error);
             }
         } else {
-            try {
-                await dispatch(createCareer(careerData));
+            await dispatch(createCareer(careerData));
+            console.log(error)
+            if (error && error.response.status === 401 || error?.status === 401) {
+                router.push('/login')
+            } else {
                 router.push('/careers');
-            } catch (error) {
-                console.log('Creation error:', error);
             }
-
         }
-
     };
 
     return (
-        <div className="">
-            <div className="form-container">
-                <Title>Crear Carrera</Title>
+        <div style={{
+            display: 'flex',
+            flexFlow: 'column wrap',
+            alignItems: "center",
+            justifyContent: "center",
+            width: '100%',
+            height: '100%',
+        }}>
+            <div style={{
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                minWidth: '360px',
+                background: '#FFFFFF',
+                padding: '32px',
+                borderRadius: 20,
+
+            }}>
+                {
+                    career ? <Title style={{color: '#275DAD', alignSelf: "center"}}>Editar Carrera</Title> :
+                        <Title style={{color: '#275DAD', alignSelf: "center"}}>Crear Carrera</Title>
+                }
                 <Form
                     name="newCareer"
                     form={form}
                     labelCol={{span: 8}}
                     wrapperCol={{span: 16}}
-                    style={{maxWidth: 600}}
+                    style={{minWidth: 300}}
                     initialValues={{remember: true}}
                     onFinish={handleSubmit}
                     autoComplete="off"
+                    layout="vertical"
                 >
                     <Form.Item
                         label="Nombre"
                         name="name"
                         rules={[{required: true, message: 'Ingresa el nombre de la carrera!'}]}
                     >
-                        <Input style={{width: 300}}/>
+                        <Input
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}/>
                     </Form.Item>
                     <Form.Item
                         label="Facultad"
@@ -93,12 +119,17 @@ const CareerForm = ({career}: CareerFormProps) => {
                         rules={[{required: true, message: 'Selecciona una facultad!'}]}
                     >
                         <Select
-                            style={{width: 300}}
+                            style={{width: 360, border: 'none', borderBottom: '2px solid #2B4162', borderRadius: '0'}}
                             onChange={value => setFacultyId(value)}
                             options={options}
+                            bordered={false}
                         />
                     </Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit" style={{
+                        borderRadius: '0',
+                        backgroundColor: '#275DAD',
+                        margin: '1rem 0',
+                    }}>
                         Submit
                     </Button>
                 </Form>

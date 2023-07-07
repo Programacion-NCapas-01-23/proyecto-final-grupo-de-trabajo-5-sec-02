@@ -35,13 +35,6 @@ const cards = [
         href: '/subjects',
     },
     {
-        key: "5",
-        title: "Horarios",
-        description: "This is the description",
-        source: "https://mundocampusvirtual.com/wp-content/uploads/2022/09/4886002039_8c186c8b17_b-scaled.jpg",
-        href: '/schedules',
-    },
-    {
         key: "6",
         title: "Descarga",
         description: "Descarga nuestra aplicacion",

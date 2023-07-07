@@ -8,6 +8,7 @@ import com.code_of_duty.u_tracker.enums.ChangePasswordStatus
 import com.code_of_duty.u_tracker.enums.TokenStatus
 import com.code_of_duty.u_tracker.ui.models.TextFieldModel
 import com.code_of_duty.u_tracker.ui.components.ui.CustomButton
+import com.code_of_duty.u_tracker.ui.components.ui.DialogAlert
 import com.code_of_duty.u_tracker.ui.components.ui.EditTextField
 import com.code_of_duty.u_tracker.ui.components.ui.FormsCard
 import com.code_of_duty.u_tracker.ui.components.ui.KeyboardType
@@ -21,10 +22,11 @@ fun ChangePasswordCard(
     val token = remember { mutableStateOf("") }
     val newPassword = remember { mutableStateOf(TextFieldModel()) }
     val confirmPassword = remember { mutableStateOf(TextFieldModel()) }
-    val email = remember { mutableStateOf("") }
-    val isEnabled = remember { mutableStateOf(true) }
+    val isEnabled = remember { mutableStateOf(false) }
     val loadingToken =  remember { mutableStateOf(false) }
     val loadingChangePass = remember { mutableStateOf(false) }
+    val errormsg = remember { mutableStateOf("") }
+    val error = remember { mutableStateOf(false) }
 
     LaunchedEffect(viewModel.tokenStatus().value){
         when(viewModel.tokenStatus().value){
@@ -34,6 +36,8 @@ fun ChangePasswordCard(
             }
             TokenStatus.FAILED -> {
                 loadingToken.value = false
+                error.value = true
+                errormsg.value = "El correo ingresado no existe"
                 viewModel.tokenStatus().value = TokenStatus.NONE
             }
             else -> {}
@@ -47,6 +51,8 @@ fun ChangePasswordCard(
             }
             ChangePasswordStatus.FAILURE -> {
                 loadingChangePass.value = false
+                error.value = true
+                errormsg.value = "No se pudo cambiar la contraseña"
                 viewModel.changePassStatus().value = ChangePasswordStatus.NONE
             }
             else -> {}
@@ -55,15 +61,21 @@ fun ChangePasswordCard(
 
     LaunchedEffect(newPassword.value.text.value) {
         newPassword.value.apply {
-            isError.value = !text.value.matches(Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))
-            supportText.value = if (isError.value) "La contraseña debe tener al menos 8 caracteres, 1 mayuscula, 1 minuscula, 1 numero y un caracter especial" else ""
+            if(text.value != ""){
+                isError.value = !text.value.matches(Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))
+                supportText.value = if (isError.value) "La contraseña debe tener al menos 8 caracteres, 1 mayuscula, 1 minuscula, 1 numero y un caracter especial" else ""
+                viewModel.newPassword().value = text.value
+            }
         }
     }
 
     LaunchedEffect(confirmPassword.value.text.value) {
         confirmPassword.value.apply {
-            isError.value = newPassword.value.text.value != text.value
-            supportText.value = if (isError.value) "Las contraseñas no coinciden" else ""
+            if (text.value != ""){
+                isError.value = text.value != newPassword.value.text.value
+                supportText.value = if (isError.value) "Las contraseñas no coinciden" else ""
+                viewModel.confirmPassword().value = text.value
+            }
         }
     }
 
@@ -74,7 +86,7 @@ fun ChangePasswordCard(
             {
                 EditTextField(
                     label = "Correo electrónico",
-                    value = email,
+                    value = viewModel.email(),
                     type = KeyboardType.Email
                 )
             },
@@ -122,4 +134,13 @@ fun ChangePasswordCard(
         ),
         onClick = {}
     )
+
+    if (error.value){
+        DialogAlert(
+            title = "Error cambiando contraseña",
+            message = errormsg.value,
+            onConfirm = {error.value = false},
+            needCancel = false
+        )
+    }
 }
