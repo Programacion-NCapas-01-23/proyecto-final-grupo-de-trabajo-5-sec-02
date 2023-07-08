@@ -68,6 +68,14 @@ class CycleServiceImp(
         val subject = subjectDao.findByCode(subjectCode)
             ?: throw ExceptionNotFound("Subject not found")
 
+        // Check if the subject is already associated with the student cycle
+        val existingSubjectPerStudentCycle = subjectPerStudentCycleDao
+            .findByStudentCycleAndSubject(studentCycle, subject)
+
+        if (existingSubjectPerStudentCycle != null) {
+            throw IllegalArgumentException("The subject is already added")
+        }
+
         // Check if the prerequisites are approved
         val prerequisites = prerequisitesDao.findBySubjectCode(subjectCode)
         val prerequisiteStatuses = prerequisites.map { prerequisite ->
@@ -79,17 +87,17 @@ class CycleServiceImp(
             throw IllegalArgumentException("Prerequisites are not approved")
         }
 
+        // Create a new SubjectPerStudentCycle entity
         val subjectPerStudentCycle = SubjectPerStudentCycle(
             status = SubjectStatus.IN_PROGRESS,
-            grade = 0.0.toBigDecimal(),
+            grade = BigDecimal.ZERO,
             estimateGrade = estimateGrade,
             studentCycle = studentCycle,
             subject = subject
         )
-
-        // Save the subjectPerStudentCycle entity to the database
         subjectPerStudentCycleDao.save(subjectPerStudentCycle)
     }
+
 
     @Transactional
     override fun removeSubjectFromStudentPerCycle(studentCycleId: UUID, subjectCode: String) {

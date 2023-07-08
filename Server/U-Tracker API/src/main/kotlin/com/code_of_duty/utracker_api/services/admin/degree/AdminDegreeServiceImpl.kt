@@ -51,7 +51,6 @@ class AdminDegreeServiceImpl(
 
     override fun updateDegree(degree: UpdateDegreeDto) {
         degreeDao.findById(UUID.fromString(degree.id))
-            ?: throw ExceptionNotFound("Degree not found")
 
         val faculty = facultyDao.findById(UUID.fromString(degree.facultyId)).orElseThrow {
             ExceptionNotFound("Faculty not found")

@@ -10,11 +10,12 @@ import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.util.*
 
 @Component
 class SubjectServiceImp(
     private val subjectDao: SubjectDao,
-    private val assessmentDao: AssesmentDao,
+    private val assessmentDao: AssessmentDao,
     private val subjectPerStudentCycleDao: SubjectPerStudentCycleDao,
     private val cycleDao: CycleDao,
     private val studentCycleDao: StudentCycleDao,
@@ -84,8 +85,26 @@ class SubjectServiceImp(
         return matchingSubjectPerStudentCycle.subject
     }
 
-    override fun setAssessment(subjectCode: String, name: String, percentage: Int, date: LocalDate, grade: BigDecimal?): Subject {
-        val subjectPerStudentCycleList = subjectPerStudentCycleDao.findBySubjectCode(subjectCode)
+    override fun getAllAssessments(studentCode: String, subjectCode: String): List<AssessmentResponseDto> {
+        val subjectPerStudentCycleList = subjectPerStudentCycleDao.findBySubjectCodeAndStudentCode(subjectCode, studentCode)
+        val subjectPerStudentCycle = subjectPerStudentCycleList.firstOrNull()
+            ?: throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode")
+
+        val assessments = assessmentDao.findBySubjectPerStudentCycle(subjectPerStudentCycle)
+
+        return assessments.map { assessment ->
+            AssessmentResponseDto(
+                assessmentId = assessment.id.toString(),
+                name = assessment.name,
+                percentage = assessment.percentage,
+                date = assessment.date,
+                grade = assessment.grade
+            )
+        }
+    }
+
+    override fun setAssessment(studentCode:String,subjectCode: String, name: String, percentage: Int, date: LocalDate, grade: BigDecimal?): Subject {
+        val subjectPerStudentCycleList = subjectPerStudentCycleDao.findBySubjectCodeAndStudentCode(subjectCode, studentCode)
         val subjectPerStudentCycle = subjectPerStudentCycleList.firstOrNull()
             ?: throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode")
 
@@ -101,15 +120,36 @@ class SubjectServiceImp(
         return subjectPerStudentCycle.subject
     }
 
-    override fun calculateEstimateGrades(subjectCode: String): List<RemainingAssessmentDto> {
-        val subjectPerStudentCycle = subjectPerStudentCycleDao.findBySubjectCode(subjectCode)
+    override fun updateAssessment(studentCode: String, assessmentId: UUID, name: String?, percentage: Int?, date: LocalDate?, grade: BigDecimal?): Subject{
+        val assessment = assessmentDao.findByIdAndStudentCode(assessmentId, studentCode)
+
+        assessment.name = name?: assessment.name
+        assessment.percentage = percentage?: assessment.percentage
+        assessment.date = date?: assessment.date
+        assessment.grade = grade
+
+        assessmentDao.save(assessment)
+
+        return assessment.subjectPerStudentCycle.subject
+    }
+
+    override fun deleteAssessment(studentCode: String, assessmentId: UUID): Subject {
+        val assessment = assessmentDao.findByIdAndStudentCode(assessmentId, studentCode)
+
+        assessmentDao.delete(assessment)
+
+        return assessment.subjectPerStudentCycle.subject
+    }
+
+    override fun calculateEstimateGrades(studentCode:String,subjectCode: String): List<RemainingAssessmentDto> {
+        val subjectPerStudentCycle = subjectPerStudentCycleDao.findBySubjectCodeAndStudentCode(subjectCode, studentCode)
             .firstOrNull() ?: throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode")
 
         val assessments = assessmentDao.findBySubjectPerStudentCycle(subjectPerStudentCycle)
         val estimateGrade = subjectPerStudentCycleDao.getEstimateGradeBySubjectCode(subjectCode)
 
         val totalPercentageAchieved = assessments.fold(BigDecimal.ZERO) { acc, assessment ->
-            acc + (assessment.grade?.multiply(assessment.percentage.toBigDecimal()) ?: BigDecimal.ZERO)
+            acc + (assessment.grade?.multiply(assessment.percentage.toBigDecimal().divide(BigDecimal(100))) ?: BigDecimal.ZERO)
         }
 
         val remainingPercentageNeeded = estimateGrade?.minus(totalPercentageAchieved.toDouble()) ?: BigDecimal.ZERO
@@ -125,11 +165,32 @@ class SubjectServiceImp(
 
         val estimateGrades = remainingAssessments.map { assessment ->
             val percentageNeeded = (assessment.percentage.toDouble() / remainingTotalPercentage) * remainingPercentageNeeded.toDouble()
-            val gradeNeeded = (percentageNeeded / assessment.percentage.toDouble()) * 100.0
-            RemainingAssessmentDto(assessment.name, gradeNeeded.toBigDecimal())
+            val gradeNeeded = (percentageNeeded / (assessment.percentage.toDouble() / 100.0)) * 10.0 // Cap at 10
+            val cappedGradeNeeded = if (gradeNeeded > 10) 10.0 else gradeNeeded // Cap at 10
+            RemainingAssessmentDto(assessment.name, cappedGradeNeeded.toBigDecimal())
+        }
+        return estimateGrades
+    }
+
+    override fun calculateRemainingGradeToPass(studentCode: String,subjectCode: String): PassGradeDto {
+        val subjectPerStudentCycle = subjectPerStudentCycleDao.findBySubjectCodeAndStudentCode(subjectCode, studentCode)
+            .firstOrNull() ?: throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode")
+
+        val assessments = assessmentDao.findBySubjectPerStudentCycle(subjectPerStudentCycle)
+
+        val actualGrade = assessments.fold(BigDecimal.ZERO) { acc, assessment ->
+            acc + (assessment.grade?.multiply(assessment.percentage.toBigDecimal().divide(BigDecimal(100))) ?: BigDecimal.ZERO)
         }
 
-        return estimateGrades
+        val gradeRemaining = BigDecimal("6.0") - actualGrade
+
+        val message = if (actualGrade >= BigDecimal("6.0")) {
+            "You already passed the subject"
+        } else {
+            "You need to get $gradeRemaining to pass the subject"
+        }
+
+        return PassGradeDto(actualGrade, gradeRemaining, message)
     }
 
     override fun calculateCum(studentCode: String): CumDto {

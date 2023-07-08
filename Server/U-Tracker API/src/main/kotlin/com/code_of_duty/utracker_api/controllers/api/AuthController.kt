@@ -231,7 +231,6 @@ class AuthController (private val passwordUtils: PasswordUtils){
     @PostMapping("/verifyToken")
     fun verifyToken(request: HttpServletRequest): ResponseEntity<Any> {
         val student = generalUtils.extractJWT(request)
-            ?: return ResponseEntity(MessageDto("Invalid verification token"), HttpStatus.BAD_REQUEST)
 
         return ResponseEntity(MessageDto("Verification successful"), HttpStatus.OK)
     }

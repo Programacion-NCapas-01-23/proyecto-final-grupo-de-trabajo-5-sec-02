@@ -311,7 +311,7 @@ class CycleController(
     @SecurityRequirement(name = "APIAuth")
     fun deleteSubjectFromStudentCycle(
         request: HttpServletRequest,
-        @RequestBody body: SubjectInStudentCycleDto
+        @RequestBody body: DeleteStudentSubjectDto
     ): ResponseEntity<Any> {
         return try {
             cycleService.removeSubjectFromStudentPerCycle(

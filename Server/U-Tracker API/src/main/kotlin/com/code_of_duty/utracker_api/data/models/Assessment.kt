@@ -11,13 +11,13 @@ data class Assessment(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: UUID = UUID.randomUUID(),
-    val name: String,
-    val percentage: Int,
+    var name: String,
+    var percentage: Int,
     @Column(columnDefinition = "DATE")
     @Temporal(TemporalType.DATE)
-    val date: LocalDate,
+    var date: LocalDate,
     @Column(precision = 10, scale = 2)
-    val grade: BigDecimal?,
+    var grade: BigDecimal?,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_per_student_cycle_fk", referencedColumnName = "id")
     val subjectPerStudentCycle: SubjectPerStudentCycle
