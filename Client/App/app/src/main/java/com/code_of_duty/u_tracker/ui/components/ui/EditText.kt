@@ -1,6 +1,7 @@
 package com.code_of_duty.u_tracker.ui.components.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,6 +34,8 @@ fun EditTextField(
     isError: MutableState<Boolean> = mutableStateOf(false),
     supportText: MutableState<String> = mutableStateOf(""),
     type: KeyboardType = KeyboardType.Text,
+    onChangeValue: (String) -> Unit = {},
+    float: Float = 1f,
     isEnabled: MutableState<Boolean> = mutableStateOf(true)
 ) {
     val showContent = remember { mutableStateOf(true) }
@@ -45,10 +48,11 @@ fun EditTextField(
     TextField(
         value = value.value,
         onValueChange = {
+            onChangeValue(it)
             value.value = it
         },
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(float)
             .padding(horizontal = 16.dp),
         label = {
             Text(

@@ -27,7 +27,7 @@ import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 fun BottomBar(navController: NavHostController) {
     val screens = listOf (
         MainNavItems.Pensum,
-        //MainNavItems.Assesment,
+        MainNavItems.Assesment,
         MainNavItems.Term,
         MainNavItems.CUM,
         //MainNavItems.Schedule,

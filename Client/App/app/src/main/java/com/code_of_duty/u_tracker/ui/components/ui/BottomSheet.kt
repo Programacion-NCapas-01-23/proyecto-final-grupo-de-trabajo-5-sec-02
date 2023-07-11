@@ -182,10 +182,10 @@ fun BottomSheet(
 @Composable
 fun BottomSheetPreview() {
 
-    var openBottomSheet = rememberSaveable { mutableStateOf(false) }
+    val openBottomSheet = rememberSaveable { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 //    var edgeToEdgeEnabled by remember { mutableStateOf(false) }
-    var skipPartiallyExpanded = remember { mutableStateOf(false) }
+    val skipPartiallyExpanded = remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = skipPartiallyExpanded.value
     )

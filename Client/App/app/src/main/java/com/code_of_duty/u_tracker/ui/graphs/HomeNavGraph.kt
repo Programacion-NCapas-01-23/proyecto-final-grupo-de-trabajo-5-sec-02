@@ -7,6 +7,7 @@ import androidx.navigation.navigation
 
 import com.code_of_duty.u_tracker.ui.models.MainNavItems
 import com.code_of_duty.u_tracker.ui.screens.ScreenContent
+import com.code_of_duty.u_tracker.ui.screens.assesment.AssesmentScreen
 import com.code_of_duty.u_tracker.ui.screens.cum.CUMScreen
 import com.code_of_duty.u_tracker.ui.screens.pensum.PensumScreen
 import com.code_of_duty.u_tracker.ui.screens.schedule.ScheduleScreen
@@ -22,12 +23,7 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
             ScheduleScreen()
         }
         composable(route = MainNavItems.Assesment.route){
-            ScreenContent(
-                name = MainNavItems.Assesment.route,
-                onClick = {
-                    navController.navigate(Graph.DETAILS)
-                }
-            )
+            AssesmentScreen()
         }
         composable(route = MainNavItems.CUM.route){
             CUMScreen()
