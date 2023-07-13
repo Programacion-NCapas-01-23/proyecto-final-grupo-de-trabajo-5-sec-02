@@ -37,11 +37,15 @@ class CycleServiceImp(
                         val prerequisiteIDs = prerequisitesForSubject.map { it.prerequisite.prerequisiteCode.correlative }
                         val correlativeList = subject.subjectPerCycles.map { it.correlative }
 
+                        val subjectPerStudentCycleList = subjectPerStudentCycleDao.findBySubjectCodeAndStudentCode(subjectCode, studentCode)
+                        val grade = subjectPerStudentCycleList.firstOrNull()?.grade
+
                         StudentSubjectDto(
                             code = subject.code,
                             name = subject.name,
                             correlative = correlativeList[0],
                             uv = subject.uv,
+                            grade = grade,
                             prerequisiteID = prerequisiteIDs
                         )
                     }
@@ -49,6 +53,8 @@ class CycleServiceImp(
             } ?: emptyList()
         }
     }
+
+
 
     override fun createStudentCycle(studentCode: String, cycleType: Int, year: Int): StudentCycleCreatedDto {
         val student = studentDao.findByCode(studentCode) ?: throw ExceptionNotFound("Student not found")
