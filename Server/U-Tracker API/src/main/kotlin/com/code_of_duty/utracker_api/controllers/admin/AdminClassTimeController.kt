@@ -1,11 +1,9 @@
 package com.code_of_duty.utracker_api.controllers.admin
 
-import com.code_of_duty.utracker_api.data.dtos.ClassTimeDTO
+import com.code_of_duty.utracker_api.data.dtos.ClassTimeDto
 import com.code_of_duty.utracker_api.data.dtos.ClassTimeUpdateDto
 import com.code_of_duty.utracker_api.data.dtos.ErrorsDto
 import com.code_of_duty.utracker_api.data.dtos.MessageDto
-import com.code_of_duty.utracker_api.data.models.ClassTime
-import com.code_of_duty.utracker_api.services.admin.auth.AdminAuthService
 import com.code_of_duty.utracker_api.services.admin.classTime.ClassTimeService
 import com.code_of_duty.utracker_api.utils.GeneralUtils
 import io.swagger.v3.oas.annotations.Operation
@@ -85,7 +83,7 @@ class AdminClassTimeController(
     @PostMapping("/add")
     fun addClassTime(
         request: HttpServletRequest,
-        @Valid @RequestBody classTimes: List<ClassTimeDTO>
+        @Valid @RequestBody classTimes: List<ClassTimeDto>
     ): ResponseEntity<MessageDto> {
         generalUtils.extractJWT(request)
         classTimeService.addClassTime(classTimes)

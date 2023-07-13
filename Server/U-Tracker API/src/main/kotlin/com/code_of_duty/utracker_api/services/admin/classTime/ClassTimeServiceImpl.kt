@@ -1,7 +1,7 @@
 package com.code_of_duty.utracker_api.services.admin.classTime
 
 import com.code_of_duty.utracker_api.data.dao.ClassTimeDao
-import com.code_of_duty.utracker_api.data.dtos.ClassTimeDTO
+import com.code_of_duty.utracker_api.data.dtos.ClassTimeDto
 import com.code_of_duty.utracker_api.data.dtos.ClassTimeUpdateDto
 import com.code_of_duty.utracker_api.data.enums.Days
 import com.code_of_duty.utracker_api.data.models.ClassTime
@@ -19,7 +19,7 @@ class ClassTimeServiceImpl : ClassTimeService{
     lateinit var generalUtils: GeneralUtils
 
     override fun getAllClassTimes(): List<ClassTime> = classTimeDao.findAll()
-    override fun addClassTime(classesTimes: List<ClassTimeDTO>) {
+    override fun addClassTime(classesTimes: List<ClassTimeDto>) {
         classesTimes.forEach {
             val day = Days.fromInt(it.day)
             val time = LocalTime.parse(it.start)
