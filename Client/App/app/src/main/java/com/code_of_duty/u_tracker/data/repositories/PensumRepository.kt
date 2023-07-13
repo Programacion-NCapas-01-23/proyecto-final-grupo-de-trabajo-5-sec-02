@@ -111,7 +111,20 @@ class PensumRepository @Inject constructor(
 
     suspend fun updateSubjectgrade(subject: String, grade: Float) {
         val grade = Grade(subject, grade, grade >= 6.0)
-        gradeDao.insertOrUpdate(grade)
+        try {
+            gradeDao.insert(grade)
+        }catch (_: Exception) {
+            gradeDao.update(grade)
+        }
+    }
+
+    suspend fun updateSubjectGradeInServer(cycle: String = "", subject: String, grade: Float){
+        /*return apiRequest {
+
+        }*/
+    }
+    suspend fun insertSubjectGradeInServer(cycle: String = "", subject: String, grade: Float){
+
     }
 
     suspend fun updateCycle(existingCycle: CycleEntities) {

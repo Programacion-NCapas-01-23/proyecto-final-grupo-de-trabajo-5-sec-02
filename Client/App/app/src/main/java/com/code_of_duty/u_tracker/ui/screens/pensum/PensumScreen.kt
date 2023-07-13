@@ -26,6 +26,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -122,7 +123,7 @@ fun PensumScreen (
                         cycle.subjects.forEach { subject ->
                             Spacer(modifier = Modifier.padding(8.dp))
                             SubjectCard(
-                                passed = mutableStateOf(viewModel.isPassed(subject.code)),
+                                passed = mutableStateOf(viewModel.subjectPassedState[subject.code] ?: false),
                                 markCard = mutableStateOf(subject.prerequisiteID?.filter { it == correlativePressed }
                                     ?.isNotEmpty() ?: false),
                                 sort = subject.correlative,
@@ -168,7 +169,9 @@ fun PensumScreen (
             },
             {
                 Button(onClick = {
+                    //TODO: Update subject in server
                     viewModel.updateSubject(currSubject.value, currGrade.value.toFloat())
+                    viewModel.subjectPassedState[currSubject.value.code] = currGrade.value.toFloat() >= 6.0f
                     currGrade.value = ""
                     scope.launch { bsState.bottomSheetState.partialExpand() }
                 }) {

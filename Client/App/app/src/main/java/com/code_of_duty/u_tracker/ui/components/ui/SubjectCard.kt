@@ -65,7 +65,7 @@ fun SubjectCard(
                 },
                     color = MaterialTheme3.colorScheme.onSurface
                 )
-                Checkbox(checked = passed.value, onCheckedChange = {}, enabled = false)
+                Checkbox(checked = passed.value, onCheckedChange = {})
             }
             Text(
                 text = subjectName,

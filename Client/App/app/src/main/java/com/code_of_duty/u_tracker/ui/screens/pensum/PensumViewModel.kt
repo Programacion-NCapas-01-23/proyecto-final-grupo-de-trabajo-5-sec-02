@@ -3,6 +3,7 @@ package com.code_of_duty.u_tracker.ui.screens.pensum
 import android.util.Log
 import com.code_of_duty.u_tracker.data.database.entities.Cycle as CycleEntity
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,6 +25,7 @@ class PensumViewModel @Inject constructor(
     //TODO: Implement PensumViewModel
     private var _pensum: MutableList<IdealTermResponse> = mutableListOf()
     private var pensumStatus: MutableState<PensumState> = mutableStateOf(PensumState.NONE)
+    val subjectPassedState = mutableStateMapOf<String, Boolean>()
 
     fun pensum() = _pensum
     fun pensumStatus() = pensumStatus
@@ -40,6 +42,11 @@ class PensumViewModel @Inject constructor(
                 val subjects = repository.getSubjects(cycle.orderValue)
                 val subjectsResponse = mutableListOf<SubjectsFromTermResponse>()
                 subjects.forEach { subject ->
+                    val grade = repository.getGrade(subject.code)
+                    if (grade == null)
+                        subjectPassedState[subject.code] = false
+                    else
+                        subjectPassedState[subject.code] = grade.passed
                     val prerequisites = repository.getPrerequisites(subject.code)
                     subjectsResponse.add(
                         SubjectsFromTermResponse(
@@ -47,7 +54,7 @@ class PensumViewModel @Inject constructor(
                             subject.name,
                             subject.uv,
                             subject.order,
-                            prerequisites.map { it.prerequisiteCode }
+                            prerequisites.map { it.prerequisiteCode },
                         )
                     )
                 }
@@ -116,23 +123,12 @@ class PensumViewModel @Inject constructor(
         }
     }
 
-
     fun updateSubject(currSubject: Subject, grade: Float) {
         viewModelScope.launch {
-            //TODO: Update subject grade in server
+            val isPassed = grade >= 6.0f
+            subjectPassedState[currSubject.code] = isPassed
             repository.updateSubjectgrade(currSubject.code, grade)
+            repository.updateSubjectGradeInServer("", currSubject.code, grade)
         }
-    }
-
-    fun isPassed(code: String): Boolean {
-        var grade = Grade("",0f,false)
-        viewModelScope.launch {
-            try {
-                grade = repository.getGrade(code)
-            } catch (e: Exception) {
-                Log.e("PensumViewModel", e.toString())
-            }
-        }
-        return grade.passed
     }
 }

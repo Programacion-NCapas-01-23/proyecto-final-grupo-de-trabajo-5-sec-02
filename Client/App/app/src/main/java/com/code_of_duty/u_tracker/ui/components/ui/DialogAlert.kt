@@ -9,7 +9,8 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun DialogAlert(
     title: String,
-    message: String,
+    message: String? = null,
+    content: @Composable () -> Unit = {},
     onConfirm: () -> Unit,
     onCancel: () -> Unit = {},
     needCancel: Boolean = true
@@ -17,7 +18,12 @@ fun DialogAlert(
     AlertDialog(
         onDismissRequest = onConfirm,
         title = { Text(text = title) },
-        text = { Text(text = message) },
+        text = {
+            if (message != null) {
+                Text(text = message)
+            }
+            content()
+           },
         confirmButton = {
             Button(
                 onClick = onConfirm

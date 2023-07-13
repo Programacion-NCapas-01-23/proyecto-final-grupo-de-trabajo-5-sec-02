@@ -16,6 +16,8 @@ interface SubjectDao {
     suspend fun getSubjectsByCycle(cycle: Int): List<Subject>
     @Query("SELECT * FROM subject WHERE code = :code")
     suspend fun getSubjectByCode(code: String): Subject
+    @Query("SELECT subject.* FROM subject LEFT JOIN grade ON subject.code = grade.code")
+    suspend fun getSubjectWithoutGrade(): List<Subject>
     @Update
     suspend fun updateSubject(subject: Subject)
     @Insert
