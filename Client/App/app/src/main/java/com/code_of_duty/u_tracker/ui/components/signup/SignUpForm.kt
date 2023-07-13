@@ -24,11 +24,7 @@ import com.code_of_duty.u_tracker.ui.components.ui.DialogAlert
 import com.code_of_duty.u_tracker.ui.components.ui.EditTextField
 import com.code_of_duty.u_tracker.ui.components.ui.FormsCard
 import com.code_of_duty.u_tracker.ui.components.ui.KeyboardType
-import com.code_of_duty.u_tracker.ui.models.ExposedDropdownModel
-import com.code_of_duty.u_tracker.ui.models.Provisional
 import com.code_of_duty.u_tracker.ui.models.TextFieldModel
-import com.code_of_duty.u_tracker.ui.models.careers
-import com.code_of_duty.u_tracker.ui.models.faculties
 import com.code_of_duty.u_tracker.ui.screens.signup.SignUpViewModel
 import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 

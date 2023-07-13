@@ -2,13 +2,11 @@ package com.code_of_duty.u_tracker.ui.screens.pensum
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,19 +44,23 @@ import com.code_of_duty.u_tracker.ui.components.ui.BottomSheet
 import com.code_of_duty.u_tracker.ui.components.ui.EditTextField
 import com.code_of_duty.u_tracker.ui.components.ui.KeyboardType
 import com.code_of_duty.u_tracker.ui.components.ui.SubjectCard
+import com.code_of_duty.u_tracker.ui.components.ui.UtrackerBottomSheetScaffold
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class
+)
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun PensumScreen (
     viewModel: PensumViewModel = hiltViewModel()
 ) {
-    val edgeToEdge = remember { mutableStateOf(true) }
+    val bsState = rememberBottomSheetScaffoldState()
     val currGrade = remember { mutableStateOf("") }
     val currSubject = remember { mutableStateOf(Subject("","",0,0,0)) }
     var openBottomSheet = rememberSaveable { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    var skipPartiallyExpanded = remember { mutableStateOf(false) }
+    var skipPartiallyExpanded = remember { mutableStateOf(true) }
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = skipPartiallyExpanded.value
     )
@@ -127,6 +131,7 @@ fun PensumScreen (
                                 uv = subject.uv,
                                 myModifier = Modifier.combinedClickable(
                                     onClick = {
+                                        scope.launch { bsState.bottomSheetState.expand() }
                                         openBottomSheet.value = true
                                         currSubject.value = Subject(
                                             code = subject.code,
@@ -147,7 +152,33 @@ fun PensumScreen (
             }
         }
 
-        BottomSheet(
+        UtrackerBottomSheetScaffold(content = listOf(
+            {
+                Text(
+                    text = currSubject.value.name,
+                    modifier = Modifier.padding(24.dp)
+                )
+            },
+            {
+                EditTextField(
+                    label = "Nota",
+                    value = currGrade,
+                    type = KeyboardType.Number
+                )
+            },
+            {
+                Button(onClick = {
+                    viewModel.updateSubject(currSubject.value, currGrade.value.toFloat())
+                    currGrade.value = ""
+                    scope.launch { bsState.bottomSheetState.partialExpand() }
+                }) {
+                    Text(text = "Guardar Nota")
+                }
+            }
+        ), scaffoldState = bsState
+        )
+
+        /*BottomSheet(
             closeButtonLabel = "Guardar Nota",
             bottomSheetState = bottomSheetState,
             scope = scope,
@@ -174,7 +205,7 @@ fun PensumScreen (
                 currGrade.value = ""
             },
             edgeToEdgeEnabled = edgeToEdge
-        )
+        )*/
     }
 }
 
