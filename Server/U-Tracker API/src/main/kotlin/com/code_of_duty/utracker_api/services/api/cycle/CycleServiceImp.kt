@@ -18,8 +18,7 @@ class CycleServiceImp(
     private val studentCycleDao: StudentCycleDao,
     private val studentDao: StudentDao,
     private val subjectDao: SubjectDao,
-    private val prerequisitesDao: PrerequisitesDao,
-    private val scheduleDao: ScheduleDao
+    private val prerequisitesDao: PrerequisitesDao
 ) : CycleService {
     override fun getAllCycles(studentCode: String): List<StudentCycleResponseDto> {
         val student = studentDao.findByCode(studentCode) ?: throw ExceptionNotFound("Student not found")
@@ -51,15 +50,22 @@ class CycleServiceImp(
         }
     }
 
-    override fun createStudentCycle(studentCode: String, cycleType: Int, year: Int) {
+    override fun createStudentCycle(studentCode: String, cycleType: Int, year: Int): StudentCycleCreatedDto {
         val student = studentDao.findByCode(studentCode) ?: throw ExceptionNotFound("Student not found")
         val newStudentCycle = StudentCycle(
             cycleType = CycleType.values()[cycleType], // Assuming cycleType is an index for CycleType enum
             year = year,
             student = student
         )
-        studentCycleDao.save(newStudentCycle)
+        val savedStudentCycle = studentCycleDao.save(newStudentCycle)
+
+        return StudentCycleCreatedDto(
+            studentCycleId = savedStudentCycle.studentCycleId.toString(),
+            cycleType = savedStudentCycle.cycleType.ordinal,
+            year = savedStudentCycle.year
+        )
     }
+
 
     override fun addSubjectToStudentPerCycle(studentCycleId: UUID, subjectCode: String, estimateGrade: BigDecimal?) {
         val studentCycle = studentCycleDao.findById(studentCycleId)
@@ -140,127 +146,4 @@ class CycleServiceImp(
         studentCycleDao.delete(studentCycle)
     }
 
-    /*override fun findBestStudentCycle(
-        studentCode: String,
-        userCycleId: String,
-        subjects: List<String>
-    ): StudentCycleDto {
-        val student = studentDao.findByCode(studentCode) ?: throw ExceptionNotFound("Student not found")
-        val studentUUID = student.code
-
-        // Retrieve the schedules for the given subjects
-        val schedules = getScheduleForSubjects(subjects)
-
-        // If there are no schedules, return an empty cycle
-        if (schedules.isEmpty()) {
-            return StudentCycleDto(
-                id = null,
-                studentCode = studentCode,
-                cycleType = 0, // Set the appropriate default cycleType value
-                year = 0, // Set the appropriate default year value
-                subjects = emptyList()
-            )
-        }
-
-        // Create a solver.
-        val solver = CpSolver()
-
-        // Create the model.
-        val model = CpModel()
-
-        // Create variables.
-        val subjectVariables = subjects.map { model.newBoolVar(it) }
-
-        // Create constraints.
-        for (i in subjects.indices) {
-            for (j in i + 1 until subjects.size) {
-                model.addBoolXor(listOf(subjectVariables[i], subjectVariables[j]))
-            }
-        }
-
-        // Create constraints for schedules.
-        for (i in schedules.indices) {
-            val subjectIndex = subjects.indexOf(schedules[i].subject)
-            if (subjectIndex != -1) {
-                val subjectVariable = subjectVariables[subjectIndex]
-                model.addBoolAnd(listOf(subjectVariable, model.newBoolVar(schedules[i].id.toString())))
-            }
-        }
-
-        // Solve the problem.
-        val status = solver.solve(model)
-
-        // If a solution is found, check prerequisites and return the best cycle.
-        if (status == CpSolverStatus.OPTIMAL) {
-            val bestCycle = StudentCycleDto(
-                id = null,
-                studentCode = studentCode,
-                cycleType = 0, // Set the appropriate default cycleType value
-                year = 0, // Set the appropriate default year value
-                subjects = subjectVariables.mapIndexedNotNull { index, variable ->
-                    if (solver.booleanValue(variable)) subjects[index] else null
-                }
-            )
-
-            return if (arePrerequisitesSatisfied(bestCycle.subjects, studentUUID)) {
-                bestCycle
-            } else {
-                StudentCycleDto(
-                    id = null,
-                    studentCode = studentCode,
-                    cycleType = 0, // Set the appropriate default cycleType value
-                    year = 0, // Set the appropriate default year value
-                    subjects = emptyList()
-                )
-            }
-        } else {
-            // No solution found.
-            return StudentCycleDto(
-                id = null,
-                studentCode = studentCode,
-                cycleType = 0, // Set the appropriate default cycleType value
-                year = 0, // Set the appropriate default year value
-                subjects = emptyList()
-            )
-        }
-    }*/
-
-    private fun getScheduleForSubjects(subjectId: List<String>): List<SchedulesDto> {
-        val scheduleDao = scheduleDao
-        // Retrieve the schedules for the given subjects from the database
-        val schedules = scheduleDao.findBySubjectCodeIn(subjectId)
-
-        // Convert the retrieved Schedule models to SchedulesDto objects
-        val schedulesDtos = schedules.map { schedule ->
-            SchedulesDto(
-                id = schedule.id.toString(),
-                collection = schedule.collection,
-                subject = schedule.subject.name,
-                classTime = schedule.classTime.id ?: UUID.randomUUID()
-            )
-        }
-        return schedulesDtos
-    }
-
-    private fun arePrerequisitesSatisfied(subjectCodes: List<String>, studentCode: String): Boolean {
-        val subjectPerStudentCycles = subjectPerStudentCycleDao.getSubjectStatusesForStudent(studentCode)
-
-        for (subjectCode in subjectCodes) {
-            val prerequisites = prerequisitesDao.getPrerequisitesForSubjects(listOf(subjectCode))
-
-            for (prerequisite in prerequisites) {
-                val prerequisiteSubjectCode = prerequisite.prerequisite.prerequisiteCode.subject.code
-
-                val subjectStatus = subjectPerStudentCycles
-                    .find { it.subject.code == prerequisiteSubjectCode }
-                    ?.status
-
-                if (subjectStatus != SubjectStatus.APPROVED) {
-                    return false
-                }
-            }
-        }
-
-        return true
-    }
 }
