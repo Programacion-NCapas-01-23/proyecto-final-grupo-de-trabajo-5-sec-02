@@ -135,8 +135,8 @@ class CycleController(
     }
 
     @Operation(
-        summary = "Create a new cycle",
-        description = "Create a new cycle",
+        summary = "Create student cycle",
+        description = "Create cycle for student",
         security = [SecurityRequirement(name = "APIAuth")],
         responses = [
             ApiResponse(
@@ -146,7 +146,7 @@ class CycleController(
                     Content(
                         mediaType = "application/json",
                         schema = Schema(
-                            implementation = MessageDto::class
+                            implementation = StudentCycleCreatedDto::class
                         )
                     )
                 ]
@@ -185,12 +185,12 @@ class CycleController(
     ): ResponseEntity<Any> {
         return try {
             val studentCode = generalUtils.extractJWT(request)
-            cycleService.createStudentCycle(
+            val createdStudentCycle = cycleService.createStudentCycle(
                 studentCode = studentCode,
                 cycleType = body.cycleType,
                 year = body.year
             )
-            ResponseEntity(MessageDto("Cycle created successfully"), HttpStatus.OK)
+            ResponseEntity(createdStudentCycle, HttpStatus.OK)
         } catch (e: UnauthorizedException) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         } catch (e: ExceptionNotFound) {
@@ -325,7 +325,10 @@ class CycleController(
         } catch (e: UnauthorizedException) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         } catch (e: ExceptionNotFound) {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+            ResponseEntity(
+                MessageDto(e.message?:""),
+                HttpStatus.NOT_FOUND
+            )
         }
     }
 

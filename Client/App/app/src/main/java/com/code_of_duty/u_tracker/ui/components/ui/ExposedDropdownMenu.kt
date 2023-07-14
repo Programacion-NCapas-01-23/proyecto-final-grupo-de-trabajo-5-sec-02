@@ -45,6 +45,8 @@ fun <T: Any> CenteredExposedDropdown (
     optionNameProvider: (T) -> String,
     optionIdProvider: (T) -> String = {""},
     width: Dp = 200.dp,
+    onItemSelected: ((String) -> Unit)? = null,
+
 ) {
     //VARIABLES
     val expandedState = remember { mutableStateOf(false) }
@@ -96,6 +98,8 @@ fun <T: Any> CenteredExposedDropdown (
                             selectedNameValue.value = optionNameProvider(selectionOption)
                             selectedIdValue.value = optionIdProvider(selectionOption)
                             expandedState.value = false
+
+                            onItemSelected?.invoke(selectedIdValue.value)
                         },
                         contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                     )
