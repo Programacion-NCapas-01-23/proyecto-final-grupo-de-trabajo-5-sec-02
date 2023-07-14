@@ -1,7 +1,10 @@
 package com.code_of_duty.u_tracker.data.network
 
+import com.code_of_duty.u_tracker.data.network.request.AddSubjectToPersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.ChangePasswordRequest
 import com.code_of_duty.u_tracker.data.network.request.CreatePersonalTermRequest
+import com.code_of_duty.u_tracker.data.network.request.DeletePersonalTermRequest
+import com.code_of_duty.u_tracker.data.network.request.DeleteSubjectFromPersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.LoginRequest
 import com.code_of_duty.u_tracker.data.network.request.SignUpRequest
 import com.code_of_duty.u_tracker.data.network.response.DegreesResponse
@@ -12,6 +15,7 @@ import com.code_of_duty.u_tracker.data.network.response.IdealTermResponse
 import com.code_of_duty.u_tracker.data.network.response.PersonalTermResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
@@ -68,5 +72,23 @@ interface UtrackerApiClient {
     suspend fun  createPersonalTerm(
         @Header("Authorization") token: String,
         @Body createPersonalTermRequest: CreatePersonalTermRequest
+    ): Response<MessageResponse>
+
+    @POST("cycle/addSubject")
+    suspend fun addSubjectToPersonalTerm(
+        @Header("Authorization") token: String,
+        @Body addSubjectToPersonalTermRequest: AddSubjectToPersonalTermRequest
+    ): Response<MessageResponse>
+
+    @DELETE("cycle/deleteCycle")
+    suspend fun deletePersonalTerm(
+        @Header("Authorization") token: String,
+        @Body deletePersonalTermRequest: DeletePersonalTermRequest
+    ): Response<MessageResponse>
+
+    @DELETE("cycle/deleteSubject")
+    suspend fun deleteSubjectFromPersonalTerm(
+        @Header("Authorization") token: String,
+        @Body deletePersonalTermRequest: DeleteSubjectFromPersonalTermRequest
     ): Response<MessageResponse>
 }

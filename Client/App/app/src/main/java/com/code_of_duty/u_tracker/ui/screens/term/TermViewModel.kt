@@ -1,5 +1,6 @@
 package com.code_of_duty.u_tracker.ui.screens.term
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.code_of_duty.u_tracker.data.network.response.PersonalTermResponse
 import com.code_of_duty.u_tracker.data.repositories.TermRepository
 import com.code_of_duty.u_tracker.enums.AddTermStatus
 import com.code_of_duty.u_tracker.enums.CommonState
+import com.code_of_duty.u_tracker.enums.DeleteTermStatus
 import com.code_of_duty.u_tracker.ui.models.CommonInt
 import com.code_of_duty.u_tracker.ui.models.ExposedDropdownModel
 import com.code_of_duty.u_tracker.ui.models.TermType
@@ -22,13 +24,22 @@ import javax.inject.Inject
 class TermViewModel @Inject constructor(
     private val repository: TermRepository
 ) : ViewModel() {
+    //PARA LOS EXPOSED DROPDOWNS DE ADD TERM
     private var year: MutableState<ExposedDropdownModel> = mutableStateOf(ExposedDropdownModel())
     private var term: MutableState<ExposedDropdownModel> = mutableStateOf(ExposedDropdownModel())
+
+    //MODELOS DE LAS LISTAS
     private var yearsList = mutableListOf<CommonInt>()
     private var termTypesList = mutableListOf<TermType>()
+
+    //LISTA QUE TRAE LOS CICLOS PERSONALES
     private var _term: MutableList<PersonalTermResponse> = mutableListOf()
+
+    //STATUS PARA LAS ACCIONES DEL CRUD
     private var termStatus: MutableState<CommonState> = mutableStateOf(CommonState.NONE)
     private var addTermStatus: MutableState<AddTermStatus> = mutableStateOf(AddTermStatus.NONE)
+    private var deleteTermStatus: MutableState<DeleteTermStatus> = mutableStateOf(DeleteTermStatus.NONE)
+    private var termCycleStatus: MutableState<CommonState> = mutableStateOf(CommonState.NONE)
 
     fun term() = _term
     fun termStatus() = termStatus
@@ -40,39 +51,42 @@ class TermViewModel @Inject constructor(
         }
     }
 
+    private fun getForDB(){
+        viewModelScope.launch {
+            val personalTerms = repository.getPersonalTerms()
+
+        }
+    }
+
     fun filterYears(): MutableList<CommonInt> {
-        try {
-            val yearsWithCount = yearsList.map { year ->
-                val count = _term.count { it.year == year.value }
-                year to count
-            }
-
-            yearsList = yearsWithCount.filter { it.second < 3 }.map { it.first }.toMutableList()
-            return yearsList
-        } catch (e: Exception) {
-            /*CUANDO VEAS ESTO, YA SE QUE NO VA UN TRY CATCH*/
-            return emptyList<CommonInt>().toMutableList()
+        val yearsWithCount = yearsList.map { year ->
+            val count = _term.count { it.year == year.value }
+            year to count
         }
+
+        setTermTypesStatus(CommonState.DONE)
+        yearsList = yearsWithCount.filter { it.second < 3 }.map { it.first }.toMutableList()
+        return yearsList
     }
 
+    fun filterTermTypesForYear(year: Int): MutableList<TermType> {
+        val filteredTermsForYear = _term.filter { it.year == year }
+        Log.d("TermViewModel", "TermTypesList1: $filteredTermsForYear")
 
-    fun filterTermTypes(year: Int) : MutableList<TermType> {
-        try {
-            val filteredTermsForYear = _term.filter { it.year == year }
-
-            val cycleTypesWithCount = termTypesList.map { termType ->
-                val count = filteredTermsForYear.count { it.cycleType == termType.value }
-                termType to count
-            }
-
-            termTypesList = cycleTypesWithCount.filter { it.second < 3 }.map { it.first }.toMutableList()
-            return termTypesList
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return emptyList<TermType>().toMutableList()
+        val filteredTermTypes = termTypesList.filter { termType ->
+            val count = filteredTermsForYear.count { it.cycleType == termType.value }
+            count < 3 && count == 0
         }
-    }
+        Log.d("TermViewModel", "TermTypesList2: $filteredTermTypes")
 
+        termTypesList.clear()
+        termTypesList.addAll(filteredTermTypes)
+
+        Log.d("TermViewModel", "TermTypesList3: $termTypesList")
+
+        setTermTypesStatus(CommonState.DONE)
+        return termTypesList
+    }
     fun getYearsList(): MutableList<CommonInt> {
         return yearsList
     }
@@ -81,6 +95,15 @@ class TermViewModel @Inject constructor(
         this.yearsList = yearsList
         return this.yearsList
     }
+
+    fun getTermTypesStatus(): MutableState<CommonState> {
+        return termCycleStatus
+    }
+
+    fun setTermTypesStatus(status: CommonState){
+        this.termCycleStatus.value = status
+    }
+
 
     fun getTermTypesList(): MutableList<TermType> {
         return termTypesList
@@ -125,6 +148,14 @@ class TermViewModel @Inject constructor(
         this.term.value.selectedTextValue.value = termTypeText
     }
 
+    fun getAddTermStatus(): MutableState<AddTermStatus> {
+        return addTermStatus
+    }
+
+    fun setAddTermStatus(status: AddTermStatus) {
+        this.addTermStatus.value = status
+    }
+
 
     fun getTerm() {
         viewModelScope.launch {
@@ -132,10 +163,25 @@ class TermViewModel @Inject constructor(
                 val token = repository.getToken()
                 if (token.isNotEmpty()) {
                     _term = repository.getPersonalTerms(token).toMutableList()
+                    Log.d("TermViewModel", "getTerm: $_term")
                     termStatus.value = CommonState.DONE
                 }
             } catch (e: Exception) {
                 termStatus.value = CommonState.ERROR
+            }
+        }
+    }
+
+    fun addTerm() {
+        viewModelScope.launch {
+            try {
+                val token = repository.getToken()
+                if (token.isNotEmpty()) {
+                    val addTermResponse = repository.addPersonalTerm(token, getYearId().value.toInt(), getTermTypeId().value.toInt())
+                    addTermStatus.value = AddTermStatus.CREATED
+                }
+            } catch (e: Exception) {
+                addTermStatus.value = AddTermStatus.FAILED
             }
         }
     }
