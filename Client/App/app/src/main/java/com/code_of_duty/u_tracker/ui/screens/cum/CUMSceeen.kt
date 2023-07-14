@@ -48,7 +48,7 @@ fun CUMScreen (
             completed = completed.value,
             total = total.value,
             cum = cum.value,
-            scale = 1.5f
+            scale = 1.5f,
         )
         Text(
             text = "AVANCE DE CARRERA: %.2f".format(percent.value) + "%",

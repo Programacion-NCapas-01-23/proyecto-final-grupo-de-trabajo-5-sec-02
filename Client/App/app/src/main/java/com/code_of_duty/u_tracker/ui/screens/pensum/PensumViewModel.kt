@@ -1,7 +1,6 @@
 package com.code_of_duty.u_tracker.ui.screens.pensum
 
 import android.util.Log
-import com.code_of_duty.u_tracker.data.database.entities.Cycle as CycleEntity
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -120,7 +119,7 @@ class PensumViewModel @Inject constructor(
     fun updateSubject(currSubject: Subject, grade: Float) {
         viewModelScope.launch {
             //TODO: Update subject grade in server
-            repository.updateSubjectgrade(currSubject.code, grade)
+            repository.updateSubjectGrade(currSubject.code, grade)
         }
     }
 
