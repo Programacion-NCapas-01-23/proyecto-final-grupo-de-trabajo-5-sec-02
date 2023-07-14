@@ -3,7 +3,7 @@ package com.code_of_duty.utracker_api.data.dtos
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
 
-data class ClassTimeDTO(
+data class ClassTimeDto(
     @field:NotEmpty(message = "Day of the week is required")
     val day: Int,
     @field:NotEmpty(message = "Start time is required")
