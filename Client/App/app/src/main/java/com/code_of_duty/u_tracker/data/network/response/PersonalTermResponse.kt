@@ -5,5 +5,5 @@ data class PersonalTermResponse(
     val studentCode: String,
     val cycleType: Int,
     val year: Int,
-    val subjects: List<SubjectsForPersonalTermResponse>? = emptyList(),
+    val subjects: List<String>? = emptyList(),
 )

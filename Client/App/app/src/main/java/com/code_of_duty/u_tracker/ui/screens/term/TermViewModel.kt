@@ -162,8 +162,10 @@ class TermViewModel @Inject constructor(
             try {
                 val token = repository.getToken()
                 if (token.isNotEmpty()) {
+                    Log.d("TermViewModel", "Entro al if")
                     _term = repository.getPersonalTerms(token).toMutableList()
-                    Log.d("TermViewModel", "getTerm: $_term")
+
+                    Log.d("TermViewModel", "getTerm: ${_term}")
                     termStatus.value = CommonState.DONE
                 }
             } catch (e: Exception) {
@@ -181,7 +183,7 @@ class TermViewModel @Inject constructor(
                     val addTermResponse = repository.addPersonalTerm(
                         token = token,
                         cycleType =  getTermTypeId().value.toInt(),
-                        year =  getYearText().value.toInt()
+                        year =  getYearId().value.toInt()
                     )
                     addTermStatus.value = AddTermStatus.CREATED
                 }

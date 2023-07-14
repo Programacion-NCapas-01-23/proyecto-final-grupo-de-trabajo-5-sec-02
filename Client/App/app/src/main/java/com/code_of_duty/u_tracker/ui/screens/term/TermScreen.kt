@@ -46,7 +46,6 @@ fun TermScreen (
     termViewModel: TermViewModel = hiltViewModel()
 ) {
     UTrackerTheme {
-
         val error = remember { mutableStateOf(false) }
         val currTerm = remember { mutableStateOf(termViewModel.term())}
         val loading = remember { mutableStateOf(true) }
@@ -56,9 +55,16 @@ fun TermScreen (
 
         val enableStateTermType = remember {mutableStateOf(false)}
 
+        termViewModel.getTerm()
+        termViewModel.loadTermSelectsData()
+
         LaunchedEffect(termViewModel.getAddTermStatus().value) {
             when(termViewModel.getAddTermStatus().value) {
                 AddTermStatus.CREATED -> {
+                    Log.d("TermScreen", "Term Created")
+                    termViewModel.getTerm()
+                    Log.d("TermScreen", "Term Loaded ${termViewModel.getTerm()}")
+                    termViewModel.loadTermSelectsData()
                     termViewModel.setAddTermStatus(AddTermStatus.NONE)
                 }
                 AddTermStatus.FAILED -> {
@@ -69,9 +75,6 @@ fun TermScreen (
                 else -> {}
             }
         }
-
-        termViewModel.getTerm()
-        termViewModel.loadTermSelectsData()
 
         LaunchedEffect(termViewModel.termStatus().value) {
             when (termViewModel.termStatus().value) {
@@ -100,7 +103,6 @@ fun TermScreen (
         //Enable termType Dropdown
 
         LaunchedEffect(yearsList.value) {
-
             termViewModel.setTermTypeId("")
             termViewModel.setTermTypeText("")
             termViewModel.setTermTypesStatus(CommonState.NONE)
@@ -138,6 +140,7 @@ fun TermScreen (
                                     selectedIdValue = selectedYear,
                                     selectedNameValue = selectedNameYear,
                                     optionNameProvider = { option -> option.value.toString()},
+                                    optionIdProvider = { option -> option.value.toString()},
                                     width = 125.dp,
                                     onItemSelected = { selectedId ->
                                         // Aquí puedes acceder al valor de selectedId y hacer lo que necesites con él
@@ -155,6 +158,7 @@ fun TermScreen (
                                     selectedIdValue = selectedIdTermType,
                                     selectedNameValue = selectedNameTermType,
                                     optionNameProvider = { option -> option.name },
+                                    optionIdProvider = { option -> option.value.toString()},
                                     width = 175.dp,
                                     onItemSelected = { selectedId ->
                                         // Aquí puedes acceder al valor de selectedId y hacer lo que necesites con él
@@ -208,7 +212,6 @@ fun TermScreen (
         if(loading.value){
             CircularProgressIndicator()
         } else {
-
             if(currTerm.value.isEmpty()){
                 Box(
                     modifier = Modifier
