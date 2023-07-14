@@ -58,31 +58,14 @@ class SubjectServiceImp(
     }
 
     override fun updateSubjectCompletion(studentCode: String, subjectCode: String, state: SubjectStatus, grade: BigDecimal?): Subject {
-        val studentCycles = studentCycleDao.findByStudentCode(studentCode)
+        val subjectPerStudentCycle = subjectPerStudentCycleDao.findByStudentCode(studentCode)
+            .firstOrNull { it.subject.code == subjectCode }
+            ?: throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode")
 
-        var matchingSubjectPerStudentCycle: SubjectPerStudentCycle? = null
+        subjectPerStudentCycle.status = state
+        subjectPerStudentCycle.grade = grade
 
-        for (studentCycle in studentCycles) {
-            matchingSubjectPerStudentCycle = subjectPerStudentCycleDao.findBySubjectCodeAndStudentCycle(subjectCode, studentCycle)
-            if (matchingSubjectPerStudentCycle != null) {
-                break
-            }
-        }
-
-        if (matchingSubjectPerStudentCycle == null) {
-            throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode and student code: $studentCode")
-        }
-
-        matchingSubjectPerStudentCycle.status = state
-
-        if (grade != null) {
-            matchingSubjectPerStudentCycle.grade = grade
-        }
-
-        // Save the updated SubjectPerStudentCycle entity
-        subjectPerStudentCycleDao.save(matchingSubjectPerStudentCycle)
-
-        return matchingSubjectPerStudentCycle.subject
+        return subjectPerStudentCycleDao.save(subjectPerStudentCycle).subject
     }
 
     override fun getAllAssessments(studentCode: String, subjectCode: String): List<AssessmentResponseDto> {
@@ -213,8 +196,12 @@ class SubjectServiceImp(
             BigDecimal.ZERO
         }
 
+        // Update the cum value in the Student model
+        val student = studentDao.findByCode(studentCode)
+        student?.cum = cum
+        studentDao.save(student!!)
+
         return CumDto(cum)
     }
-
 
 }

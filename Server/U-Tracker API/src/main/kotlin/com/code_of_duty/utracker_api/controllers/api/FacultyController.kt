@@ -26,13 +26,13 @@ class FacultyController (
     private val facultyService: FacultyService
 ) {
     @Operation(
-        summary = "Get all degrees",
-        description = "Get all degrees",
+        summary = "Get all faculties",
+        description = "Get all faculties available",
 
         responses = [
             ApiResponse(
                 responseCode = "200",
-                description = "Degrees retrieved successfully",
+                description = "Faculties retrieved successfully",
                 content = [
                     Content(
                         mediaType = "application/json",
