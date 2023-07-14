@@ -44,5 +44,12 @@ object RoomModule {
     @Singleton
     fun providesGradeDao(database: UtrackerDatabase) = database.gradeDao()
 
+    @Provides
+    @Singleton
+    fun providesPersonalTermDao(database: UtrackerDatabase) = database.PersonalTermDao()
+
+    @Provides
+    @Singleton
+    fun providesPersonalTermXSubjectDao(database: UtrackerDatabase) = database.PersonalTermXSubjectDao()
     //if you have more DAOs, you can provide them here as well
 }

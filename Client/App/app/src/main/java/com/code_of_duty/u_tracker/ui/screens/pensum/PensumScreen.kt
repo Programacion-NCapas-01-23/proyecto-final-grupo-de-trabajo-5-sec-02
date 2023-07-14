@@ -59,12 +59,7 @@ fun PensumScreen (
     val bsState = rememberBottomSheetScaffoldState()
     val currGrade = remember { mutableStateOf("") }
     val currSubject = remember { mutableStateOf(Subject("","",0,0,0)) }
-    var openBottomSheet = rememberSaveable { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    var skipPartiallyExpanded = remember { mutableStateOf(true) }
-    val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = skipPartiallyExpanded.value
-    )
     val currPensum = remember { mutableStateOf(viewModel.pensum()) }
     val loading = remember { mutableStateOf(true) }
     var correlativePressed by remember { mutableStateOf(0) }
@@ -133,7 +128,6 @@ fun PensumScreen (
                                 myModifier = Modifier.combinedClickable(
                                     onClick = {
                                         scope.launch { bsState.bottomSheetState.expand() }
-                                        openBottomSheet.value = true
                                         currSubject.value = Subject(
                                             code = subject.code,
                                             name = subject.name,
@@ -169,7 +163,6 @@ fun PensumScreen (
             },
             {
                 Button(onClick = {
-                    //TODO: Update subject in server
                     viewModel.updateSubject(currSubject.value, currGrade.value.toFloat())
                     viewModel.subjectPassedState[currSubject.value.code] = currGrade.value.toFloat() >= 6.0f
                     currGrade.value = ""

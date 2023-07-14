@@ -29,7 +29,7 @@ fun BottomBar(navController: NavHostController) {
         MainNavItems.Pensum,
         MainNavItems.Assesment,
         MainNavItems.Term,
-        MainNavItems.CUM,
+        //MainNavItems.CUM,
         //MainNavItems.Schedule,
     )
 

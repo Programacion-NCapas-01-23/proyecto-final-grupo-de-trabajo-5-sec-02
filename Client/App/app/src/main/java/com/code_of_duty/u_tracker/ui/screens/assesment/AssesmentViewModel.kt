@@ -19,22 +19,8 @@ import javax.inject.Inject
 class AssesmentViewModel @Inject constructor(
     private val repository: AssesmentRepository
 ): ViewModel(){
-    val subject = mutableStateListOf<SubjectWithAssesment>(
-        SubjectWithAssesment(code = "1", name = "Calculo I", assesments = listOf(
-            Assesment(name = "Parcial 1", grade = "4.5", percentage = "30", subject = "1"),
-            Assesment(name = "Parcial 2", grade = "4.5", percentage = "30", subject = "1"),
-            Assesment(name = "Parcial 3", grade = "4.5", percentage = "30", subject = "1"),
-        )),
-        SubjectWithAssesment(code = "2", name = "Calculo II", assesments = listOf(
-            Assesment(name = "Parcial 1", grade = "4.5", percentage = "30", subject = "2"),
-            Assesment(name = "Parcial 2", grade = "4.5", percentage = "30", subject = "2"),
-            Assesment(name = "Parcial 3", grade = "4.5", percentage = "30", subject = "2"),
-        )),
-        SubjectWithAssesment(code = "3", name = "Calculo III", assesments = listOf(
-            Assesment(name = "Parcial 1", grade = "4.5", percentage = "30", subject = "3"),
-            Assesment(name = "Parcial 2", grade = "4.5", percentage = "70", subject = "3")
-        )),
-    )
+    val subject = repository.getSubjectWithAssesment()
+
     var subjects = listOf<Subject>()
 
     fun getSubjectWithoutGrade(){

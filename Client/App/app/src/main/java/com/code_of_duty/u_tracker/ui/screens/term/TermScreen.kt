@@ -42,7 +42,9 @@ import com.code_of_duty.u_tracker.ui.theme.Typography
 import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 
 @Composable
-fun TermScreen (termViewModel: TermViewModel = hiltViewModel()) {
+fun TermScreen (
+    termViewModel: TermViewModel = hiltViewModel()
+) {
     UTrackerTheme {
 
         val error = remember { mutableStateOf(false) }
@@ -140,6 +142,7 @@ fun TermScreen (termViewModel: TermViewModel = hiltViewModel()) {
                                     onItemSelected = { selectedId ->
                                         // Aquí puedes acceder al valor de selectedId y hacer lo que necesites con él
                                         Log.d("TermScreen", "Selected Id: $selectedId")
+                                        termViewModel.setYearText(selectedNameYear.value)
                                         termViewModel.setYearId(selectedId)
                                     }
                                 )
@@ -155,8 +158,9 @@ fun TermScreen (termViewModel: TermViewModel = hiltViewModel()) {
                                     width = 175.dp,
                                     onItemSelected = { selectedId ->
                                         // Aquí puedes acceder al valor de selectedId y hacer lo que necesites con él
-                                        Log.d("TermScreen", "Selected Id: $selectedId")
-                                        termViewModel.setTermTypeId(selectedId)
+                                        Log.d("TermScreen", "Selected Id: ${selectedIdTermType.value}")
+                                        termViewModel.setTermTypeText(selectedNameTermType.value)
+                                        termViewModel.setTermTypeId(selectedIdTermType.value)
                                     }
                                 )
                             },

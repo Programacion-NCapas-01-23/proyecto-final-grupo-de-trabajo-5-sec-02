@@ -1,11 +1,12 @@
 package com.code_of_duty.u_tracker.data.database.dao
 
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.code_of_duty.u_tracker.data.database.entities.PersonalTerm
-
+@Dao
 interface PersonalTermDao {
     @Transaction
     @Insert(onConflict = androidx.room.OnConflictStrategy.REPLACE)

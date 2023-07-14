@@ -16,6 +16,7 @@ import com.code_of_duty.u_tracker.data.network.request.CreatePersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.DeletePersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.DeleteSubjectFromPersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.LoginRequest
+import com.code_of_duty.u_tracker.data.network.response.CreateTermResponse
 import com.code_of_duty.u_tracker.data.network.response.MessageResponse
 import com.code_of_duty.u_tracker.data.network.response.PersonalTermResponse
 import javax.inject.Inject
@@ -35,9 +36,15 @@ class TermRepository @Inject constructor(
         }
     }
 
-    suspend fun addPersonalTerm(token:String, cycleType: Int, year: Int): MessageResponse {
+    suspend fun addPersonalTerm(token:String, cycleType: Int, year: Int): CreateTermResponse {
         return apiRequest {
-            apiClient.createPersonalTerm(token, CreatePersonalTermRequest(cycleType, year))
+            apiClient.createPersonalTerm(
+                token,
+                CreatePersonalTermRequest(
+                    cycleType,
+                    year
+                )
+            )
         }
     }
 
@@ -120,7 +127,8 @@ class TermRepository @Inject constructor(
     }
 
     suspend fun getSubjectsFromTerm(termId: String): List<PersonalTermSubjectCrossRef> {
-        return subjectForTermDao.getSubjectsFromPersonalTerm(termId)
+        //return subjectForTermDao.getSubjectsFromPersonalTerm(termId)
+        TODO()
     }
 
     suspend fun updatePersonalTerm(personalTerm: PersonalTermEntities) {
@@ -144,8 +152,7 @@ class TermRepository @Inject constructor(
             id = personalTerm.id,
             studentCode = personalTerm.studentCode,
             cycleType = personalTerm.cycleType,
-            year = personalTerm.year,
-            subjects = subjectsForTerm
+            year = personalTerm.year
         ))
     }
 

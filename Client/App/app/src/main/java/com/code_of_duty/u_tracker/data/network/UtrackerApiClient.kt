@@ -7,6 +7,7 @@ import com.code_of_duty.u_tracker.data.network.request.DeletePersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.DeleteSubjectFromPersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.LoginRequest
 import com.code_of_duty.u_tracker.data.network.request.SignUpRequest
+import com.code_of_duty.u_tracker.data.network.response.CreateTermResponse
 import com.code_of_duty.u_tracker.data.network.response.DegreesResponse
 import com.code_of_duty.u_tracker.data.network.response.FacultiesResponse
 import com.code_of_duty.u_tracker.data.network.response.LoginResponse
@@ -73,7 +74,7 @@ interface UtrackerApiClient {
     suspend fun  createPersonalTerm(
         @Header("Authorization") token: String,
         @Body createPersonalTermRequest: CreatePersonalTermRequest
-    ): Response<MessageResponse>
+    ): Response<CreateTermResponse>
 
     //Student
     @GET("student/getStudent")

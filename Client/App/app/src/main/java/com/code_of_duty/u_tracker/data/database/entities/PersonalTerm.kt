@@ -13,14 +13,4 @@ data class PersonalTerm(
     val studentCode: String,
     val cycleType: Int,
     val year: Int,
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "code",
-        associateBy = Junction(
-            value = PersonalTermSubjectCrossRef::class,
-            parentColumn = "personalTermId",
-            entityColumn = "subjectCode"
-        )
-    )
-    val subjects: List<String>,
 )

@@ -8,13 +8,16 @@ import com.code_of_duty.u_tracker.data.database.dao.SubjectDao
 import com.code_of_duty.u_tracker.data.database.dao.TokenDao
 import com.code_of_duty.u_tracker.data.database.dao.UserDao
 import com.code_of_duty.u_tracker.data.database.entities.Grade
+import com.code_of_duty.u_tracker.data.database.entities.MainTerm
 import com.code_of_duty.u_tracker.data.database.entities.Prerequisite
 import com.code_of_duty.u_tracker.data.database.entities.Subject
 import com.code_of_duty.u_tracker.data.database.entities.Cycle as CycleEntities
 import com.code_of_duty.u_tracker.data.database.entities.UserToken
 import com.code_of_duty.u_tracker.data.network.SafeApiRequest
 import com.code_of_duty.u_tracker.data.network.UtrackerApiClient
+import com.code_of_duty.u_tracker.data.network.request.CreatePersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.LoginRequest
+import com.code_of_duty.u_tracker.data.network.response.CreateTermResponse
 import com.code_of_duty.u_tracker.data.network.response.IdealTermResponse
 import com.code_of_duty.u_tracker.data.network.response.SubjectsFromTermResponse
 import javax.inject.Inject
@@ -117,14 +120,20 @@ class PensumRepository @Inject constructor(
             gradeDao.update(grade)
         }
     }
+    suspend fun getMainTerm() = cycleDao.getMainTerm()
 
-    suspend fun updateSubjectGradeInServer(cycle: String = "", subject: String, grade: Float){
-        /*return apiRequest {
+    suspend fun insertMainTerm(mainTerm: MainTerm) = cycleDao.insertMainTerm(mainTerm)
 
-        }*/
-    }
-    suspend fun insertSubjectGradeInServer(cycle: String = "", subject: String, grade: Float){
-
+    suspend fun createMainTerm(token: String): CreateTermResponse {
+        return apiRequest {
+            apiClient.createPersonalTerm(
+                token = token,
+                createPersonalTermRequest =  CreatePersonalTermRequest(
+                    cycleType = 0,
+                    year = 1000
+                )
+            )
+        }
     }
 
     suspend fun updateCycle(existingCycle: CycleEntities) {
@@ -165,5 +174,25 @@ class PensumRepository @Inject constructor(
 
     suspend fun getGrade(code: String): Grade {
         return gradeDao.getGradeBySubject(code)
+    }
+    fun updateGradeInServer(code: String, grade: Float, id: String) {
+        //TODO: Implement this
+        /*try {
+            apiRequest {
+                apiClient.insertGrade(
+                    token = id,
+                    code = code,
+                    grade = grade
+                )
+            }
+        } catch (_: Exception) {
+            apiRequest {
+                apiClient.updateGrade(
+                    token = id,
+                    code = code,
+                    grade = grade
+                )
+            }
+        }*/
     }
 }

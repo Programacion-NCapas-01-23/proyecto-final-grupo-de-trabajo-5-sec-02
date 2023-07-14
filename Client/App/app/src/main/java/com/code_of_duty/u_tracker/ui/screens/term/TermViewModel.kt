@@ -53,7 +53,7 @@ class TermViewModel @Inject constructor(
 
     private fun getForDB(){
         viewModelScope.launch {
-            val personalTerms = repository.getPersonalTerms()
+            //val personalTerms = repository.getPersonalTerms()
 
         }
     }
@@ -177,7 +177,12 @@ class TermViewModel @Inject constructor(
             try {
                 val token = repository.getToken()
                 if (token.isNotEmpty()) {
-                    val addTermResponse = repository.addPersonalTerm(token, getYearId().value.toInt(), getTermTypeId().value.toInt())
+                    Log.d("TermViewModel", "addTerm: $token ${getTermTypeId().value} ${getYearText().value}")
+                    val addTermResponse = repository.addPersonalTerm(
+                        token = token,
+                        cycleType =  getTermTypeId().value.toInt(),
+                        year =  getYearText().value.toInt()
+                    )
                     addTermStatus.value = AddTermStatus.CREATED
                 }
             } catch (e: Exception) {

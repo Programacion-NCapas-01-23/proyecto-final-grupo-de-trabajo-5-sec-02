@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.code_of_duty.u_tracker.data.database.entities.Grade
+import com.code_of_duty.u_tracker.data.database.entities.MainTerm
 import com.code_of_duty.u_tracker.data.database.entities.Prerequisite
 import com.code_of_duty.u_tracker.data.database.entities.Subject
 import com.code_of_duty.u_tracker.data.repositories.PensumRepository
@@ -124,10 +125,22 @@ class PensumViewModel @Inject constructor(
 
     fun updateSubject(currSubject: Subject, grade: Float) {
         viewModelScope.launch {
-            val isPassed = grade >= 6.0f
-            subjectPassedState[currSubject.code] = isPassed
-            repository.updateSubjectgrade(currSubject.code, grade)
-            repository.updateSubjectGradeInServer("", currSubject.code, grade)
+            try {
+                var mainTerm = repository.getMainTerm()
+                if (mainTerm == null) {
+                    val token = repository.getToken()
+                    if (token.isEmpty()) throw Exception("No token found")
+                    val _mainTerm =  repository.createMainTerm(token)
+                    mainTerm = MainTerm(id = _mainTerm.studentCycleId, cycleType = _mainTerm.cycleType, year = _mainTerm.year)
+                    repository.insertMainTerm(mainTerm)
+                }
+                val isPassed = grade >= 6.0f
+                repository.updateGradeInServer(currSubject.code, grade, mainTerm.id)
+                subjectPassedState[currSubject.code] = isPassed
+                repository.updateSubjectgrade(currSubject.code, grade)
+            } catch (e: Exception) {
+                Log.e("PensumViewModel", e.toString())
+            }
         }
     }
 }
