@@ -106,12 +106,14 @@ fun StatisticCard(
                 )
             }
             if (cardType == 3) {
-                PartialCircle(
-                    completed = completed.value,
-                    total = total.value,
-                    cum = approvedSubjects as Float,
-                    scale = 1.5f,
-                )
+                if (approvedSubjects != null) {
+                    PartialCircle(
+                        completed = completed.value,
+                        total = total.value,
+                        cum = approvedSubjects.toFloat(),
+                        scale = 1.5f,
+                    )
+                }
                 Text(
                     text = "Materias Aprobadas",
                     textAlign = TextAlign.End,
