@@ -38,11 +38,13 @@ import com.code_of_duty.u_tracker.ui.components.profile.StatisticCard
         }
 
         val code by viewModel.code.collectAsState()
-        val username by viewModel.username.collectAsState()
+        val username by viewModel.name.collectAsState()
         val image by viewModel.image.collectAsState()
         val cum by viewModel.cum.collectAsState()
         val degree by viewModel.degree.collectAsState()
         val approvedSubjects by viewModel.approvedSubjects.collectAsState()
+        val faculty by viewModel.faculty.collectAsState()
+        val pensum by viewModel.pensum.collectAsState()
 
         Log.e("Data", code)
         Log.e("Loading", loading.toString())
@@ -59,8 +61,8 @@ import com.code_of_duty.u_tracker.ui.components.profile.StatisticCard
                     ProfileCard(
                         code = code,
                         username = username,
-                        career = it.name,
-                        pensum = degree!!.pensums?.firstOrNull()?.plan ?: "",
+                        career = degree!!,
+                        pensum = pensum,
                         image = "https://img.freepik.com/free-icon/user_318-159711.jpg?w=2000"
                     )
                 }

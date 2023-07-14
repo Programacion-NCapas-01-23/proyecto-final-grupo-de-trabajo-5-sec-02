@@ -16,18 +16,23 @@ class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
 ) : ViewModel() {
     private val _code = MutableStateFlow("")
-    private val _username = MutableStateFlow("")
+    private val _name = MutableStateFlow("")
     private val _image = MutableStateFlow("")
     private val _cum = MutableStateFlow(0.0f)
-    private val _degree = MutableStateFlow<Degree?>(null)
+    private val _degree = MutableStateFlow<String?>(null)
     private val _approvedSubjects = MutableStateFlow(0)
+    private val _pensum = MutableStateFlow("")
+    private val _faculty = MutableStateFlow("")
+
 
     val code: StateFlow<String> = _code
-    val username: StateFlow<String> = _username
+    val name: StateFlow<String> = _name
     val image: StateFlow<String> = _image
     val cum: StateFlow<Float> = _cum
-    val degree: StateFlow<Degree?> = _degree
+    val degree: StateFlow<String?> = _degree
     val approvedSubjects: StateFlow<Int> = _approvedSubjects
+    val pensum: StateFlow<String> = _pensum
+    val faculty: StateFlow<String> = _faculty
 
     fun getStudentInfo() {
         viewModelScope.launch {
@@ -37,11 +42,13 @@ class ProfileViewModel @Inject constructor(
                     val profileResponse = profileRepository.getStudentInfo(token)
                     Log.e("Response", profileResponse.toString())
                     _code.value = profileResponse.code
-                    _username.value = profileResponse.username
+                    _name.value = profileResponse.name
                     _image.value = profileResponse.image ?: ""
                     _cum.value = profileResponse.cum
                     _degree.value = profileResponse.degree
                     _approvedSubjects.value = profileResponse.approvedSubjects
+                    _pensum.value = profileResponse.pensum
+                    _faculty.value = profileResponse.faculty
                 }
             } catch (e: Exception) {
                 Log.e("Profile View Model", e.toString())
