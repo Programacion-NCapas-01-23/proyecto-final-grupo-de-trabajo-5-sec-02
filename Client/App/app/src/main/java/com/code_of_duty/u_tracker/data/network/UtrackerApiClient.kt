@@ -13,6 +13,7 @@ import com.code_of_duty.u_tracker.data.network.response.LoginResponse
 import com.code_of_duty.u_tracker.data.network.response.MessageResponse
 import com.code_of_duty.u_tracker.data.network.response.IdealTermResponse
 import com.code_of_duty.u_tracker.data.network.response.PersonalTermResponse
+import com.code_of_duty.u_tracker.data.network.response.ProfileResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -74,6 +75,11 @@ interface UtrackerApiClient {
         @Body createPersonalTermRequest: CreatePersonalTermRequest
     ): Response<MessageResponse>
 
+    //Student
+    @GET("student/getStudent")
+    suspend fun getStudentProfile(
+        @Header("Authorization") token: String,
+    ): Response<ProfileResponse>
     @POST("cycle/addSubject")
     suspend fun addSubjectToPersonalTerm(
         @Header("Authorization") token: String,

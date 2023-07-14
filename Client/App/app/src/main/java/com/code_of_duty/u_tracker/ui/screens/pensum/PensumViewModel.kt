@@ -1,7 +1,6 @@
 package com.code_of_duty.u_tracker.ui.screens.pensum
 
 import android.util.Log
-import com.code_of_duty.u_tracker.data.database.entities.Cycle as CycleEntity
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
