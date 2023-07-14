@@ -1,5 +1,6 @@
 package com.code_of_duty.u_tracker.ui.screens.term
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.code_of_duty.u_tracker.data.network.response.PersonalTermResponse
 import com.code_of_duty.u_tracker.data.repositories.TermRepository
 import com.code_of_duty.u_tracker.enums.AddTermStatus
 import com.code_of_duty.u_tracker.enums.CommonState
+import com.code_of_duty.u_tracker.enums.DeleteTermStatus
 import com.code_of_duty.u_tracker.ui.models.CommonInt
 import com.code_of_duty.u_tracker.ui.models.ExposedDropdownModel
 import com.code_of_duty.u_tracker.ui.models.TermType
@@ -22,13 +24,21 @@ import javax.inject.Inject
 class TermViewModel @Inject constructor(
     private val repository: TermRepository
 ) : ViewModel() {
+    //PARA LOS EXPOSED DROPDOWNS DE ADD TERM
     private var year: MutableState<ExposedDropdownModel> = mutableStateOf(ExposedDropdownModel())
     private var term: MutableState<ExposedDropdownModel> = mutableStateOf(ExposedDropdownModel())
+
+    //MODELOS DE LAS LISTAS
     private var yearsList = mutableListOf<CommonInt>()
     private var termTypesList = mutableListOf<TermType>()
+
+    //LISTA QUE TRAE LOS CICLOS PERSONALES
     private var _term: MutableList<PersonalTermResponse> = mutableListOf()
+    
+    //STATUS PARA LAS ACCIONES DEL CRUD
     private var termStatus: MutableState<CommonState> = mutableStateOf(CommonState.NONE)
     private var addTermStatus: MutableState<AddTermStatus> = mutableStateOf(AddTermStatus.NONE)
+    private var deleteTermStatus: MutableState<DeleteTermStatus> = mutableStateOf(DeleteTermStatus.NONE)
 
     fun term() = _term
     fun termStatus() = termStatus
@@ -56,21 +66,31 @@ class TermViewModel @Inject constructor(
     }
 
 
-    fun filterTermTypes(year: Int) : MutableList<TermType> {
-        try {
-            val filteredTermsForYear = _term.filter { it.year == year }
+    fun filterTermTypesForYear(year: Int): MutableList<TermType> {
+        val filteredTermsForYear = _term.filter { it.year == year }
+        Log.d("TermViewModel", "TermTypesList1: $filteredTermsForYear")
 
-            val cycleTypesWithCount = termTypesList.map { termType ->
-                val count = filteredTermsForYear.count { it.cycleType == termType.value }
-                termType to count
-            }
-
-            termTypesList = cycleTypesWithCount.filter { it.second < 3 }.map { it.first }.toMutableList()
-            return termTypesList
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return emptyList<TermType>().toMutableList()
+        val filteredTermTypes = termTypesList.filter { termType ->
+            val count = filteredTermsForYear.count { it.cycleType == termType.value }
+            count < 3 && count == 0
         }
+        Log.d("TermViewModel", "TermTypesList2: $filteredTermTypes")
+
+        termTypesList.clear()
+        termTypesList.addAll(filteredTermTypes)
+
+        Log.d("TermViewModel", "TermTypesList3: $termTypesList")
+
+        setTermTypesStatus(CommonState.DONE)
+        return termTypesList
+    }
+
+    fun getTermTypeStatus(): MutableState<CommonState> {
+        return termStatus
+    }
+
+    fun setTermTypesStatus(status: CommonState) {
+        this.termStatus.value = status
     }
 
     fun getYearsList(): MutableList<CommonInt> {

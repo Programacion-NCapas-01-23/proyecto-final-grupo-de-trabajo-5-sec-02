@@ -37,9 +37,6 @@ import com.code_of_duty.u_tracker.ui.theme.UTrackerTheme
 @Composable
 fun TermScreen (termViewModel: TermViewModel = hiltViewModel()) {
     UTrackerTheme {
-
-
-
         val currTerm = remember { mutableStateOf(termViewModel.term())}
         val loading = remember { mutableStateOf(true) }
 
@@ -72,7 +69,7 @@ fun TermScreen (termViewModel: TermViewModel = hiltViewModel()) {
             enableStateTermType.value = false
 
             if(termViewModel.getYearId().value != ""){
-                termTypesList.value = termViewModel.filterTermTypes(termViewModel.getYearId().value.toInt())
+                termTypesList.value = termViewModel.filterTermTypesForYear(termViewModel.getYearId().value.toInt())
                 enableStateTermType.value = true
             }
         }
