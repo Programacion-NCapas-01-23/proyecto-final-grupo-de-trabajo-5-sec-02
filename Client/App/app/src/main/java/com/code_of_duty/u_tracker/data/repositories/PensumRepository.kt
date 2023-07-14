@@ -109,9 +109,9 @@ class PensumRepository @Inject constructor(
         return prerequisiteDao.getPrerequisitesBySubject(subject)
     }
 
-    suspend fun updateSubjectgrade(subject: String, grade: Float) {
-        val grade = Grade(subject, grade, grade >= 6.0)
-        gradeDao.insertOrUpdate(grade)
+    suspend fun updateSubjectGrade(subject: String, grade: Float) {
+        val score = Grade(subject, grade, grade >= 6.0)
+        gradeDao.insertOrUpdate(score)
     }
 
     suspend fun updateCycle(existingCycle: CycleEntities) {
