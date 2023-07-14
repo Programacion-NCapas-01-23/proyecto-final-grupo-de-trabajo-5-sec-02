@@ -169,6 +169,7 @@ class TermViewModel @Inject constructor(
                     termStatus.value = CommonState.DONE
                 }
             } catch (e: Exception) {
+                Log.e("TermViewModel", "getTerm: ${e.message}", e)
                 termStatus.value = CommonState.ERROR
             }
         }
@@ -190,6 +191,13 @@ class TermViewModel @Inject constructor(
             } catch (e: Exception) {
                 addTermStatus.value = AddTermStatus.FAILED
             }
+        }
+    }
+
+    fun setCurrentTerm(id: String) {
+        viewModelScope.launch {
+            repository.deleteCurrentTerm()
+            repository.setCurrentTerm(id)
         }
     }
 }

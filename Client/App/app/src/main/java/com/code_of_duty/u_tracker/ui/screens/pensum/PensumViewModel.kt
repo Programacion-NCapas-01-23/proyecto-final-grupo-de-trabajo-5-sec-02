@@ -52,6 +52,7 @@ class PensumViewModel @Inject constructor(
                         SubjectsFromTermResponse(
                             subject.code,
                             subject.name,
+                            null,
                             subject.uv,
                             subject.order,
                             prerequisites.map { it.prerequisiteCode },
@@ -93,6 +94,7 @@ class PensumViewModel @Inject constructor(
                         }
 
                         newCycle.subjects.forEach { newSubject ->
+                            subjectPassedState[newSubject.code] = newSubject.grade != null && newSubject.grade >= 6.0f
                             val existingSubject = repository.getSubjectByCode(newSubject.code)
                             if (existingSubject != null) {
                                 // El tema ya existe, actualizar sus datos
@@ -127,15 +129,26 @@ class PensumViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 var mainTerm = repository.getMainTerm()
+                val token = repository.getToken()
                 if (mainTerm == null) {
-                    val token = repository.getToken()
                     if (token.isEmpty()) throw Exception("No token found")
-                    val _mainTerm =  repository.createMainTerm(token)
-                    mainTerm = MainTerm(id = _mainTerm.studentCycleId, cycleType = _mainTerm.cycleType, year = _mainTerm.year)
-                    repository.insertMainTerm(mainTerm)
+
+                    val serverMainTerm = repository.getPersonalTerms(token).filter { it.year == 1000 }.first()
+
+                    if (serverMainTerm == null){
+                        val _mainTerm =  repository.createMainTerm(token)
+                        mainTerm = MainTerm(id = _mainTerm.studentCycleId, cycleType = _mainTerm.cycleType, year = _mainTerm.year)
+                        repository.insertMainTerm(mainTerm)
+                    }else{
+                        mainTerm = MainTerm(
+                            id = serverMainTerm.id,
+                            cycleType = serverMainTerm.cycleType,
+                            year = serverMainTerm.year
+                        )
+                    }
                 }
                 val isPassed = grade >= 6.0f
-                repository.updateGradeInServer(currSubject.code, grade, mainTerm.id)
+                repository.updateGradeInServer(token, currSubject.code, grade, mainTerm.id)
                 subjectPassedState[currSubject.code] = isPassed
                 repository.updateSubjectgrade(currSubject.code, grade)
             } catch (e: Exception) {

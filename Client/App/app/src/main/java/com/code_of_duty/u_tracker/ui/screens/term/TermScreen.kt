@@ -251,7 +251,11 @@ fun TermScreen (
                                         Log.d("TermScreen", subject.toString())
                                         /*TODO: LIST ITEMS WITH COMPONENT LISTITEM*/
                                     }
-                                }
+                                },
+                                onButtonClick = {
+                                    termViewModel.setCurrentTerm(term.id)
+                                },
+                                buttonText = "Seleccionar ciclo"
                             )
                         }
                     }

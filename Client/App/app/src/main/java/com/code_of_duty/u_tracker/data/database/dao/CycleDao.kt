@@ -27,4 +27,8 @@ interface CycleDao {
 
     @Query("SELECT * FROM MainTerm")
     suspend fun getMainTerm(): MainTerm
+    @Query("DELETE FROM MainTerm")
+    suspend fun deleteCurrentTerm()
+    @Insert
+    suspend fun setCurrentTerm(id: String)
 }

@@ -15,11 +15,15 @@ import com.code_of_duty.u_tracker.data.database.entities.Cycle as CycleEntities
 import com.code_of_duty.u_tracker.data.database.entities.UserToken
 import com.code_of_duty.u_tracker.data.network.SafeApiRequest
 import com.code_of_duty.u_tracker.data.network.UtrackerApiClient
+import com.code_of_duty.u_tracker.data.network.request.AddSubjectToPersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.CreatePersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.LoginRequest
+import com.code_of_duty.u_tracker.data.network.request.UpdateSubjectRequest
 import com.code_of_duty.u_tracker.data.network.response.CreateTermResponse
 import com.code_of_duty.u_tracker.data.network.response.IdealTermResponse
+import com.code_of_duty.u_tracker.data.network.response.PersonalTermResponse
 import com.code_of_duty.u_tracker.data.network.response.SubjectsFromTermResponse
+import com.code_of_duty.u_tracker.enums.SubjectStatus
 import javax.inject.Inject
 //TODO: Implement DataBase for this model
 class PensumRepository @Inject constructor(
@@ -31,6 +35,13 @@ class PensumRepository @Inject constructor(
     private val prerequisiteDao: PrerequisiteDao,
     private val gradeDao: GradeDao
 ): SafeApiRequest(){
+
+    suspend fun getPersonalTerms(token:String): List<PersonalTermResponse> {
+        return apiRequest {
+            Log.d("TermRepository", "Getting personal terms")
+            apiClient.getPersonalTerms(token)
+        }
+    }
 
     suspend fun getPensum(token: String): List<IdealTermResponse>{
         return apiRequest {
@@ -175,24 +186,42 @@ class PensumRepository @Inject constructor(
     suspend fun getGrade(code: String): Grade {
         return gradeDao.getGradeBySubject(code)
     }
-    fun updateGradeInServer(code: String, grade: Float, id: String) {
-        //TODO: Implement this
-        /*try {
+     suspend fun updateGradeInServer(token: String, code: String, grade: Float, id: String) {
+        try {
             apiRequest {
-                apiClient.insertGrade(
-                    token = id,
-                    code = code,
-                    grade = grade
+                apiClient.addSubjectToPersonalTerm(
+                    token  = token,
+                    addSubjectToPersonalTermRequest = AddSubjectToPersonalTermRequest(
+                        studentCycleId = id,
+                        subjectCode = code,
+                        estimatedGrade = 6,
+                    )
+                )
+            }
+
+            apiRequest {
+                apiClient.updateSubject(
+                    token = token,
+                    updateSubject = UpdateSubjectRequest(
+                        studentCycleId = id,
+                        subjectCode = code,
+                        grade = grade,
+                        state = if (grade >= 6.0) SubjectStatus.APPROVED else SubjectStatus.REJECTED
+                    )
                 )
             }
         } catch (_: Exception) {
             apiRequest {
-                apiClient.updateGrade(
-                    token = id,
-                    code = code,
-                    grade = grade
+                apiClient.updateSubject(
+                    token = token,
+                    updateSubject = UpdateSubjectRequest(
+                        studentCycleId = id,
+                        subjectCode = code,
+                        grade = grade,
+                        state = if (grade >= 6.0) SubjectStatus.APPROVED else SubjectStatus.REJECTED
+                    )
                 )
             }
-        }*/
+        }
     }
 }

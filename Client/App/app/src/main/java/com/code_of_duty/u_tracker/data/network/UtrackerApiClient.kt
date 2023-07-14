@@ -7,6 +7,7 @@ import com.code_of_duty.u_tracker.data.network.request.DeletePersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.DeleteSubjectFromPersonalTermRequest
 import com.code_of_duty.u_tracker.data.network.request.LoginRequest
 import com.code_of_duty.u_tracker.data.network.request.SignUpRequest
+import com.code_of_duty.u_tracker.data.network.request.UpdateSubjectRequest
 import com.code_of_duty.u_tracker.data.network.response.CreateTermResponse
 import com.code_of_duty.u_tracker.data.network.response.DegreesResponse
 import com.code_of_duty.u_tracker.data.network.response.FacultiesResponse
@@ -97,5 +98,11 @@ interface UtrackerApiClient {
     suspend fun deleteSubjectFromPersonalTerm(
         @Header("Authorization") token: String,
         @Body deletePersonalTermRequest: DeleteSubjectFromPersonalTermRequest
+    ): Response<MessageResponse>
+
+    @PATCH("subject/updateSubject")
+    suspend fun updateSubject(
+        @Header("Authorization") token: String,
+        @Body updateSubject: UpdateSubjectRequest
     ): Response<MessageResponse>
 }

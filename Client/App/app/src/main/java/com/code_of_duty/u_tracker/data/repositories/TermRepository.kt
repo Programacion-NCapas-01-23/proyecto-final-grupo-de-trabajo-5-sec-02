@@ -1,6 +1,7 @@
 package com.code_of_duty.u_tracker.data.repositories
 
 import android.util.Log
+import com.code_of_duty.u_tracker.data.database.dao.CycleDao
 import com.code_of_duty.u_tracker.data.database.dao.PersonalTermDao
 import com.code_of_duty.u_tracker.data.database.dao.PersonalTermXSubjectDao
 import com.code_of_duty.u_tracker.data.database.dao.TokenDao
@@ -23,6 +24,7 @@ import javax.inject.Inject
 
 class TermRepository @Inject constructor(
     private val apiClient: UtrackerApiClient,
+    private val cycleDao: CycleDao,
     private val tokenDao: TokenDao,
     private val userDao: UserDao,
     private val personalTermDao: PersonalTermDao,
@@ -162,4 +164,8 @@ class TermRepository @Inject constructor(
             personalTermId = termId
         ))
     }
+
+    suspend fun deleteCurrentTerm() = cycleDao.deleteCurrentTerm()
+
+    suspend fun setCurrentTerm(id: String)  = cycleDao.setCurrentTerm(id)
 }
