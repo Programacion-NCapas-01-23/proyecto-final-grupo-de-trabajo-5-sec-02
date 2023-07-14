@@ -57,8 +57,8 @@ class SubjectServiceImp(
         }
     }
 
-    override fun updateSubjectCompletion(studentCode: String, subjectCode: String, state: SubjectStatus, grade: BigDecimal?): Subject {
-        val subjectPerStudentCycle = subjectPerStudentCycleDao.findByStudentCode(studentCode)
+    override fun updateSubjectCompletion(studentCode: String, studentCycleId: UUID, subjectCode: String, state: SubjectStatus, grade: BigDecimal?): Subject {
+        val subjectPerStudentCycle = subjectPerStudentCycleDao.findByStudentCodeAndStudentCycleId(studentCode, studentCycleId)
             .firstOrNull { it.subject.code == subjectCode }
             ?: throw EntityNotFoundException("SubjectPerStudentCycle not found for subject code: $subjectCode")
 
@@ -67,6 +67,7 @@ class SubjectServiceImp(
 
         return subjectPerStudentCycleDao.save(subjectPerStudentCycle).subject
     }
+
 
     override fun getAllAssessments(studentCode: String, subjectCode: String): List<AssessmentResponseDto> {
         val subjectPerStudentCycleList = subjectPerStudentCycleDao.findBySubjectCodeAndStudentCode(subjectCode, studentCode)

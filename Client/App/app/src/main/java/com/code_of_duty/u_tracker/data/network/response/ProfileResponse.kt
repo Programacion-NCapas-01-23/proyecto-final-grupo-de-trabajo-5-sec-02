@@ -15,9 +15,11 @@ data class Degree (
 
 data class ProfileResponse (
     val code: String,
-    val username: String,
+    val name: String,
     val image: String?,
     val cum: Float,
-    val degree: Degree,
+    val degree: String,
     val approvedSubjects: Int,
+    val pensum: String,
+    val faculty: String,
 )

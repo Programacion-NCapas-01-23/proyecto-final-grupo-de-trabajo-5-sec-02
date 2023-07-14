@@ -20,7 +20,7 @@ interface SubjectService {
 
     fun calculateEstimateGrades(studentCode: String, subjectCode: String): List<RemainingAssessmentDto>
 
-    fun updateSubjectCompletion(studentCode: String, subjectCode: String, state: SubjectStatus, grade: BigDecimal?): Subject
+    fun updateSubjectCompletion(studentCode: String, studentCycleId: UUID, subjectCode: String, state: SubjectStatus, grade: BigDecimal?): Subject
 
     fun calculateRemainingGradeToPass(studentCode: String, subjectCode: String): PassGradeDto
 
