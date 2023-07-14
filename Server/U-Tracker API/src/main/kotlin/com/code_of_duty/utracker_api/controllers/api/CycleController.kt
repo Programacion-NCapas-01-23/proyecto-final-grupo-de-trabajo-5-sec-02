@@ -396,4 +396,22 @@ class CycleController(
         }
     }
 
+    @PostMapping("/getSubjectsInStudentCycle")
+    @SecurityRequirement(name = "APIAuth")
+    fun getSubjectsInStudentCycle(
+            request: HttpServletRequest,
+            @RequestBody body: CycleIdDto
+    ): ResponseEntity<Any> {
+        return try {
+            val studentCode = generalUtils.extractJWT(request)
+            val cycleId = body.cycleId
+            val subjects = cycleService.getSubjectsFromStudentCycle(studentCode, cycleId)
+            ResponseEntity.ok(subjects)
+        } catch (e: UnauthorizedException) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        } catch (e: ExceptionNotFound) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+        }
+    }
+
 }

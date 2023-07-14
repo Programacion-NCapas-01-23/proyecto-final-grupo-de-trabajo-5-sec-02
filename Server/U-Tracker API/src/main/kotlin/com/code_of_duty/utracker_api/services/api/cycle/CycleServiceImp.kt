@@ -18,7 +18,8 @@ class CycleServiceImp(
     private val studentCycleDao: StudentCycleDao,
     private val studentDao: StudentDao,
     private val subjectDao: SubjectDao,
-    private val prerequisitesDao: PrerequisitesDao
+    private val prerequisitesDao: PrerequisitesDao,
+    private val assessmentDao: AssessmentDao
 ) : CycleService {
     override fun getAllCycles(studentCode: String): List<StudentCycleResponseDto> {
         val student = studentDao.findByCode(studentCode) ?: throw ExceptionNotFound("Student not found")
@@ -142,6 +143,44 @@ class CycleServiceImp(
             )
         }
     }
+
+    override fun getSubjectsFromStudentCycle(studentCode: String, cycleId: String): List<SubjectResponseDto> {
+        // 1. Retrieve the StudentCycle object
+        val studentCycles = studentCycleDao.findByStudentCode(studentCode)
+        val studentCycle = studentCycles.find { it.studentCycleId.toString() == cycleId }
+                ?: throw IllegalArgumentException("StudentCycle not found")
+
+        // 2. Retrieve the SubjectPerStudentCycle objects for the studentCycle
+        val subjectPerStudentCycles = subjectPerStudentCycleDao.findByStudentCycle(studentCycle)
+
+        // 3. Fetch the assessments for the SubjectPerStudentCycle objects
+        val subjectResponseDtos = subjectPerStudentCycles.map { subjectPerStudentCycle ->
+            val subject = subjectPerStudentCycle.subject
+
+            // Retrieve assessments for the subject
+            val assessments = assessmentDao.findBySubjectPerStudentCycle(subjectPerStudentCycle)
+                    .map { assessment ->
+                        AssessmentXStudentCycleDto(
+                                id = assessment.id,
+                                name = assessment.name,
+                                percentage = assessment.percentage,
+                                grade = assessment.grade,
+                                subject = subject.code
+                        )
+                    }
+
+            SubjectResponseDto(
+                    code = subject.code,
+                    name = subject.name,
+                    assessments = assessments
+            )
+        }
+
+        // 4. Return the list of SubjectResponseDto objects
+        return subjectResponseDtos
+    }
+
+
 
     override fun deleteStudentCycle(studentCode: String, studentCycleId: UUID) {
         val student = studentDao.findByCode(studentCode) ?: throw ExceptionNotFound("Student not found")

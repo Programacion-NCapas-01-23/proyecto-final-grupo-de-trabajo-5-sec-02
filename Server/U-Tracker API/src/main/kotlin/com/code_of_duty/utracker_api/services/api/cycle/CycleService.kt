@@ -1,8 +1,6 @@
 package com.code_of_duty.utracker_api.services.api.cycle
 
-import com.code_of_duty.utracker_api.data.dtos.StudentCycleCreatedDto
-import com.code_of_duty.utracker_api.data.dtos.StudentCycleDto
-import com.code_of_duty.utracker_api.data.dtos.StudentCycleResponseDto
+import com.code_of_duty.utracker_api.data.dtos.*
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.util.*
@@ -16,5 +14,5 @@ interface CycleService {
     fun deleteStudentCycle(studentCode: String, studentCycleId: UUID)
     fun getStudentCycles(studentCode: String): List<StudentCycleDto>
     /*fun findBestStudentCycle(studentCode: String, userCycleId: String, subjects: List<String>): List<OrSchedulesDto>*/
-
+    fun getSubjectsFromStudentCycle(studentCode: String, cycleId:String): List<SubjectResponseDto>
 }

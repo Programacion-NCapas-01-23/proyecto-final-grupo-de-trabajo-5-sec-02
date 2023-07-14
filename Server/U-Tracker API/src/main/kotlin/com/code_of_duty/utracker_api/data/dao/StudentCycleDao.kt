@@ -6,4 +6,5 @@ import java.util.UUID
 
 interface StudentCycleDao : JpaRepository<StudentCycle, UUID> {
     fun findByStudentCode(studentCode: String): List<StudentCycle>
+    fun findByStudentCodeAndCycleId(studentCode: String, cycleId: String): StudentCycle?
 }

@@ -28,5 +28,5 @@ interface SubjectPerStudentCycleDao : JpaRepository<SubjectPerStudentCycle, UUID
 
     @Query("SELECT s FROM SubjectPerStudentCycle s WHERE s.studentCycle.student.code = :studentCode")
     fun findByStudentCode(studentCode: String): List<SubjectPerStudentCycle>
-
+    fun findByStudentCycle(studentCycle: StudentCycle): List<SubjectPerStudentCycle>
 }
