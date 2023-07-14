@@ -120,12 +120,13 @@ class SubjectController {
         @Valid @RequestBody body: UpdateSubjectStateDto
     ): ResponseEntity<Any> {
         val studentCode = generalUtils.extractJWT(request)
+        val studentCycleId = body.studentCycleId
         val subjectCode = body.subjectCode
         val completed = body.state
         val grade = body.grade
 
         return try {
-            subjectService.updateSubjectCompletion(studentCode, subjectCode, completed, grade)
+            subjectService.updateSubjectCompletion(studentCode, studentCycleId, subjectCode, completed, grade)
             ResponseEntity.ok(MessageDto("Subject updated"))
         } catch (e: EntityNotFoundException) {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageDto("Subject not found"))
@@ -133,6 +134,7 @@ class SubjectController {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(MessageDto("Internal server error"))
         }
     }
+
 
     @Operation(
         summary = "Get all assessments",
