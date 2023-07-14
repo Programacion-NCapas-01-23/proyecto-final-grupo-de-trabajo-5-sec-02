@@ -78,7 +78,7 @@ fun StatisticCard(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (cardType == 1) {
