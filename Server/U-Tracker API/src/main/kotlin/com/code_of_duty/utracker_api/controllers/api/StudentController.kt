@@ -1,12 +1,8 @@
 package com.code_of_duty.utracker_api.controllers.api
 
-import com.code_of_duty.utracker_api.data.dtos.ChangePasswordDto
-import com.code_of_duty.utracker_api.data.dtos.MessageDto
-import com.code_of_duty.utracker_api.data.dtos.StudentRequestDto
-import com.code_of_duty.utracker_api.data.dtos.StudentResponseDto
+import com.code_of_duty.utracker_api.data.dtos.*
 import com.code_of_duty.utracker_api.services.api.student.StudentService
 import com.code_of_duty.utracker_api.utils.GeneralUtils
-import com.code_of_duty.utracker_api.utils.JwtUtils
 import com.code_of_duty.utracker_api.utils.StudentNotFoundException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -45,7 +41,7 @@ class StudentController(private val studentService: StudentService) {
                 content = [
                     Content(
                         mediaType = "application/json",
-                        schema = Schema(implementation = StudentResponseDto::class)
+                        schema = Schema(implementation = StudentDto::class)
                     )
                 ]
             ),
@@ -72,21 +68,26 @@ class StudentController(private val studentService: StudentService) {
         ]
     )
     @GetMapping("/getStudent")
-    fun getStudent( request: HttpServletRequest ): ResponseEntity<StudentResponseDto> {
+    fun getStudent(request: HttpServletRequest): ResponseEntity<StudentDto> {
         val code = generalUtils.extractJWT(request)
 
-        val student = studentService.getStudent(code) ?: throw StudentNotFoundException("Student not found")
+        val studentDto = studentService.getStudent(code) ?: throw StudentNotFoundException("Student not found")
 
-        val response = StudentResponseDto(
-            code = student.code,
-            username = student.username,
-            image = student.image,
-            cum = student.cum,
-            degree = student.degree
+        val response = StudentDto(
+            code = studentDto.code,
+            name = studentDto.name,
+            email = studentDto.email,
+            image = studentDto.image,
+            cum = studentDto.cum,
+            degree = studentDto.degree,
+            faculty = studentDto.faculty,
+            pensum = studentDto.pensum,
+            approvedSubjects = studentDto.approvedSubjects
         )
 
         return ResponseEntity(response, HttpStatus.OK)
     }
+
 
     @Operation(
         summary = "Update student Information",
@@ -141,8 +142,44 @@ class StudentController(private val studentService: StudentService) {
         )
     }
 
+    @Operation(
+        summary = "Change student password",
+        description = "Change student password",
+        security = [SecurityRequirement(name = "APIAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Password changed successfully",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Student not found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            )
+        ]
+    )
     @PatchMapping("/changePassword")
-    @Operation(summary = "Change student password")
     @SecurityRequirement(name = "APIAuth")
     fun changePassword(
         request: HttpServletRequest,

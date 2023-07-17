@@ -1,8 +1,14 @@
-interface Subject {
-    id?: string;
-    correlative: number;
-    name: string;
-    uv: number;
+type cycleRelation = {
+    id: string,
+    correlative: number,
 }
 
-export default Subject;
+export interface Subject {
+    id?: string;
+    code: string;
+    estimatedGrade?: number;
+    name: string;
+    uv: number;
+    cycleRelation?: cycleRelation[];
+}
+

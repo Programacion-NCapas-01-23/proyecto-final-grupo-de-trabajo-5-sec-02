@@ -44,4 +44,9 @@ class GlobalExceptionHandler {
     fun handleIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<MessageDto> {
         return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.CONFLICT)
     }
+
+    @ExceptionHandler(ExceptionNotFound::class)
+    fun handleExceptionNotFound(ex: ExceptionNotFound): ResponseEntity<MessageDto> {
+        return ResponseEntity(MessageDto(message = ex.message.toString()), HttpStatus.NOT_FOUND)
+    }
 }

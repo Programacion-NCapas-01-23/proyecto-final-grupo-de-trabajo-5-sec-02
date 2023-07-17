@@ -1,0 +1,7 @@
+package com.code_of_duty.u_tracker.data.network.response
+
+data class CreateTermResponse(
+    val studentCycleId: String,
+    val cycleType: Int,
+    val year: Int,
+)

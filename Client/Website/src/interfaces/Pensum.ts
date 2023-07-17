@@ -1,9 +1,11 @@
-import Career from "@/interfaces/Career";
+import {Career} from "@/interfaces/Career";
 
-interface Pensum {
+export interface Pensum {
     id?: string;
     plan: string;
     career: Career;
 }
 
-export default Pensum;
+export type PensumPreview = {degreeId: string} & Omit<Pensum, "career">;
+
+export type PensumTable = Omit<PensumPreview, 'degreeId'> & {careerName: string};

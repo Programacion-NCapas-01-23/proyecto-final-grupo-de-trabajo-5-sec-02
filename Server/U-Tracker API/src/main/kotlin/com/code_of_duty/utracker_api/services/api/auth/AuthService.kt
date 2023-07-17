@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service
 
 @Service
 interface AuthService {
-    fun registerStudent(registerDto: RegisterDto, degree: String): Student
+    fun registerStudent(registerDto: RegisterDto): Student
     fun authenticate(code: String, password: String): Student?
     fun isCodeTaken(code: String): Boolean
+    //fun userAlreadyRegisteredInDegree()
     fun changePassword(forgotPasswordDto: ForgotPasswordDto)
     fun generateToken(student: Student): String
     fun validateToken(authToken: String): Boolean

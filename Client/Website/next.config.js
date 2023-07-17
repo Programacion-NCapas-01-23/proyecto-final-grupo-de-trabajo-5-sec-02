@@ -6,6 +6,7 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
+  basePath: '/adminPage',
 }
 
 module.exports = nextConfig

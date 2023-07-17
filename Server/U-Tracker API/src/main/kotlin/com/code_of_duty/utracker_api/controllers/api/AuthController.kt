@@ -4,19 +4,21 @@ import com.code_of_duty.utracker_api.data.dtos.*
 import com.code_of_duty.utracker_api.services.api.auth.AuthService
 import com.code_of_duty.utracker_api.services.api.student.StudentService
 import com.code_of_duty.utracker_api.services.api.verificationToken.VerificationTokenService
+import com.code_of_duty.utracker_api.utils.GeneralUtils
 import com.code_of_duty.utracker_api.utils.PasswordUtils
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Email
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.web.bind.annotation.*
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.context.Context
@@ -34,8 +36,12 @@ class AuthController (private val passwordUtils: PasswordUtils){
     private lateinit var mailSender: JavaMailSender
     @Autowired
     lateinit var studentService: StudentService
+
     @Autowired
     private lateinit var templateEngine: TemplateEngine
+
+    @Autowired
+    private lateinit var generalUtils: GeneralUtils
 
     @Operation(
         summary = "Register a new user",
@@ -64,20 +70,16 @@ class AuthController (private val passwordUtils: PasswordUtils){
         ]
     )
     @PostMapping("/register")
-    fun register(@RequestBody registerDto: RegisterDto) :ResponseEntity<Any>{
-        if (authService.isCodeTaken(registerDto.username)) {
-            return ResponseEntity(MessageDto("Username already taken"), HttpStatus.BAD_REQUEST)
+    fun register(@RequestBody registerDto: RegisterDto): ResponseEntity<Any> {
+        if (authService.isCodeTaken(registerDto.code)) {
+            return ResponseEntity(MessageDto("Code already taken"), HttpStatus.BAD_REQUEST)
         }
 
-        // Hash the password using PasswordUtils
-        val hashedPassword = passwordUtils.hashPassword(registerDto.password)
+        val newUser = authService.registerStudent(registerDto)
 
-        // Create a new user using UserService
-        val newUser = authService.registerStudent(registerDto, hashedPassword)
-
-        // Return a success response with the new user's ID
         return ResponseEntity(MessageDto("User successfully registered with ID ${newUser.code}"), HttpStatus.OK)
     }
+
 
     @Operation(
         summary = "Login",
@@ -198,5 +200,38 @@ class AuthController (private val passwordUtils: PasswordUtils){
     ): ResponseEntity<MessageDto>{
         authService.changePassword(forgotPasswordDto)
         return ResponseEntity(MessageDto("Password changed successfully"), HttpStatus.OK)
+    }
+
+    @Operation(
+        summary = "Verify Token",
+        description = "Verify Token",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Verification successful",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = MessageDto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid verification token",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorsDto::class)
+                    )
+                ]
+            )
+        ]
+    )
+    @PostMapping("/verifyToken")
+    fun verifyToken(request: HttpServletRequest): ResponseEntity<Any> {
+        val student = generalUtils.extractJWT(request)
+
+        return ResponseEntity(MessageDto("Verification successful"), HttpStatus.OK)
     }
 }

@@ -8,7 +8,7 @@ import com.code_of_duty.utracker_api.utils.JwtUtils
 import com.code_of_duty.utracker_api.utils.PasswordUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util.UUID
+import java.util.*
 
 @Component
 class AdminAuthServiceImp: AdminAuthService {
@@ -35,7 +35,11 @@ class AdminAuthServiceImp: AdminAuthService {
         return adminDao.save(admin)
     }
 
-    override fun generateToken(admin: Admins) = jwtUtil.generateToken(admin.id.toString())
+    override fun generateToken(admin: Admins): String {
+        val role = "admin"
+        return jwtUtil.generateToken(admin.id.toString(), role)
+    }
+
 
     override fun login(adminLoginDto: AdminLoginDto): Admins {
         val admin = adminDao.findByUsername(adminLoginDto.username)

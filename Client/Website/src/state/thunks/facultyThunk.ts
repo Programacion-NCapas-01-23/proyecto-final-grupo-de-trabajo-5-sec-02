@@ -1,4 +1,4 @@
-import {AppThunk} from '@/state/store';
+import {AppDispatch, AppThunk} from '@/state/store';
 import apiService from '@/api/appService';
 import {
     createFacultyFailure,
@@ -11,37 +11,92 @@ import {
     updateFacultyStart,
     updateFacultySuccess
 } from "@/state/slices/facultySlice";
-import Faculty from "@/interfaces/Faculty";
+import {Faculty} from "@/interfaces/Faculty";
 import {routes} from "@/api/routes";
+import {ErrorResponse} from "@/interfaces/InitialState";
 
 export const fetchFaculties = (): AppThunk => {
-    return async (dispatch) => {
+    return async (dispatch: AppDispatch) => {
         try {
             dispatch(fetchFacultiesStart());
-            const faculties = await apiService.get<Faculty[]>(routes.faculties.getAllFaculties);
+            const faculties = await apiService.get<Faculty[]>(routes.faculties.all);
             dispatch(fetchFacultiesSuccess(faculties));
-        } catch (error) {
-            dispatch(fetchFacultiesFailure(error.message));
+        } catch (error: any) {
+            // @ts-ignore
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(fetchFacultiesFailure(receivedError));
         }
     };
 };
 
-export const createFaculty = (faculty: Faculty): AppThunk => async (dispatch) => {
-    try {
-        dispatch(createFacultyStart());
-        const createdFaculty = await apiService.post<Faculty>(routes.faculties.newFaculty, faculty);
-        dispatch(createFacultySuccess(createdFaculty));
-    } catch (error) {
-        dispatch(createFacultyFailure(error.message));
+export const createFaculty = (faculty: Faculty): AppThunk => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            dispatch(createFacultyStart());
+            const createdFaculty = await apiService.post<Faculty>(routes.faculties.add, [faculty]);
+            dispatch(createFacultySuccess(createdFaculty));
+        } catch (error: any) {
+            // @ts-ignore
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(createFacultyFailure(receivedError));
+        }
+    };
+};
+
+
+export const updateFaculty = (faculty: Faculty): AppThunk => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            dispatch(updateFacultyStart());
+            const updatedFaculty = await apiService.patch<Faculty>(routes.faculties.update, faculty);
+            dispatch(updateFacultySuccess(updatedFaculty));
+        } catch (error: any) {
+            // @ts-ignore
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(updateFacultyFailure(receivedError));
+        }
     }
 };
 
-export const updateFaculty = (faculty: Faculty): AppThunk => async (dispatch) => {
-    try {
-        dispatch(updateFacultyStart());
-        const updatedFaculty = await apiService.patch<Faculty>(`/faculties/${faculty.id}`, faculty);
-        dispatch(updateFacultySuccess(updatedFaculty));
-    } catch (error) {
-        dispatch(updateFacultyFailure(error.message));
+/*
+export const deleteFaculty = (faculty: string): AppThunk => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            dispatch(updateFacultyStart());
+            const updatedFaculty = await apiService.delete(routes.faculties.delete, {
+                data: {
+                        [faculty],
+                    }
+            });
+            dispatch(updateFacultySuccess(updatedFaculty));
+        } catch (error: any) {
+            // @ts-ignore
+            const receivedError: ErrorResponse = {
+                message: error.message,
+                response: {
+                    data: error.response.data,
+                    status: error.response.status,
+                }
+            }
+            dispatch(updateFacultyFailure(receivedError));
+        }
     }
-};
+};*/
